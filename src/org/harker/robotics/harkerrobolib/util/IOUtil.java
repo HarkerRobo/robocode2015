@@ -7,7 +7,16 @@ package org.harker.robotics.harkerrobolib.util;
  * @author Andrew Tierno
  */
 public class IOUtil {
-    
+	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_BLACK = "\u001B[30m";
+	public static final String ANSI_RED = "\u001B[31m";
+	public static final String ANSI_GREEN = "\u001B[32m";
+	public static final String ANSI_YELLOW = "\u001B[33m";
+	public static final String ANSI_BLUE = "\u001B[34m";
+	public static final String ANSI_PURPLE = "\u001B[35m";
+	public static final String ANSI_CYAN = "\u001B[36m";
+	public static final String ANSI_WHITE = "\u001B[37m";
+	
     private static boolean DEBUG = true;
     
     /**
@@ -19,8 +28,7 @@ public class IOUtil {
      */
     public static void debug(String s) {
         if (DEBUG) {
-            System.out.print("[DEBUG] ");
-            System.out.println(s);
+            System.out.println(ANSI_RED + s + ANSI_RESET);
         }
     }
     
@@ -39,10 +47,9 @@ public class IOUtil {
       * @param s a descriptive string about the problem
       */
      public static void warn(String s) {
-         System.err.print("[WARN] ");
-         System.err.println(s);
+         System.err.println(ANSI_YELLOW + s + ANSI_RESET);
      }
- 
+      
     /**
      * Pads the given string on the right with spaces
      * @param s The string which we are padding
@@ -78,35 +85,34 @@ public class IOUtil {
      * @param obj the line to print
      */
     public static void println(Object obj) {
-        System.out.println(obj);
+        System.out.println(ANSI_WHITE + obj + ANSI_RESET);
     }
     
     public static void println(boolean b) {
-	println(String.valueOf(b));
+    	println(String.valueOf(b));
     }
     
     public static void println(char c) {
-	println(String.valueOf(c));
+    	println(String.valueOf(c));
     }
     
     public static void println(char[] s) {
-	println(String.valueOf(s));
+    	println(String.valueOf(s));
     }
     
     public static void println(double d) {
-	println(String.valueOf(d));
+    	println(String.valueOf(d));
     }
     
     public static void println(float f) {
-	println(String.valueOf(f));
+    	println(String.valueOf(f));
     }
     
     public static void println(int i) {
-	println(String.valueOf(i));
+    	println(String.valueOf(i));
     }
     
     public static void println(long l) {
-	println(String.valueOf(l));
+    	println(String.valueOf(l));
     }
-    
 }
