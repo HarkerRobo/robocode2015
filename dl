@@ -1,0 +1,139 @@
+[33mcommit c3e58a5947333fa1da041d918dc89a15cda5ad19[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 18:52:33 2015 -0800
+
+    Replace tabs with whitespace
+
+[33mcommit 5edbde4047a23003bcfabda6b08ea8eaf8b27a2d[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 18:50:46 2015 -0800
+
+    Delete build folder (actual)
+
+[33mcommit a37bdb2b873786229d10facce7df58e2e3d341f6[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 18:46:29 2015 -0800
+
+    Delete .classpath
+
+[33mcommit 03cceb0032822a2e2301149615b72828ce31df8a[m
+Author: Andrew Tierno <andrew.tierno@gmail.com>
+Date:   Fri Feb 6 18:37:41 2015 -0800
+
+    Updated GamepadWrapper with values for the xbox controller
+
+[33mcommit f21a9b3f5d0b6f79711b52e565597740e97501c9[m
+Author: Andrew Tierno <andrew.tierno@gmail.com>
+Date:   Fri Feb 6 18:21:20 2015 -0800
+
+    Removed colors from IOUtil as they don't work, sorry Manan :(
+
+[33mcommit cf26ff0de33788305af9decce41f652bb20d122f[m
+Author: Andrew Tierno <andrew.tierno@gmail.com>
+Date:   Fri Feb 6 18:17:00 2015 -0800
+
+    Readded initDefaultCommand
+
+[33mcommit 5f83cfbb9ce47f5da79ce73f9640d571eb88b7b8[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 18:15:55 2015 -0800
+
+    Update .gitignore
+
+[33mcommit 02f333f524787b03193c16923b2e54bbd6f948d1[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 18:11:57 2015 -0800
+
+    Update IOUtil print methods
+
+[33mcommit a4a3ba7e57f8d37d35f74fdb8da6a45ed3fce4b2[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 17:54:17 2015 -0800
+
+    Drivetrain work (Issue #2)
+
+[33mcommit aaae4236591fe030fe9bd721ba5264642aad32e4[m
+Merge: f267ad8 488cfd7
+Author: Andrew Tierno <andrew.tierno@gmail.com>
+Date:   Fri Feb 6 17:35:17 2015 -0800
+
+    Merge branch 'master' of http://github.com/HarkerRobo/robocode2015
+
+[33mcommit f267ad8351718d9313fb540d47f9971e2581b814[m
+Author: Andrew Tierno <andrew.tierno@gmail.com>
+Date:   Fri Feb 6 17:35:09 2015 -0800
+
+    Added initialize code to OI and added requires to ManualDrive
+
+[33mcommit 488cfd74da2808cb0d5735eaa5b6d12c23f6e653[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 17:32:25 2015 -0800
+
+    Delete _tmp_
+
+[33mcommit a46220e9c409ffa12d968d6a6b2301d8c341d27b[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 17:30:27 2015 -0800
+
+    Update normalize.sh
+
+[33mcommit fbd32cf4b70f8bbe488ae0564572d5d73b6bfe14[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 17:30:16 2015 -0800
+
+    Update normalize.sh
+
+[33mcommit 165101c5676584f7a16e0f05bb22cbb0c9c38de1[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 17:24:10 2015 -0800
+
+    Attempt to normalize tab spacing
+
+[33mcommit 0ba13871c6eb663f279e91d2047f7798ccd0a928[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 17:23:20 2015 -0800
+
+    Update .travis.yml
+
+[33mcommit 964d36cd78b2d9701bab265b6e55a16b8db5bd57[m
+Merge: 89a6e42 e812721
+Author: Andrew Tierno <andrew.tierno@gmail.com>
+Date:   Fri Feb 6 17:20:52 2015 -0800
+
+    Merge branch 'master' of http://github.com/HarkerRobo/robocode2015
+
+[33mcommit 89a6e42d892e4fd2d8bd770fcc736b152c1ed19e[m
+Author: Andrew Tierno <andrew.tierno@gmail.com>
+Date:   Fri Feb 6 17:20:36 2015 -0800
+
+    Configured buildfile, began initial work on Drivetrain + commands
+
+[33mcommit e812721892e35053fbf61493bdbb59e06faf9c45[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 17:20:21 2015 -0800
+
+    Update README.md
+
+[33mcommit 75c15c8f89b2e4a668748b677c79f7cd747e4027[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 17:12:28 2015 -0800
+
+    Create normalize.sh
+
+[33mcommit 3fccd5742dd6215acb5f5236af0d133500895b56[m
+Author: Manan Shah <manan.shah.777@gmail.com>
+Date:   Fri Feb 6 17:08:41 2015 -0800
+
+    Create .travis.yml
+
+[33mcommit 256e24c62fae1260a2068e5c02789517f628f3f3[m
+Author: Andrew Tierno <andrew.tierno@gmail.com>
+Date:   Fri Feb 6 16:52:11 2015 -0800
+
+    Initial commit
+
+[33mcommit 42436b035cbda95ded741e15d24caa2eb7be7813[m
+Author: Andrew Tierno <Andrew-Tierno@users.noreply.github.com>
+Date:   Fri Feb 6 16:45:56 2015 -0800
+
+    Initial commit

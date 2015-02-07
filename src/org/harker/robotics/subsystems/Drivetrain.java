@@ -1,7 +1,11 @@
 package org.harker.robotics.subsystems;
 
 import org.harker.robotics.commands.ManualDriveCommand;
+import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
+import org.harker.robotics.RobotMap;
 
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -14,13 +18,16 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Drivetrain extends Subsystem {
 	
+	private static RobotDrive robotDrive;
+	private static TalonWrapper leftBack, leftFront, rightBack, rightFront;
+	
 	//Deadzone constants
-	public static double DZ_Y = 0.15;
-	public static double DZ_T = 0.20;
-	public static double DZ_X = 0.15;
+	private static double DZ_Y = 0.15;
+	private static double DZ_T = 0.20;
+	private static double DZ_X = 0.15;
 	
 	//Theta scale because we need to ensure we don't move theta too fast
-	public static double T_SCALE = 0.2;
+	private static double T_SCALE = 0.2;
 	
 	// The static instance variable Drivetrain
 	private static Drivetrain drivetrain;
@@ -29,7 +36,11 @@ public class Drivetrain extends Subsystem {
 	 * Drivetrain singleton constructor (private and empty)
 	 */
 	private Drivetrain() {
-		
+		leftBack = new TalonWrapper(RobotMap.Drivetrain.LEFT_FRONT_TALON_PORT);
+		rightBack = new TalonWrapper(RobotMap.Drivetrain.LEFT_BACK_TALON_PORT);
+		leftFront = new TalonWrapper(RobotMap.Drivetrain.RIGHT_FRONT_TALON_PORT);
+		rightFront = new TalonWrapper(RobotMap.Drivetrain.RIGHT_BACK_TALON_PORT);
+		robotDrive = new RobotDrive(leftBack, rightBack, leftFront, rightFront);
 	}
 	
 	/**
@@ -41,6 +52,9 @@ public class Drivetrain extends Subsystem {
 		return drivetrain;
 	}
 	
+	public void drive(double sx, double sy, double rotation, double gyroAngle) {
+		robotDrive.mecanumDrive_Cartesian(sx, sy, rotation*T_SCALE, gyroAngle);
+	}
 	/**
 	 * Sets the default command to which the subsystem reverts when 
 	 * nothing else is being called. For the Drivetrain this is the 
