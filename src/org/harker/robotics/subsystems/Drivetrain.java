@@ -38,6 +38,16 @@ public class Drivetrain extends Subsystem {
 	// The static instance variable Drivetrain
 	private static Drivetrain drivetrain;
 	
+	//Constants for acceleration
+	private static double MAX_ACCEL_X = 0.1;
+	private static double MAX_ACCEL_Y = 0.1;
+	private static double MAX_ACCEL_R = 0.1;
+	
+	//A reference to previous speeds to use for acceleration
+	private double prevX;
+	private double prevY;
+	private double prevR;
+	
 	/**
 	 * Drivetrain singleton constructor. Initializes the various components 
 	 * of the robot along with the internal RobotDrive handler. 
@@ -51,6 +61,8 @@ public class Drivetrain extends Subsystem {
 		gyro = new Gyro(RobotMap.Drivetrain.GYRO_PORT);
 		
 		robotDrive = new RobotDrive(leftBack, rightBack, leftFront, rightFront);
+		
+		prevX = prevY = prevR = 0;
 	}
 	
 	/**
@@ -88,10 +100,25 @@ public class Drivetrain extends Subsystem {
 	 * @param rotation The rotational velocity
 	 */
 	public void drive(double sx, double sy, double rotation) {
+		//Applying deadzone
 		double vX = (Math.abs(sx) > DZ_X) ? sx : 0; 
 		double vY = (Math.abs(sy) > DZ_Y) ? sy : 0;
 		double vR = (Math.abs(rotation) > DZ_R) ? rotation * R_SCALE : 0;
 		double heading = (isRelative) ? getCurrentHeading() : 0;
+		
+		//Restricting acceleration
+		if (Math.abs(vX - prevX) > MAX_ACCEL_X)
+			vX = Math.signum(vX - prevX) * MAX_ACCEL_X;
+		if (Math.abs(vY - prevY) > MAX_ACCEL_Y)
+			vY = Math.signum(vY - prevY) * MAX_ACCEL_Y;
+		if (Math.abs(vR - prevR) > MAX_ACCEL_R)
+			vR = Math.signum(vR - prevR) * MAX_ACCEL_R;
+		
+		//Updating previous values
+		prevX = vX;
+		prevY = vY;
+		prevR = vR;
+		
 		robotDrive.mecanumDrive_Cartesian(vX, vY, vR, heading);
 	}
 	
