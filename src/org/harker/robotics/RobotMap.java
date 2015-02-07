@@ -11,7 +11,6 @@ public class RobotMap {
 	
 	/**
 	 * Constants pertaining specifically to the Drivetrain. 
-	 * @author Andrew Tierno
 	 */
 	public class Drivetrain {
 	    public static final int LEFT_FRONT_TALON_PORT = 3;
@@ -22,6 +21,9 @@ public class RobotMap {
 	    public static final int GYRO_PORT = 0;
 	}
 	
+	/**
+	 * Constants pertaining specifically to the OI. 
+	 */
 	public class OI {
 		public static final int GAMEPAD_PORT = 0;
 	}

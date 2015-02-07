@@ -14,10 +14,9 @@ import edu.wpi.first.wpilibj.command.Command;
 public class ManualDriveCommand extends Command {
 
 	private Drivetrain drivetrain;
-	private OI oi;
-    public ManualDriveCommand() {
+
+	public ManualDriveCommand() {
     	drivetrain = Drivetrain.getInstance();
-    	oi = OI.getInstance();
     	requires(drivetrain);
     }
 
@@ -28,11 +27,13 @@ public class ManualDriveCommand extends Command {
     }
 
     /**
-     * Invokes the Drivetrain's drive method with the inputs from the Joystick. 
+     * Invokes the Drivetrain's drive method with the inputs from the Joystick.
+     * The x and y magnitudes of the left joystick are mapped to the translational
+     * velocities of the robot and the x magnitude of the right joystick is 
+     * mapped to the rotational velocity. 
      */
     protected void execute() {
-    	drivetrain.drive(oi.gamepad1.getLeftX(), oi.gamepad1.getLeftY(),
-				oi.gamepad1.getRightX(), drivetrain.getCurrentHeading());
+    	drivetrain.drive(OI.gamepad.getLeftX(), OI.gamepad.getLeftY(), OI.gamepad.getRightX());
     }
 
     /**

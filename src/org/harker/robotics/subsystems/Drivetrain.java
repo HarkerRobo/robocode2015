@@ -4,6 +4,7 @@ import org.harker.robotics.commands.ManualDriveCommand;
 import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
 import org.harker.robotics.RobotMap;
 
+import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -18,30 +19,57 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Drivetrain extends Subsystem {
 	
+	//Drive related components
 	private static RobotDrive robotDrive;
 	private static TalonWrapper leftBack, leftFront, rightBack, rightFront;
+	private static Gyro gyro;
 	
 	//Deadzone constants
 	private static double DZ_Y = 0.15;
-	private static double DZ_T = 0.20;
+	private static double DZ_R = 0.20;
 	private static double DZ_X = 0.15;
 	
 	//Theta scale because we need to ensure we don't move theta too fast
-	private static double T_SCALE = 0.2;
+	private static double R_SCALE = 0.2;
+	
+	//Relative driving boolean
+	private static boolean isRelative = false;
 	
 	// The static instance variable Drivetrain
 	private static Drivetrain drivetrain;
 	
 	/**
-	 * Drivetrain singleton constructor (private and empty)
+	 * Drivetrain singleton constructor. Initializes the various components 
+	 * of the robot along with the internal RobotDrive handler. 
 	 */
 	private Drivetrain() {
 		leftBack = new TalonWrapper(RobotMap.Drivetrain.LEFT_FRONT_TALON_PORT);
 		rightBack = new TalonWrapper(RobotMap.Drivetrain.LEFT_BACK_TALON_PORT);
 		leftFront = new TalonWrapper(RobotMap.Drivetrain.RIGHT_FRONT_TALON_PORT);
 		rightFront = new TalonWrapper(RobotMap.Drivetrain.RIGHT_BACK_TALON_PORT);
+		
+		gyro = new Gyro(RobotMap.Drivetrain.GYRO_PORT);
+		
 		robotDrive = new RobotDrive(leftBack, rightBack, leftFront, rightFront);
 	}
+	
+	/**
+	 * Sets the default command to which the subsystem reverts when 
+	 * nothing else is being called. For the Drivetrain this is the 
+	 * Manual Drive Command. 
+	 */
+    public void initDefaultCommand() {
+    	setDefaultCommand(new ManualDriveCommand());
+    }
+    
+    /**
+     * Initializes the Drivetrain singleton if it has not yet previously
+     * done so. 
+     */
+    public static void initialize() {
+    	if (drivetrain == null)
+    		drivetrain = new Drivetrain();
+    }
 	
 	/**
 	 * Gets an instance of the Drivetrain (needed for singleton)
@@ -52,16 +80,52 @@ public class Drivetrain extends Subsystem {
 		return drivetrain;
 	}
 	
-	public void drive(double sx, double sy, double rotation, double gyroAngle) {
-		robotDrive.mecanumDrive_Cartesian(sx, sy, rotation*T_SCALE, gyroAngle);
-	}
 	/**
-	 * Sets the default command to which the subsystem reverts when 
-	 * nothing else is being called. For the Drivetrain this is the 
-	 * Manual Drive Command. 
+	 * Drives the robot using a Cartesian style mecanum drive with the given 
+	 * x, y, and rotational velocities. 
+	 * @param sx The x-velocity
+	 * @param sy The y-velocity
+	 * @param rotation The rotational velocity
 	 */
-    public void initDefaultCommand() {
-    	setDefaultCommand(new ManualDriveCommand());
-    }
+	public void drive(double sx, double sy, double rotation) {
+		double vX = (Math.abs(sx) > DZ_X) ? sx : 0; 
+		double vY = (Math.abs(sy) > DZ_Y) ? sy : 0;
+		double vR = (Math.abs(rotation) > DZ_R) ? rotation * R_SCALE : 0;
+		double heading = (isRelative) ? getCurrentHeading() : 0;
+		robotDrive.mecanumDrive_Cartesian(vX, vY, vR, heading);
+	}
+	
+	/**
+	 * Finds the current heading of the robot relative to its initial position.  
+	 * @return The angle which the robot is facing relative to the robot's original position
+	 */
+	public double getCurrentHeading() {
+		return gyro.getAngle();
+	}
+	
+	/**
+	 * Resets the value of the gyro such that the robot's current heading is zero.
+	 */
+	public void resetGyro() {
+		gyro.reset();
+	}
+	
+	/**
+	 * Sets whether or not driving should be relative to the player or
+	 * absolute to the field. 
+	 * @param flag
+	 */
+	public void setRelativeDriving(boolean flag)
+	{
+		isRelative = flag;
+	}
+	
+	/**
+	 * Toggles whether or not relative driving should be used. 
+	 */
+	public void toggleRelativeDriving()
+	{
+		isRelative = ! isRelative;
+	}
 }
 

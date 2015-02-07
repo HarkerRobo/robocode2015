@@ -1,5 +1,6 @@
 package org.harker.robotics;
 
+import org.harker.robotics.commands.ToggleRelativeDrivingCommand;
 import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
 
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -15,8 +16,13 @@ public class OI {
 	private static OI oi; 
 	public static GamepadWrapper gamepad;
 	
+	/**
+	 * OI singleton constructor. Initializes the gamepad along with 
+	 * the functionalities associated with buttons on the gamepad. 
+	 */
 	private OI() {
 		gamepad = new GamepadWrapper(RobotMap.OI.GAMEPAD_PORT);
+		gamepad.getButtonA().whenPressed(new ToggleRelativeDrivingCommand());
 	}
 	
 	/**
