@@ -30,7 +30,7 @@ public class Drivetrain extends Subsystem {
 	private static double DZ_X = 0.15;
 	
 	//Theta scale because we need to ensure we don't move theta too fast
-	private static double R_SCALE = 0.2;
+	private static double T_SCALE = 0.2;
 	
 	//Relative driving boolean
 	private static boolean isRelative = false;
@@ -41,12 +41,12 @@ public class Drivetrain extends Subsystem {
 	//Constants for acceleration
 	private static double MAX_ACCEL_X = 0.1;
 	private static double MAX_ACCEL_Y = 0.1;
-	private static double MAX_ACCEL_R = 0.1;
+	private static double MAX_ACCEL_T = 0.1;
 	
 	//A reference to previous speeds to use for acceleration
 	private double prevX;
 	private double prevY;
-	private double prevR;
+	private double prevT;
 	
 	/**
 	 * Drivetrain singleton constructor. Initializes the various components 
@@ -62,7 +62,7 @@ public class Drivetrain extends Subsystem {
 		
 		robotDrive = new RobotDrive(leftBack, rightBack, leftFront, rightFront);
 		
-		prevX = prevY = prevR = 0;
+		prevX = prevY = prevT = 0;
 	}
 	
 	/**
@@ -103,7 +103,7 @@ public class Drivetrain extends Subsystem {
 		//Applying deadzone
 		double vX = (Math.abs(sx) > DZ_X) ? sx : 0; 
 		double vY = (Math.abs(sy) > DZ_Y) ? sy : 0;
-		double vR = (Math.abs(rotation) > DZ_R) ? rotation * R_SCALE : 0;
+		double vT = (Math.abs(rotation) > DZ_R) ? rotation * T_SCALE : 0;
 		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
 		
 		//Restricting acceleration
@@ -111,15 +111,15 @@ public class Drivetrain extends Subsystem {
 			vX = Math.signum(vX - prevX) * MAX_ACCEL_X;
 		if (Math.abs(vY - prevY) > MAX_ACCEL_Y)
 			vY = Math.signum(vY - prevY) * MAX_ACCEL_Y;
-		if (Math.abs(vR - prevR) > MAX_ACCEL_R)
-			vR = Math.signum(vR - prevR) * MAX_ACCEL_R;
+		if (Math.abs(vT - prevT) > MAX_ACCEL_T)
+			vT = Math.signum(vT - prevT) * MAX_ACCEL_T;
 		
 		//Updating previous values
 		prevX = vX;
 		prevY = vY;
-		prevR = vR;
+		prevT = vT;
 		
-		robotDrive.mecanumDrive_Cartesian(vX, vY, vR, heading);
+		robotDrive.mecanumDrive_Cartesian(vX, vY, vT, heading);
 	}
 	
 	/**
