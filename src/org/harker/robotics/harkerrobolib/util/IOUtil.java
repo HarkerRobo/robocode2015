@@ -7,7 +7,7 @@ package org.harker.robotics.harkerrobolib.util;
  * @author Andrew Tierno
  */
 public class IOUtil {
-	
+    
     private static boolean DEBUG = true;
     
     /**
@@ -19,6 +19,7 @@ public class IOUtil {
      */
     public static void debug(String s) {
         if (DEBUG) {
+            System.out.print("[DEBUG] ");
             System.out.println(s);
         }
     }
@@ -38,9 +39,10 @@ public class IOUtil {
       * @param s a descriptive string about the problem
       */
      public static void warn(String s) {
+         System.err.print("[WARN] ");
          System.err.println(s);
      }
-      
+ 
     /**
      * Pads the given string on the right with spaces
      * @param s The string which we are padding
@@ -80,30 +82,31 @@ public class IOUtil {
     }
     
     public static void println(boolean b) {
-    	println(String.valueOf(b));
+	println(String.valueOf(b));
     }
     
     public static void println(char c) {
-    	println(String.valueOf(c));
+	println(String.valueOf(c));
     }
     
     public static void println(char[] s) {
-    	println(String.valueOf(s));
+	println(String.valueOf(s));
     }
     
     public static void println(double d) {
-    	println(String.valueOf(d));
+	println(String.valueOf(d));
     }
     
     public static void println(float f) {
-    	println(String.valueOf(f));
+	println(String.valueOf(f));
     }
     
     public static void println(int i) {
-    	println(String.valueOf(i));
+	println(String.valueOf(i));
     }
     
     public static void println(long l) {
-    	println(String.valueOf(l));
+	println(String.valueOf(l));
     }
+    
 }
