@@ -104,7 +104,7 @@ public class Drivetrain extends Subsystem {
 		double vX = (Math.abs(sx) > DZ_X) ? sx : 0; 
 		double vY = (Math.abs(sy) > DZ_Y) ? sy : 0;
 		double vR = (Math.abs(rotation) > DZ_R) ? rotation * R_SCALE : 0;
-		double heading = (isRelative) ? getCurrentHeading() : 0;
+		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
 		
 		//Restricting acceleration
 		if (Math.abs(vX - prevX) > MAX_ACCEL_X)
@@ -123,11 +123,20 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	/**
-	 * Finds the current heading of the robot relative to its initial position.  
+	 * Finds the current heading of the robot relative to its initial position. The angle returned
+	 * is continuous - that is, it goes from 0 -> 360 -> 720 -> ...
 	 * @return The angle which the robot is facing relative to the robot's original position
 	 */
-	public double getCurrentHeading() {
+	public double getCurrentContinuousHeading() {
 		return gyro.getAngle();
+	}
+	
+	/**
+	 * Returns the current heading of the robot as an absolute value ranging from 0 -> 360.
+	 * @return The angle which the robot is facing mod 360
+	 */
+	public double getCurrentAbsoluteHeading() {
+		return gyro.getAngle() % 360;
 	}
 	
 	/**
@@ -142,7 +151,7 @@ public class Drivetrain extends Subsystem {
 	 * absolute to the field. 
 	 * @param flag
 	 */
-	public void setRelativeDriving(boolean flag)
+	public void setRelative(boolean flag)
 	{
 		isRelative = flag;
 	}
@@ -150,9 +159,9 @@ public class Drivetrain extends Subsystem {
 	/**
 	 * Toggles whether or not relative driving should be used. 
 	 */
-	public void toggleRelativeDriving()
+	public void toggleRelative()
 	{
-		isRelative = ! isRelative;
+		isRelative = !isRelative;
 	}
 }
 
