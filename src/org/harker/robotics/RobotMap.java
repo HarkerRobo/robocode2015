@@ -6,13 +6,17 @@ package org.harker.robotics;
  * floating around.
  */
 public class RobotMap {
-    // For example to map the left and right motors, you could define the
-    // following variables to use with your drivetrain subsystem.
-    // public static int leftMotor = 1;
-    // public static int rightMotor = 2;
-    
-    // If you are using multiple modules, make sure to define both the port
-    // number and the module. For example you with a rangefinder:
-    // public static int rangefinderPort = 1;
-    // public static int rangefinderModule = 1;
+	
+	/**
+	 * Constants pertaining specifically to the Drivetrain. 
+	 * @author Andrew Tierno
+	 */
+	public class Drivetrain {
+	    public static final int LEFT_FRONT_TALON_PORT = 0;
+	    public static final int LEFT_BACK_TALON_PORT = 1;
+	    public static final int RIGHT_FRONT_TALON_PORT = 2;
+	    public static final int RIGHT_BACK_TALON_PORT = 3;
+	    
+	    public static final int GYRO_PORT = 0;
+	}
 }

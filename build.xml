@@ -20,11 +20,23 @@
   <!-- <property name="target" value=""/> -->
 
   <!-- Any other property in build.properties can also be overridden. -->
-  
+	<exec executable="git">
+		<arg value="submodule"/>
+		<arg value="foreach"/>
+		<arg value="git"/>
+		<arg value="pull"/>
+		<arg value="origin"/>
+		<arg value="master"/>
+	</exec>
+
+	  <delete dir="src/org/harker/robotics/harkerrobolib"/>
+	  <copy todir="src">
+	    <fileset dir="harkerrobolib/src"/>
+	  </copy>
   <property file="${user.home}/wpilib/wpilib.properties"/>
   <property file="build.properties"/>
   <property file="${user.home}/wpilib/java/${version}/ant/build.properties"/>
-  
-  <import file="${wpilib.ant.dir}/build.xml"/>
 
-</project> 
+  <import file="${user.home}/wpilib/java/${version}/ant/build.xml"/>
+
+</project>

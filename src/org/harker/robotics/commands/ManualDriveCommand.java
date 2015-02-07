@@ -1,18 +1,14 @@
-
 package org.harker.robotics.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-import org.harker.robotics.Robot;
-
 /**
  *
  */
-public class ExampleCommand extends Command {
+public class ManualDriveCommand extends Command {
 
-    public ExampleCommand() {
-        // Use requires() here to declare subsystem dependencies
-        requires(Robot.exampleSubsystem);
+    public ManualDriveCommand() {
+        requires(Drivetrain.getInstance());
     }
 
     // Called just before this Command runs the first time

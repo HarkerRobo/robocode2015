@@ -1,0 +1,4 @@
+[submodule "harkerrobolib"]
+	path = harkerrobolib
+	url = http://github.com/HarkerRobo/harkerrobolib
+	branch = master
