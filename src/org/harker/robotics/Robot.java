@@ -2,7 +2,6 @@
 package org.harker.robotics;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
@@ -12,17 +11,17 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * documentation. If you change the name of this class or the package after
  * creating this project, you must also update the manifest file in the resource
  * directory.
+ * 
+ * @author Andrew Tierno
  */
 public class Robot extends IterativeRobot {
-
-	public static OI oi;
 
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-		oi = new OI();
+		OI.initialize();
     }
 	
 	public void disabledPeriodic() {
