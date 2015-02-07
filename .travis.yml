@@ -1,0 +1,12 @@
+language: java
+jdk:
+  - oraclejdk8
+
+install:
+  - sudo apt-get update
+  - sudo apt-get install libc6-i386
+  - (git clone git://github.com/HarkerRobo/sunspotfrcsdk && mv sunspotfrcsdk ~)
+  - (git clone git://github.com/HarkerRobo/wpilib && mv wpilib ~)
+
+script:
+  - ant -buildfile ./RobotCode2015/build.xml -Dsunspot.home="`echo ~`"/sunspotfrcsdk jar
