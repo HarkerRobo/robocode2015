@@ -1,1 +1,3 @@
-# robocode2015
+# Robot Code 2015 [[![Build Status](https://travis-ci.org/HarkerRobo/robocode2015.svg)](https://travis-ci.org/HarkerRobo/robocode2015)]
+
+Official (working and maintained) repository source code of 2015 robot. 
