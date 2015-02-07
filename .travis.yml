@@ -9,4 +9,4 @@ install:
   - (git clone git://github.com/HarkerRobo/wpilib && mv wpilib ~)
 
 script:
-  - ant -buildfile ./RobotCode2015/build.xml -Dsunspot.home="`echo ~`"/sunspotfrcsdk jar
+  - ant -Dsunspot.home="`echo ~`"/sunspotfrcsdk jar
