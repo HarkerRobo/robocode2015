@@ -9,18 +9,31 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * the gyroscope and encoders. 
  * 
  * @author Andrew Tierno
+ * @author Manan Shah
  */
+
 public class Drivetrain extends Subsystem {
 	
+	//Deadzone constants
+	public static double DZ_Y = 0.15;
+	public static double DZ_T = 0.20;
+	public static double DZ_X = 0.15;
+	
+	//Theta scale because we need to ensure we don't move theta too fast
+	public static double T_SCALE = 0.2;
+	
+	// The static instance variable Drivetrain
 	private static Drivetrain drivetrain;
 	
+	/**
+	 * Drivetrain singleton constructor (private and empty)
+	 */
 	private Drivetrain() {
 		
 	}
 	
 	/**
-	 * Gets an instance of the robot's drivetrain and initializes it 
-	 * if it was previously null. 
+	 * Gets an instance of the Drivetrain (needed for singleton)
 	 * @return An instance of the drivetrain
 	 */
 	public static Drivetrain getInstance() {
@@ -28,13 +41,5 @@ public class Drivetrain extends Subsystem {
 		return drivetrain;
 	}
 	
-	/**
-	 * Sets the default command to which the subsystem reverts when 
-	 * nothing else is being called. For the Drivetrain this is the 
-	 * Manual Drive Command. 
-	 */
-    public void initDefaultCommand() {
-    	setDefaultCommand(new ManualDriveCommand());
-    }
 }
 
