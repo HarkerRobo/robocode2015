@@ -1,19 +1,24 @@
 package org.harker.robotics.commands;
 
+import org.harker.robotics.OI;
 import org.harker.robotics.subsystems.Drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * This command is reponsible for taking user input from the Joystick and
+ * This command is responsible for taking user input from the Joystick and
  * instructing the drivetrain to drive with those values. 
  * 
  * @author Andrew Tierno
  */
 public class ManualDriveCommand extends Command {
 
+	private Drivetrain drivetrain;
+	private OI oi;
     public ManualDriveCommand() {
-        requires(Drivetrain.getInstance());
+    	drivetrain = Drivetrain.getInstance();
+    	oi = OI.getInstance();
+    	requires(drivetrain);
     }
 
     /**
@@ -26,6 +31,8 @@ public class ManualDriveCommand extends Command {
      * Invokes the Drivetrain's drive method with the inputs from the Joystick. 
      */
     protected void execute() {
+    	drivetrain.drive(oi.gamepad1.getLeftX(), oi.gamepad1.getLeftY(),
+				oi.gamepad1.getRightX(), drivetrain.getCurrentHeading());
     }
 
     /**
