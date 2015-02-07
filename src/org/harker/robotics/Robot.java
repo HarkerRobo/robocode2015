@@ -21,7 +21,7 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-		OI.initialize();
+    	OI.initialize();
     }
 	
 	public void disabledPeriodic() {

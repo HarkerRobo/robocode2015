@@ -41,5 +41,13 @@ public class Drivetrain extends Subsystem {
 		return drivetrain;
 	}
 	
+	/**
+	 * Sets the default command to which the subsystem reverts when 
+	 * nothing else is being called. For the Drivetrain this is the 
+	 * Manual Drive Command. 
+	 */
+    public void initDefaultCommand() {
+    	setDefaultCommand(new ManualDriveCommand());
+    }
 }
 
