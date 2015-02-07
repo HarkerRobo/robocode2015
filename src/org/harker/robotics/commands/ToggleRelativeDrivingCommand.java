@@ -29,7 +29,7 @@ public class ToggleRelativeDrivingCommand extends Command {
      * Toggles the isRelative flag in Drivetrain
      */
     protected void execute() {
-    	Drivetrain.getInstance().toggleRelativeDriving();
+    	Drivetrain.getInstance().toggleRelative();
     }
 
     /**
