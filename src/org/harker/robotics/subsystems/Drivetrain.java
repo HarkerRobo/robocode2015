@@ -119,7 +119,8 @@ public class Drivetrain extends Subsystem {
 		prevY = vY;
 		prevT = vT;
 		
-		robotDrive.mecanumDrive_Cartesian(vX, vY, vT, heading);
+		System.err.println("Would have performed drive now");
+		//robotDrive.mecanumDrive_Cartesian(vX, vY, vT, heading);
 	}
 	
 	/**

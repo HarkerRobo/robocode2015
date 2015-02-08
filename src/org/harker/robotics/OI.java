@@ -1,6 +1,7 @@
-package src.org.harker.robotics;
+package org.harker.robotics;
 
-import org.harker.robotics.RobotMap;
+
+import org.harker.robotics.commands.ManualDriveCommand;
 import org.harker.robotics.commands.ToggleRelativeDrivingCommand;
 import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
 
@@ -24,6 +25,8 @@ public class OI {
 	private OI() {
 		gamepad = new GamepadWrapper(RobotMap.OI.GAMEPAD_PORT);
 		gamepad.getButtonA().whenPressed(new ToggleRelativeDrivingCommand());
+		System.out.println(gamepad.getButtonBState());
+		gamepad.getButtonB().whenPressed(new ManualDriveCommand());
 	}
 	
 	/**
@@ -43,4 +46,3 @@ public class OI {
 			oi = new OI();
 	}
 }
-
