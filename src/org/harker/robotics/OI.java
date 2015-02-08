@@ -1,5 +1,6 @@
-package org.harker.robotics;
+package src.org.harker.robotics;
 
+import org.harker.robotics.RobotMap;
 import org.harker.robotics.commands.ToggleRelativeDrivingCommand;
 import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
 
