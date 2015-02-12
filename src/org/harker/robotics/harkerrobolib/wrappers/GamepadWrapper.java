@@ -18,28 +18,24 @@ public class GamepadWrapper extends Joystick {
     private final JoystickButtonWrapper buttonStickRight;
     private final JoystickButtonWrapper buttonBumperLeft;
     private final JoystickButtonWrapper buttonBumperRight;
-    private final JoystickButtonWrapper buttonTriggerLeft;
-    private final JoystickButtonWrapper buttonTriggerRight;
     
-    public static final int BUTTON_A_PORT = 2;
-    public static final int BUTTON_B_PORT = 3;
-    public static final int BUTTON_X_PORT = 1;
+    public static final int BUTTON_A_PORT = 1;
+    public static final int BUTTON_B_PORT = 2;
+    public static final int BUTTON_X_PORT = 3;
     public static final int BUTTON_Y_PORT = 4;
-    public static final int BUTTON_SELECT_PORT = 9;
-    public static final int BUTTON_START_PORT = 10;
+    public static final int BUTTON_SELECT_PORT = 7;
+    public static final int BUTTON_START_PORT = 8;
 
-    public static final int BUTTON_STICK_LEFT_PORT = 11;
-    public static final int BUTTON_STICK_RIGHT_PORT = 12;
+    public static final int BUTTON_STICK_LEFT_PORT = 9;
+    public static final int BUTTON_STICK_RIGHT_PORT = 10;
 
     public static final int BUTTON_BUMPER_LEFT_PORT = 5;
     public static final int BUTTON_BUMPER_RIGHT_PORT = 6;
-
-    public static final int BUTTON_TRIGGER_LEFT_PORT = 7;
-    public static final int BUTTON_TRIGGER_RIGHT_PORT = 8;
-
-    public static final int AXIS_DPAD_H = 6; //This was found in Overkill's code. Should be tested.
-    public static final int AXIS_DPAD_V = 7;
     
+    public static final int AXIS_LEFT_X = 0;
+    public static final int AXIS_LEFT_Y = 1;
+    public static final int AXIS_RIGHT_X = 4;
+    public static final int AXIS_RIGHT_Y = 5;
     public static final int AXIS_TRIGGER_LEFT = 2;
     public static final int AXIS_TRIGGER_RIGHT = 3;
     
@@ -55,33 +51,31 @@ public class GamepadWrapper extends Joystick {
         buttonStickRight = new JoystickButtonWrapper(this, BUTTON_STICK_RIGHT_PORT);
         buttonBumperLeft = new JoystickButtonWrapper(this, BUTTON_BUMPER_LEFT_PORT);
         buttonBumperRight = new JoystickButtonWrapper(this, BUTTON_BUMPER_RIGHT_PORT);
-        buttonTriggerLeft = new JoystickButtonWrapper(this, BUTTON_TRIGGER_LEFT_PORT);
-        buttonTriggerRight = new JoystickButtonWrapper(this, BUTTON_TRIGGER_RIGHT_PORT);
     }
 
     public double getLeftX() {
-	return super.getX();
+	return getRawAxis(AXIS_LEFT_X);
     }
 
     public double getLeftY() {
-	return -super.getY(); //by default, forward returns a negative number, which is unintuitive
+	return -getRawAxis(AXIS_LEFT_Y); //by default, forward returns a negative number, which is unintuitive
     }
 
     public double getRightX() {
-	return super.getZ();
+	return getRawAxis(AXIS_RIGHT_X);
     }
 
     public double getRightY() {
-	return -super.getThrottle(); //by default, forward returns a negative number, which is unintuitive
+	return -getRawAxis(AXIS_RIGHT_Y); //by default, forward returns a negative number, which is unintuitive
     }
     
     
     public double getRightTrigger() {
-    	return super.getRawAxis(AXIS_TRIGGER_RIGHT);
+    	return getRawAxis(AXIS_TRIGGER_RIGHT);
     }
     
     public double getLeftTrigger() {
-    	return super.getRawAxis(AXIS_TRIGGER_LEFT);
+    	return getRawAxis(AXIS_TRIGGER_LEFT);
     }
     
     /**
@@ -162,62 +156,6 @@ public class GamepadWrapper extends Joystick {
      */
     public boolean getButtonBumperRightState() {
         return buttonBumperRight.get();
-    }
-    
-    /**
-     * Gets whether or not the Left Trigger is pressed
-     * @return The state of the button
-     */
-    public boolean getButtonTriggerLeftState() {
-        return buttonTriggerLeft.get();
-    }
-    
-    /**
-     * Gets whether or not the Right Trigger is pressed
-     * @return The state of the button
-     */
-    public boolean getButtonTriggerRightState() {
-        return buttonTriggerRight.get();
-    }
-    
-    /**
-     * Gets whether or not the Right Button on the DPad is pressed. Since the DPad
-     * is an axis, the code checks to see if the button is pushed significantly far enough
-     * to the right.
-     * @return The state of the button
-     */
-    public boolean getDPadRightState() {
-        return this.getRawAxis(AXIS_DPAD_H) > .5;
-    }
-    
-    /**
-     * Gets whether or not the Left Button on the DPad is pressed. Since the DPad
-     * is an axis, the code checks to see if the button is pushed significantly far enough
-     * to the left.
-     * @return The state of the button
-     */
-    public boolean getDPadLeftState() {
-        return this.getRawAxis(AXIS_DPAD_H) < -.5;
-    }
-    
-    /**
-     * Gets whether or not the Up Button on the DPad is pressed. Since the DPad
-     * is an axis, the code checks to see if the button is pushed significantly far enough
-     * to the left.
-     * @return The state of the button
-     */
-    public boolean getDPadUpState() {
-        return this.getRawAxis(AXIS_DPAD_V) > .5;
-    }
-    
-    /**
-     * Gets whether or not the Down Button on the DPad is pressed. Since the DPad
-     * is an axis, the code checks to see if the button is pushed significantly far enough
-     * to the left.
-     * @return The state of the button
-     */
-    public boolean getDPadDownState() {
-        return this.getRawAxis(AXIS_DPAD_V) < -.5;
     }
     
     /**

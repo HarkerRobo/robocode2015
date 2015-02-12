@@ -3,6 +3,7 @@ package org.harker.robotics;
 
 import org.harker.robotics.OI;
 import org.harker.robotics.subsystems.Drivetrain;
+import org.harker.robotics.subsystems.Manipulator;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -23,8 +24,9 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-		OI.initialize();
     	Drivetrain.initialize();
+    	Manipulator.initialize();
+		OI.initialize();
     }
 	
 	public void disabledPeriodic() {

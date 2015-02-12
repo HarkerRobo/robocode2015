@@ -47,6 +47,11 @@ public class Manipulator extends Subsystem {
 		limitSwitchHigh = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_HIGH_PORT);
 	}
 	
+	public static void initialize() {
+		if (manipulator == null)
+			 manipulator = new Manipulator();
+	}
+	
 	/**
 	 * Gets an instance of the Manipulator (needed for singleton)
 	 * @return An instance of the manipulator

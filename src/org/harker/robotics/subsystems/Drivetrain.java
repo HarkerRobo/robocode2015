@@ -103,6 +103,16 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	/**
+	 * Sets all four talons to one for testing purposes.
+	 */
+	public void debugDrive() {
+		leftBack.set(-1);
+		leftFront.set(-1);
+		rightBack.set(-1);
+		rightFront.set(-1);
+	}
+	
+	/**
 	 * Drives the robot using a Cartesian style mecanum drive with the given 
 	 * x, y, and rotational velocities. 
 	 * @param sx The x-velocity
@@ -110,20 +120,31 @@ public class Drivetrain extends Subsystem {
 	 * @param rotation The rotational velocity
 	 */
 	public void drive(double sx, double sy, double rotation) {
-		System.out.println("Speed x " + sx);
 		//Applying deadzone
 		double vX = (Math.abs(sx) > DZ_X) ? sx : 0; 
 		double vY = (Math.abs(sy) > DZ_Y) ? sy : 0;
 		double vT = (Math.abs(rotation) > DZ_T) ? rotation * T_SCALE : 0;
 		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
 		
+		System.out.println("====BEFORE====");
+		System.out.println("vX: " + vX);
+		System.out.println("vY: " + vY);
+		System.out.println("vT: " + vT);
+		System.out.println("dH: " + heading);
+		
 		//Restricting acceleration
 		if (Math.abs(vX - prevX) > MAX_ACCEL_X)
-			vX = Math.signum(vX - prevX) * MAX_ACCEL_X;
+			vX = prevX + Math.signum(vX - prevX) * MAX_ACCEL_X;
 		if (Math.abs(vY - prevY) > MAX_ACCEL_Y)
-			vY = Math.signum(vY - prevY) * MAX_ACCEL_Y;
+			vY = prevY + Math.signum(vY - prevY) * MAX_ACCEL_Y;
 		if (Math.abs(vT - prevT) > MAX_ACCEL_T)
-			vT = Math.signum(vT - prevT) * MAX_ACCEL_T;
+			vT = prevT + Math.signum(vT - prevT) * MAX_ACCEL_T;
+		
+		System.out.println("====AFTER====");
+		System.out.println("vX: " + vX);
+		System.out.println("vY: " + vY);
+		System.out.println("vT: " + vT);
+		System.out.println("dH: " + heading);
 		
 		//Updating previous values
 		prevX = vX;
