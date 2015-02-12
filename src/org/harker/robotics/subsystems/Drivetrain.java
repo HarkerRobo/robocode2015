@@ -175,6 +175,7 @@ public class Drivetrain extends Subsystem {
 	public void updateEncoders() {
 		System.out.println("Got to Update");
 		encRightBack.updateRate();
+		encRightBack.updateTable();
 		System.out.println(encRightBack.get());
 	}
 }

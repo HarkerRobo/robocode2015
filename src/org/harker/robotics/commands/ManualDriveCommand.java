@@ -34,7 +34,6 @@ public class ManualDriveCommand extends Command {
      * mapped to the rotational velocity. 
      */
     protected void execute() {
-    	System.out.println("Drive is running");
     	//drivetrain.debugDrive();
 		drivetrain.drive(OI.gamepad.getLeftX(), OI.gamepad.getLeftY(), OI.gamepad.getRightX());
     }

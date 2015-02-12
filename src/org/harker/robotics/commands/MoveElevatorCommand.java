@@ -26,7 +26,8 @@ public class MoveElevatorCommand extends Command {
     protected void execute() {
     	//The triggers move in a range of 0 to 1. In order to simulate a range of -1 to 1 the difference
     	//of the two triggers is taken.
-    	manipulator.moveElevator((OI.gamepad.getRightTrigger() - OI.gamepad.getLeftTrigger())*ELEV_SCALE);
+    	double val = OI.gamepad.getRightTrigger() - OI.gamepad.getLeftTrigger();
+    	manipulator.moveElevator(val*ELEV_SCALE);
     }
 
     // Make this return true when this Command no longer needs to run execute()

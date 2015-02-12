@@ -92,28 +92,28 @@ public class Manipulator extends Subsystem {
      * Toggles the left clamp.
      */
     public void toggleLeftClamp() {
-    	leftClamp.set(!leftClamp.get());
+    	setLeftClamp(!leftClamp.get());
     }
     
     /**
      * Toggles the right clamp.
      */
     public void toggleRightClamp() {
-    	rightClamp.set(!rightClamp.get());
+    	setRightClamp(!rightClamp.get());
     }
     
     /**
      * Opens the right clamp.
      */
     public void openRightClamp() {
-    	rightClamp.set(CLAMP_OPEN_STATE);
+    	setRightClamp(CLAMP_OPEN_STATE);
     }
     
     /**
      * Opens the left clamp.
      */
     public void openLeftClamp() {
-    	leftClamp.set(CLAMP_OPEN_STATE);
+    	setLeftClamp(CLAMP_OPEN_STATE);
     }
     
     /**
@@ -128,14 +128,14 @@ public class Manipulator extends Subsystem {
      * Closes the right clamp.
      */
     public void closeRightClamp() {
-    	rightClamp.set(CLAMP_CLOSED_STATE);
+    	setRightClamp(CLAMP_CLOSED_STATE);
     }
     
     /**
      * Closes the left clamp.
      */
     public void closeLeftClamp() {
-    	leftClamp.set(CLAMP_CLOSED_STATE);
+    	setLeftClamp(CLAMP_CLOSED_STATE);
     }
     
     /**
@@ -151,7 +151,7 @@ public class Manipulator extends Subsystem {
      * 
      * @param state the state to be set																																												
      */
-    public void setRightClamp(boolean state) {
+    private void setRightClamp(boolean state) {
     	rightClamp.set(state);
     }
     
@@ -160,7 +160,7 @@ public class Manipulator extends Subsystem {
      * 
      * @param state the state to be set
      */
-    public void setLeftClamp(boolean state) {
+    private void setLeftClamp(boolean state) {
     	leftClamp.set(state);
     }
 
