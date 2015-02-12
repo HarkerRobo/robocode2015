@@ -17,13 +17,12 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * @author Andrew Tierno
  */
 public class Robot extends IterativeRobot {
-
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-    	OI.initialize();
+		OI.initialize();
     	Drivetrain.initialize();
     }
 	
@@ -43,7 +42,6 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-		OI.initialize();
     }
 
     /**

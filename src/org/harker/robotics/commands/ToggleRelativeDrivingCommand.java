@@ -1,5 +1,6 @@
 package org.harker.robotics.commands;
 
+import org.harker.robotics.Robot;
 import org.harker.robotics.subsystems.Drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -13,10 +14,13 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class ToggleRelativeDrivingCommand extends Command {
 
+	private Drivetrain driveTrain;
 	/**
 	 * Creates a new Command. Empty constructor. 
 	 */
     public ToggleRelativeDrivingCommand() {
+    	driveTrain = Drivetrain.getInstance();
+    	requires(driveTrain);
     }
 
     /**

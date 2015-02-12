@@ -1,7 +1,9 @@
 package org.harker.robotics.subsystems;
 
 import org.harker.robotics.commands.ManualDriveCommand;
+import org.harker.robotics.harkerrobolib.wrappers.EncoderWrapper;
 import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
+import org.harker.robotics.OI;
 import org.harker.robotics.RobotMap;
 
 import edu.wpi.first.wpilibj.Gyro;
@@ -15,6 +17,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * 
  * @author Andrew Tierno
  * @author Manan Shah
+ * @author Vedaad Shakib
+ * @author Neymika
  */
 
 public class Drivetrain extends Subsystem {
@@ -22,11 +26,12 @@ public class Drivetrain extends Subsystem {
 	//Drive related components
 	private static RobotDrive robotDrive;
 	private static TalonWrapper leftBack, leftFront, rightBack, rightFront;
+	private static EncoderWrapper encRightBack;
 	private static Gyro gyro;
 	
 	//Deadzone constants
 	private static double DZ_Y = 0.15;
-	private static double DZ_R = 0.20;
+	private static double DZ_T = 0.20;
 	private static double DZ_X = 0.15;
 	
 	//Theta scale because we need to ensure we don't move theta too fast
@@ -47,7 +52,7 @@ public class Drivetrain extends Subsystem {
 	private double prevX;
 	private double prevY;
 	private double prevT;
-	
+	private double voltsPerDegreePerSecond = (12.5e-3);
 	/**
 	 * Drivetrain singleton constructor. Initializes the various components 
 	 * of the robot along with the internal RobotDrive handler. 
@@ -58,9 +63,14 @@ public class Drivetrain extends Subsystem {
 		leftFront = new TalonWrapper(RobotMap.Drivetrain.RIGHT_FRONT_TALON_PORT);
 		rightFront = new TalonWrapper(RobotMap.Drivetrain.RIGHT_BACK_TALON_PORT);
 		
+		encRightBack = new EncoderWrapper(RobotMap.Drivetrain.RIGHT_BACK_ENC_PORT_A,
+											RobotMap.Drivetrain.RIGHT_BACK_ENC_PORT_B);
+		
 		gyro = new Gyro(RobotMap.Drivetrain.GYRO_PORT);
+		gyro.setSensitivity(voltsPerDegreePerSecond);
 		
 		robotDrive = new RobotDrive(leftBack, rightBack, leftFront, rightFront);
+		robotDrive.setSafetyEnabled(false);
 		
 		prevX = prevY = prevT = 0;
 	}
@@ -100,10 +110,11 @@ public class Drivetrain extends Subsystem {
 	 * @param rotation The rotational velocity
 	 */
 	public void drive(double sx, double sy, double rotation) {
+		System.out.println("Speed x " + sx);
 		//Applying deadzone
 		double vX = (Math.abs(sx) > DZ_X) ? sx : 0; 
 		double vY = (Math.abs(sy) > DZ_Y) ? sy : 0;
-		double vT = (Math.abs(rotation) > DZ_R) ? rotation * T_SCALE : 0;
+		double vT = (Math.abs(rotation) > DZ_T) ? rotation * T_SCALE : 0;
 		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
 		
 		//Restricting acceleration
@@ -118,9 +129,7 @@ public class Drivetrain extends Subsystem {
 		prevX = vX;
 		prevY = vY;
 		prevT = vT;
-		
-		System.err.println("Would have performed drive now");
-		//robotDrive.mecanumDrive_Cartesian(vX, vY, vT, heading);
+		robotDrive.mecanumDrive_Cartesian(vX, vY, vT, heading);
 	}
 	
 	/**
@@ -152,17 +161,21 @@ public class Drivetrain extends Subsystem {
 	 * absolute to the field. 
 	 * @param flag
 	 */
-	public void setRelative(boolean flag)
-	{
+	public void setRelative(boolean flag) {
 		isRelative = flag;
 	}
 	
 	/**
 	 * Toggles whether or not relative driving should be used. 
 	 */
-	public void toggleRelative()
-	{
+	public void toggleRelative() {
 		isRelative = !isRelative;
+	}
+	
+	public void updateEncoders() {
+		System.out.println("Got to Update");
+		encRightBack.updateRate();
+		System.out.println(encRightBack.get());
 	}
 }
 

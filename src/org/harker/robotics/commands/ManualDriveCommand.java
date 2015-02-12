@@ -17,6 +17,7 @@ public class ManualDriveCommand extends Command {
 
 	public ManualDriveCommand() {
     	drivetrain = Drivetrain.getInstance();
+    	System.out.println("Manual Drive Command initialized");
     	requires(drivetrain);
     }
 
@@ -33,9 +34,10 @@ public class ManualDriveCommand extends Command {
      * mapped to the rotational velocity. 
      */
     protected void execute() {
-    	drivetrain.drive(OI.gamepad.getLeftX(), OI.gamepad.getLeftY(), OI.gamepad.getRightX());
+    	System.out.println("Drive is running");
+    	//drivetrain.debugDrive();
+		drivetrain.drive(OI.gamepad.getLeftX(), OI.gamepad.getLeftY(), OI.gamepad.getRightX());
     }
-
     /**
      * This command never terminates, thus this never reports being finished. 
      */
