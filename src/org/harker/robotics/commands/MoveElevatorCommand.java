@@ -1,5 +1,5 @@
 package org.harker.robotics.commands;
-
+import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
 import org.harker.robotics.OI;
 import org.harker.robotics.subsystems.Manipulator;
 
