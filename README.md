@@ -2,4 +2,4 @@
 
 Official (working and maintained) repository source code of 2015 robot. 
 
-![ourlogo](http://imgs.xkcd.com/comics/donald_knuth.png)
+![ourlogo](http://imgs.xkcd.com/comics/first_design.png)
