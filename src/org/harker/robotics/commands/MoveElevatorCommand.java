@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Vedaad Shakib
  */
 public class MoveElevatorCommand extends Command {
-
+	private double ELEV_SCALE = 0.8;
 	Manipulator manipulator;
 	
     public MoveElevatorCommand() {
@@ -26,7 +26,7 @@ public class MoveElevatorCommand extends Command {
     protected void execute() {
     	//The triggers move in a range of 0 to 1. In order to simulate a range of -1 to 1 the difference
     	//of the two triggers is taken.
-    	manipulator.moveElevator(OI.gamepad.getRightTrigger() - OI.gamepad.getLeftTrigger());
+    	manipulator.moveElevator((OI.gamepad.getRightTrigger() - OI.gamepad.getLeftTrigger())*ELEV_SCALE);
     }
 
     // Make this return true when this Command no longer needs to run execute()
