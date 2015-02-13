@@ -40,7 +40,7 @@ public class GamepadWrapper extends Joystick {
     public static final int AXIS_TRIGGER_RIGHT = 3;
     
     public GamepadWrapper(int port) {
-	super(port);
+    	super(port);
         buttonA = new JoystickButtonWrapper(this, BUTTON_A_PORT);
         buttonB = new JoystickButtonWrapper(this, BUTTON_B_PORT);
         buttonX = new JoystickButtonWrapper(this, BUTTON_X_PORT);
@@ -54,21 +54,20 @@ public class GamepadWrapper extends Joystick {
     }
 
     public double getLeftX() {
-	return getRawAxis(AXIS_LEFT_X);
+    	return getRawAxis(AXIS_LEFT_X);
     }
 
     public double getLeftY() {
-	return -getRawAxis(AXIS_LEFT_Y); //by default, forward returns a negative number, which is unintuitive
+    	return -getRawAxis(AXIS_LEFT_Y); //by default, forward returns a negative number, which is unintuitive
     }
 
     public double getRightX() {
-	return getRawAxis(AXIS_RIGHT_X);
+    	return getRawAxis(AXIS_RIGHT_X);
     }
 
     public double getRightY() {
-	return -getRawAxis(AXIS_RIGHT_Y); //by default, forward returns a negative number, which is unintuitive
+    	return -getRawAxis(AXIS_RIGHT_Y); //by default, forward returns a negative number, which is unintuitive
     }
-    
     
     public double getRightTrigger() {
     	return getRawAxis(AXIS_TRIGGER_RIGHT);
@@ -236,21 +235,5 @@ public class GamepadWrapper extends Joystick {
      */
     public JoystickButtonWrapper getButtonBumperRight() {
         return buttonBumperRight;
-    }
-    
-    /**
-     * Gets an instance of the Left Trigger
-     * @return An instance of the button
-     */
-    public JoystickButtonWrapper getButtonTriggerLeft() {
-        return buttonTriggerLeft;
-    }
-    
-    /**
-     * Gets an instance of the Right Trigger
-     * @return An instance of the button
-     */
-    public JoystickButtonWrapper getButtonTriggerRight() {
-        return buttonTriggerRight;
     }
 }

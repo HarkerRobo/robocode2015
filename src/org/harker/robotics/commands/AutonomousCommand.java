@@ -1,37 +1,32 @@
 package org.harker.robotics.commands;
 
 import org.harker.robotics.subsystems.Drivetrain;
+import org.harker.robotics.subsystems.Manipulator;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
- *
+ * Runs a series of commands in autonomous mode to pick up the crate and 
+ * deposit it after a set distance.
+ * 
+ * @author Vedaad Shakib
  */
-public class AutonomousCommand extends Command {
-
-    public AutonomousCommand() {
-    	requires(Drivetrain.getInstance());
-    }
-
-    // Called just before this Command runs the first time
-    protected void initialize() {
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    }
-
-    // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
-        return false;
-    }
-
-    // Called once after isFinished returns true
-    protected void end() {
-    }
-
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() {
+public class AutonomousCommand extends CommandGroup {
+    
+	Manipulator manipulator;
+	Drivetrain drivetrain;
+	
+	public static final int TIME_TO_DRIVE = 3; // we don't have encoders anymore :(
+	                                           // let's just assume that the battery is full voltage :)
+	
+    public  AutonomousCommand() {
+    	manipulator = Manipulator.getInstance();
+    	drivetrain = Drivetrain.getInstance();
+    	
+    	addSequential(new OpenClampsCommand());
+    	addSequential(new ResetElevatorCommand());
+    	addSequential(new CloseClampsCommand());
+    	addSequential(new DriveForTimeCommand(TIME_TO_DRIVE));
+        addSequential(new OpenClampsCommand());
     }
 }

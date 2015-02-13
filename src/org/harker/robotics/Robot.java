@@ -2,6 +2,7 @@
 package org.harker.robotics;
 
 import org.harker.robotics.OI;
+import org.harker.robotics.commands.AutonomousCommand;
 import org.harker.robotics.subsystems.Drivetrain;
 import org.harker.robotics.subsystems.Manipulator;
 
@@ -34,7 +35,7 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
-    	
+    	(new AutonomousCommand()).start();
     }
 
     /**

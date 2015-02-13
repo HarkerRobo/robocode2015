@@ -8,6 +8,7 @@ import org.harker.robotics.RobotMap;
 
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -26,7 +27,6 @@ public class Drivetrain extends Subsystem {
 	//Drive related components
 	private static RobotDrive robotDrive;
 	private static TalonWrapper leftBack, leftFront, rightBack, rightFront;
-	private static EncoderWrapper encRightBack;
 	private static Gyro gyro;
 	
 	//Deadzone constants
@@ -34,8 +34,13 @@ public class Drivetrain extends Subsystem {
 	private static double DZ_T = 0.20;
 	private static double DZ_X = 0.15;
 	
+	//Strafe correction 
+	private static double STRAFE_ERROR = 0.12;
+	
 	//Theta scale because we need to ensure we don't move theta too fast
-	private static double T_SCALE = 0.2;
+	private static double T_SCALE = 1;
+	private static double X_SCALE = 1;
+	private static double Y_SCALE = 1;
 	
 	//Relative driving boolean
 	private static boolean isRelative = false;
@@ -52,7 +57,10 @@ public class Drivetrain extends Subsystem {
 	private double prevX;
 	private double prevY;
 	private double prevT;
+	
+	//Calibration factor for the gyro
 	private double voltsPerDegreePerSecond = (12.5e-3);
+	
 	/**
 	 * Drivetrain singleton constructor. Initializes the various components 
 	 * of the robot along with the internal RobotDrive handler. 
@@ -63,14 +71,13 @@ public class Drivetrain extends Subsystem {
 		leftFront = new TalonWrapper(RobotMap.Drivetrain.RIGHT_FRONT_TALON_PORT);
 		rightFront = new TalonWrapper(RobotMap.Drivetrain.RIGHT_BACK_TALON_PORT);
 		
-		encRightBack = new EncoderWrapper(RobotMap.Drivetrain.RIGHT_BACK_ENC_PORT_A,
-											RobotMap.Drivetrain.RIGHT_BACK_ENC_PORT_B);
-		
 		gyro = new Gyro(RobotMap.Drivetrain.GYRO_PORT);
 		gyro.setSensitivity(voltsPerDegreePerSecond);
 		
 		robotDrive = new RobotDrive(leftBack, rightBack, leftFront, rightFront);
 		robotDrive.setSafetyEnabled(false);
+		robotDrive.setInvertedMotor(MotorType.kFrontRight, true);
+		robotDrive.setInvertedMotor(MotorType.kRearRight, true);
 		
 		prevX = prevY = prevT = 0;
 	}
@@ -102,14 +109,11 @@ public class Drivetrain extends Subsystem {
 		return drivetrain;
 	}
 	
-	/**
-	 * Sets all four talons to one for testing purposes.
-	 */
-	public void debugDrive() {
-		leftBack.set(-1);
-		leftFront.set(-1);
-		rightBack.set(-1);
-		rightFront.set(-1);
+	public void driveRaw(double speed) {
+		leftBack.set(speed);
+		leftFront.set(speed);
+		rightBack.set(speed);
+		rightFront.set(speed);
 	}
 	
 	/**
@@ -121,18 +125,20 @@ public class Drivetrain extends Subsystem {
 	 */
 	public void drive(double sx, double sy, double rotation) {
 		//Applying deadzone
-		double vX = (Math.abs(sx) > DZ_X) ? sx : 0; 
-		double vY = (Math.abs(sy) > DZ_Y) ? sy : 0;
-		double vT = (Math.abs(rotation) > DZ_T) ? rotation * T_SCALE : 0;
+		double vX = (Math.abs(sx) > DZ_X) ? -sx : 0; 
+		double vY = (Math.abs(sy) > DZ_Y) ? (sy + vX*STRAFE_ERROR) : 0;
+		vY = Math.min(1, vY); // the error correction might overflow vY
+		double vT = (Math.abs(rotation) > DZ_T) ? -rotation * T_SCALE : 0;
 		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
 		
-		System.out.println("====BEFORE====");
-		System.out.println("vX: " + vX);
-		System.out.println("vY: " + vY);
-		System.out.println("vT: " + vT);
-		System.out.println("dH: " + heading);
+		System.out.println(getCurrentAbsoluteHeading());
+//		System.out.println("====BEFORE====");
+//		System.out.println("vX: " + vX);
+//		System.out.println("vY: " + vY);
+//		System.out.println("vT: " + vT);
+//		System.out.println("dH: " + heading);
 		
-		//Restricting acceleration
+		//Restricting acceleration HI TIERNO!
 		if (Math.abs(vX - prevX) > MAX_ACCEL_X)
 			vX = prevX + Math.signum(vX - prevX) * MAX_ACCEL_X;
 		if (Math.abs(vY - prevY) > MAX_ACCEL_Y)
@@ -140,11 +146,11 @@ public class Drivetrain extends Subsystem {
 		if (Math.abs(vT - prevT) > MAX_ACCEL_T)
 			vT = prevT + Math.signum(vT - prevT) * MAX_ACCEL_T;
 		
-		System.out.println("====AFTER====");
-		System.out.println("vX: " + vX);
-		System.out.println("vY: " + vY);
-		System.out.println("vT: " + vT);
-		System.out.println("dH: " + heading);
+//		System.out.println("====AFTER====");
+//		System.out.println("vX: " + vX);
+//		System.out.println("vY: " + vY);
+//		System.out.println("vT: " + vT);
+//		System.out.println("dH: " + heading);
 		
 		//Updating previous values
 		prevX = vX;
@@ -191,13 +197,6 @@ public class Drivetrain extends Subsystem {
 	 */
 	public void toggleRelative() {
 		isRelative = !isRelative;
-	}
-	
-	public void updateEncoders() {
-		System.out.println("Got to Update");
-		encRightBack.updateRate();
-		encRightBack.updateTable();
-		System.out.println(encRightBack.get());
 	}
 }
 

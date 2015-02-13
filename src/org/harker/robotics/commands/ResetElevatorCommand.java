@@ -1,21 +1,20 @@
 package org.harker.robotics.commands;
-import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
-import org.harker.robotics.OI;
+
 import org.harker.robotics.subsystems.Manipulator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * Moves the elevator.
+ * Resets the elevator to the lowest position
  * 
  * @author Vedaad Shakib
  */
-public class MoveElevatorCommand extends Command {
-	private double ELEV_SCALE = 0.8;
+public class ResetElevatorCommand extends Command {
+
 	Manipulator manipulator;
 	
-    public MoveElevatorCommand() {
-        manipulator = Manipulator.getInstance();
+    public ResetElevatorCommand() {
+        manipulator.getInstance();
     }
 
     // Called just before this Command runs the first time
@@ -24,15 +23,12 @@ public class MoveElevatorCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//The triggers move in a range of 0 to 1. In order to simulate a range of -1 to 1 the difference
-    	//of the two triggers is taken.
-    	double val = OI.gamepad.getRightTrigger() - OI.gamepad.getLeftTrigger();
-    	manipulator.moveElevator(val*ELEV_SCALE);
+    	manipulator.moveElevator(-1);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return manipulator.isLowSwitchPressed();
     }
 
     // Called once after isFinished returns true

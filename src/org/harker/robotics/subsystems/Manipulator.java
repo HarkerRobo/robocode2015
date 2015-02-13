@@ -1,6 +1,7 @@
 package org.harker.robotics.subsystems;
 
 import org.harker.robotics.RobotMap;
+import org.harker.robotics.commands.ManualElevatorCommand;
 import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -24,8 +25,7 @@ public class Manipulator extends Subsystem {
 	private Solenoid rightClamp;
 	
 	// Talons that lift the elevator
-	private TalonWrapper elevatorTalon1;
-	private TalonWrapper elevatorTalon2;
+	private TalonWrapper elevatorTalon;
 	
 	// Limit switches that detect if the elevator is too high or low
 	private DigitalInput limitSwitchLow;
@@ -41,10 +41,10 @@ public class Manipulator extends Subsystem {
 	private Manipulator() {
 		leftClamp = new Solenoid(RobotMap.Manipulator.LEFT_CLAMP_PORT);
 		rightClamp = new Solenoid(RobotMap.Manipulator.RIGHT_CLAMP_PORT);
-		elevatorTalon1 = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON_1_PORT);
-		elevatorTalon2 = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON_2_PORT);
+		elevatorTalon = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON_PORT);
 		limitSwitchLow = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_LOW_PORT);
 		limitSwitchHigh = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_HIGH_PORT);
+		openClamps();
 	}
 	
 	public static void initialize() {
@@ -62,7 +62,7 @@ public class Manipulator extends Subsystem {
 	}
 	
     public void initDefaultCommand() {
-        //setDefaultCommand(new MySpecialCommand());
+    	setDefaultCommand(new ManualElevatorCommand());
     }
     
     /**
@@ -71,8 +71,7 @@ public class Manipulator extends Subsystem {
      * @param speed the speed to be set in the range [-1, 1]
      */
     public void moveElevator(double speed) {
-    	elevatorTalon1.set(speed);
-    	elevatorTalon2.set(speed);
+    	elevatorTalon.set(speed);
     }
     
     /**
