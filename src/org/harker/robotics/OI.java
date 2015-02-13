@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.command.Command;
  * 
  * @author Andrew Tierno
  * @author Vedaad Shakib
+ * @author Manan Shah
  */
 public class OI {
     public static Command manualDrive;
@@ -28,7 +29,6 @@ public class OI {
 	 * the functionalities associated with buttons on the gamepad. 
 	 */
 	public OI() {
-		System.out.println("OI is initializing");
 		gamepad = new GamepadWrapper(RobotMap.OI.GAMEPAD_PORT);
 		gamepad.getButtonB().whenPressed(new ToggleRelativeDrivingCommand());
 		gamepad.getButtonA().whenPressed(new ToggleClampsCommand());

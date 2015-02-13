@@ -25,15 +25,15 @@ public class RobotMap {
 	 * Constants pertaining specifically to the Manipulator.
 	 */
 	public class Manipulator {
-		public static final int LEFT_CLAMP_PORT = 0;
-		public static final int RIGHT_CLAMP_PORT = 1;
+		public static final int LEFT_CLAMP_PORT = 4;
+		public static final int RIGHT_CLAMP_PORT = 5;
 		public static final int ELEVATOR_TALON_PORT = 4;
 		public static final int LIMIT_SWITCH_HIGH_PORT = 3;
 		public static final int LIMIT_SWITCH_LOW_PORT = 4;
 	}
 	
 	/**
-	 * Constants pertaining specifically to the OI. 0
+	 * Constants pertaining specifically to the OI.
 	 */
 	public class OI {
 		public static final int GAMEPAD_PORT = 0;

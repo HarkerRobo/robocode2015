@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * controls the stacking and manipulation of totes. 
  * 
  * @author Vedaad Shakib
+ * @author Andrew Tierno
  */
 public class Manipulator extends Subsystem {
     
@@ -44,7 +45,6 @@ public class Manipulator extends Subsystem {
 		elevatorTalon = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON_PORT);
 		limitSwitchLow = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_LOW_PORT);
 		limitSwitchHigh = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_HIGH_PORT);
-		openClamps();
 	}
 	
 	public static void initialize() {
@@ -66,12 +66,20 @@ public class Manipulator extends Subsystem {
     }
     
     /**
-     * Moves the elevator according to a specified speed.
+     * Moves the elevator according to a specified speed. However, if 
+     * a limit switch is pressed and the desired speed would move the
+     * elevator further in that direction, the speed will then be set
+     * to zero.
      * 
      * @param speed the speed to be set in the range [-1, 1]
      */
     public void moveElevator(double speed) {
-    	elevatorTalon.set(speed);
+    	double spd = speed;
+    	if (isHighSwitchPressed() && spd > 0)
+    		spd = 0;
+    	else if (isLowSwitchPressed() && spd < 0)
+    		spd = 0;
+    	elevatorTalon.set(spd);
     }
     
     /**
@@ -80,7 +88,7 @@ public class Manipulator extends Subsystem {
      * @return whether the elevator has reached its maximum height
      */
     public boolean isHighSwitchPressed() {
-    	return limitSwitchHigh.get();
+    	return ! limitSwitchHigh.get();
     }
     
     /**
@@ -89,7 +97,7 @@ public class Manipulator extends Subsystem {
      * @return whether the elevator has reached its minimum height
      */
     public boolean isLowSwitchPressed() {
-    	return limitSwitchLow.get();
+    	return ! limitSwitchLow.get();
     }
     
     /**

@@ -21,8 +21,8 @@ public class DriveForTimeCommand extends Command {
 	 * 
 	 * @param time the time to drive in seconds
 	 */
-    public DriveForTimeCommand(double time) {
-    	this.time = time;
+    public DriveForTimeCommand(double seconds) {
+    	this.time = seconds;
     	startTime = Timer.getFPGATimestamp();
     	drivetrain = Drivetrain.getInstance();
         requires(drivetrain);

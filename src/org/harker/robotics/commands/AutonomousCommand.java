@@ -26,7 +26,7 @@ public class AutonomousCommand extends CommandGroup {
     	addSequential(new OpenClampsCommand());
     	addSequential(new ResetElevatorCommand());
     	addSequential(new CloseClampsCommand());
-    	addSequential(new DriveForTimeCommand(TIME_TO_DRIVE));
+    	addParallel(new DriveForTimeCommand(TIME_TO_DRIVE));
         addSequential(new OpenClampsCommand());
     }
 }

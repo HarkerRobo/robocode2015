@@ -38,7 +38,7 @@ public class Drivetrain extends Subsystem {
 	private static double STRAFE_ERROR = 0.12;
 	
 	//Theta scale because we need to ensure we don't move theta too fast
-	private static double T_SCALE = 1;
+	private static double T_SCALE = 0.7;
 	private static double X_SCALE = 1;
 	private static double Y_SCALE = 1;
 	
@@ -131,7 +131,7 @@ public class Drivetrain extends Subsystem {
 		double vT = (Math.abs(rotation) > DZ_T) ? -rotation * T_SCALE : 0;
 		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
 		
-		System.out.println(getCurrentAbsoluteHeading());
+//		System.out.println(getCurrentAbsoluteHeading());
 //		System.out.println("====BEFORE====");
 //		System.out.println("vX: " + vX);
 //		System.out.println("vY: " + vY);
