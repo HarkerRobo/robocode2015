@@ -69,6 +69,7 @@ public class Drivetrain extends PIDSubsystem {
 	private double prevX;
 	private double prevY;
 	private double prevT;
+	private double prevE;
 	
 	//A reference to the current setpoint values
 	private double targetX;
