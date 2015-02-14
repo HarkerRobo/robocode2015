@@ -35,7 +35,7 @@
 	  </copy>
   <property file="${user.home}/wpilib/wpilib.properties"/>
   <property file="build.properties"/>
-  <property file="${user.home}/wpilib/java/${version}/ant/build.properties"/>
+  <property file="${user.home}/wpilib/java/current/ant/build.properties"/>
 
   <import file="${user.home}/wpilib/java/${version}/ant/build.xml"/>
 
