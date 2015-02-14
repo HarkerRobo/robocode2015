@@ -2,10 +2,13 @@ package org.harker.robotics;
 
 import org.harker.robotics.RobotMap;
 import org.harker.robotics.commands.ManualDriveCommand;
+import org.harker.robotics.commands.MoveElevatorToToteCommand;
+import org.harker.robotics.commands.MoveToHeightCommand;
 import org.harker.robotics.commands.ToggleClampsCommand;
 import org.harker.robotics.commands.ToggleLeftClampCommand;
 import org.harker.robotics.commands.ToggleRelativeDrivingCommand;
 import org.harker.robotics.commands.ToggleRightClampCommand;
+import org.harker.robotics.commands.UpdateElevatorHeightCommand;
 import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
 
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -34,6 +37,7 @@ public class OI {
 		gamepad.getButtonA().whenPressed(new ToggleClampsCommand());
 		gamepad.getButtonBumperLeft().whenPressed(new ToggleLeftClampCommand());
 		gamepad.getButtonBumperRight().whenPressed(new ToggleRightClampCommand());
+		gamepad.getButtonX().whenPressed(new MoveElevatorToToteCommand());
 	}
 	
 	/**

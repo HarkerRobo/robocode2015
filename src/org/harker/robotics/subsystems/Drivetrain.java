@@ -38,7 +38,7 @@ public class Drivetrain extends Subsystem {
 	private static double STRAFE_ERROR = 0.12;
 	
 	//Theta scale because we need to ensure we don't move theta too fast
-	private static double T_SCALE = 0.7;
+	private static double T_SCALE = 0.8;
 	private static double X_SCALE = 1;
 	private static double Y_SCALE = 1;
 	
@@ -58,8 +58,14 @@ public class Drivetrain extends Subsystem {
 	private double prevY;
 	private double prevT;
 	
+	//Gyro compensation
+	private double prevR;
+	
 	//Calibration factor for the gyro
 	private double voltsPerDegreePerSecond = (12.5e-3);
+	
+	//The maximum rotational speed (corresponds to '1')
+	private final double MAX_ROTATIONAL_RATE = 0.20;
 	
 	/**
 	 * Drivetrain singleton constructor. Initializes the various components 
@@ -79,7 +85,7 @@ public class Drivetrain extends Subsystem {
 		robotDrive.setInvertedMotor(MotorType.kFrontRight, true);
 		robotDrive.setInvertedMotor(MotorType.kRearRight, true);
 		
-		prevX = prevY = prevT = 0;
+		prevX = prevY = prevT = prevR = 0;
 	}
 	
 	/**
@@ -130,15 +136,19 @@ public class Drivetrain extends Subsystem {
 		vY = Math.min(1, vY); // the error correction might overflow vY
 		double vT = (Math.abs(rotation) > DZ_T) ? -rotation * T_SCALE : 0;
 		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
-		
-//		System.out.println(getCurrentAbsoluteHeading());
 //		System.out.println("====BEFORE====");
 //		System.out.println("vX: " + vX);
 //		System.out.println("vY: " + vY);
 //		System.out.println("vT: " + vT);
 //		System.out.println("dH: " + heading);
 		
-		//Restricting acceleration HI TIERNO!
+//		System.out.println("Rate: " + getRotationalRate());
+		
+//		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
+//		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
+//		vT += (vT - actualRate);
+		
+		//Restricting acceleration
 		if (Math.abs(vX - prevX) > MAX_ACCEL_X)
 			vX = prevX + Math.signum(vX - prevX) * MAX_ACCEL_X;
 		if (Math.abs(vY - prevY) > MAX_ACCEL_Y)
@@ -153,10 +163,22 @@ public class Drivetrain extends Subsystem {
 //		System.out.println("dH: " + heading);
 		
 		//Updating previous values
+//		
+//		if (vT == 0) {
+//			vT -= (getCurrentContinuousHeading() - prevR); // might be +=
+//		} else {
+//			prevR = getCurrentContinuousHeading();
+//		}
+		
+		System.out.println("Rate: " + getRotationalRate());
 		prevX = vX;
 		prevY = vY;
 		prevT = vT;
 		robotDrive.mecanumDrive_Cartesian(vX, vY, vT, heading);
+	}
+	
+	public double getRotationalRate() {
+		return gyro.getRate();
 	}
 	
 	/**

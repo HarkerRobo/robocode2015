@@ -2,8 +2,10 @@ package org.harker.robotics.subsystems;
 
 import org.harker.robotics.RobotMap;
 import org.harker.robotics.commands.ManualElevatorCommand;
+import org.harker.robotics.commands.UpdateElevatorHeightCommand;
 import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -32,19 +34,40 @@ public class Manipulator extends Subsystem {
 	private DigitalInput limitSwitchLow;
 	private DigitalInput limitSwitchHigh;
 	
-	// The open and closed states of the Solenoids
-	public boolean CLAMP_OPEN_STATE = false;
-	public boolean CLAMP_CLOSED_STATE = true;
+	private AnalogInput rangeFinder;
 	
+	// The open and closed states of the Solenoids
+	public final boolean CLAMP_OPEN_STATE = false;
+	public final boolean CLAMP_CLOSED_STATE = true;
+	
+	//The inches of distance reported by the range finder per volt
+	public final double INCHES_PER_VOLT = 512 / 5;
+	
+	//Fields for calculating the average height, to avoid random noise
+	private double averageElevatorHeight;
+	private double[] instantHeightValues;
+	private int nDataPoints;
+	
+	//The sample size used for averaging
+	private static final int DATA_POINTS_PER_CALC = 3;
+		
 	/**
 	 * Creates a new Manipulator instance by initializing all of the elements of the manipulator.
 	 */
 	private Manipulator() {
 		leftClamp = new Solenoid(RobotMap.Manipulator.LEFT_CLAMP_PORT);
 		rightClamp = new Solenoid(RobotMap.Manipulator.RIGHT_CLAMP_PORT);
+		
 		elevatorTalon = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON_PORT);
+		
 		limitSwitchLow = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_LOW_PORT);
 		limitSwitchHigh = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_HIGH_PORT);
+		
+		rangeFinder = new AnalogInput(RobotMap.Manipulator.RANGE_FINDER_PORT);
+		
+		averageElevatorHeight = getInstantElevatorHeight();
+		instantHeightValues = new double[DATA_POINTS_PER_CALC];
+		nDataPoints = 0;
 	}
 	
 	public static void initialize() {
@@ -75,10 +98,10 @@ public class Manipulator extends Subsystem {
      */
     public void moveElevator(double speed) {
     	double spd = speed;
-    	if (isHighSwitchPressed() && spd > 0)
-    		spd = 0;
-    	else if (isLowSwitchPressed() && spd < 0)
-    		spd = 0;
+    	if (isHighSwitchPressed())
+    		spd = -1;
+    	else if (isLowSwitchPressed())
+    		spd = 1;
     	elevatorTalon.set(spd);
     }
     
@@ -184,5 +207,81 @@ public class Manipulator extends Subsystem {
     public void setClamps(boolean state) {
     	setRightClamp(state);
     	setLeftClamp(state);
+    }
+    
+    /**
+     * Gives the average elevator height, in inches, determined over time.
+     * @return
+     */
+    public double getAverageElevatorHeight() {
+    	return averageElevatorHeight;
+    }
+    
+    /**
+     * Updates the average elevator height by summing the previous 10 values and discarding the 
+     * highest and lowest of them.
+     */
+    public void updateElevatorHeight() {
+    	instantHeightValues[nDataPoints] = getInstantElevatorHeight();
+    	nDataPoints++;
+    	if (nDataPoints >= DATA_POINTS_PER_CALC) {
+    		double sumValues = sum(instantHeightValues);
+    		sumValues -= instantHeightValues[findLowestIdx(instantHeightValues)];
+    		sumValues -= instantHeightValues[findHighestIdx(instantHeightValues)];
+    		averageElevatorHeight = sumValues / (nDataPoints - 2);
+    		nDataPoints = 0;
+    	}
+    }
+    
+    /**
+     * Finds the index of the lowest value within the array.
+     * @param arr The array to search
+     * @return The index of the lowest value
+     */
+    private int findLowestIdx(double[] arr) {
+    	int lowIdx = 0;
+    	for (int i = 1; i < arr.length; i++)
+    	{
+    		if (arr[i] < arr[lowIdx])
+    			lowIdx = i;
+    	}
+    	
+    	return lowIdx;
+    }
+    
+    /**
+     * Finds the index of the highest value within the array.
+     * @param arr The array to search
+     * @return The index of the highest value
+     */
+    private int findHighestIdx(double[] arr) {
+    	int highIdx = 0;
+    	for (int i = 1; i < arr.length; i++)
+    	{
+    		if (arr[i] > arr[highIdx])
+    			highIdx = i;
+    	}
+    	
+    	return highIdx;
+    }
+    
+    /**
+     * Finds the sum of the values within the array.
+     * @param arr The values 
+     * @return The sum of the given values
+     */
+    private double sum(double[] arr) {
+    	double sumArr = 0;
+    	for (double d : arr)
+    		sumArr += d;
+    	return sumArr;
+    }
+    
+    /**
+     * Determines the current elevation of the elevator in inches.
+     * @return
+     */
+    private double getInstantElevatorHeight() {
+    	return rangeFinder.getVoltage() * INCHES_PER_VOLT;
     }
 }

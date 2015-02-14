@@ -3,6 +3,7 @@ package org.harker.robotics;
 
 import org.harker.robotics.OI;
 import org.harker.robotics.commands.AutonomousCommand;
+import org.harker.robotics.commands.UpdateElevatorHeightCommand;
 import org.harker.robotics.subsystems.Drivetrain;
 import org.harker.robotics.subsystems.Manipulator;
 
@@ -24,10 +25,14 @@ public class Robot extends IterativeRobot {
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
+	
+	UpdateElevatorHeightCommand updateHeight;
+	
     public void robotInit() {
     	Drivetrain.initialize();
     	Manipulator.initialize();
 		OI.initialize();
+		updateHeight = new UpdateElevatorHeightCommand();
     }
 	
 	public void disabledPeriodic() {
@@ -46,6 +51,8 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
+    	updateHeight = new UpdateElevatorHeightCommand();
+    	updateHeight.start();
     }
 
     /**
