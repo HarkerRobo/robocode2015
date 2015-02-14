@@ -3,13 +3,17 @@ package org.harker.robotics;
 
 import org.harker.robotics.OI;
 import org.harker.robotics.commands.AutonomousCommand;
+import org.harker.robotics.commands.PersistentCommands;
 import org.harker.robotics.commands.UpdateElevatorHeightCommand;
 import org.harker.robotics.subsystems.Drivetrain;
 import org.harker.robotics.subsystems.Manipulator;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.hal.PDPJNI;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,13 +30,19 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
 	
-	UpdateElevatorHeightCommand updateHeight;
+	PersistentCommands persistentCommands;
+	CameraServer server;
+	PDPJNI pdp;
 	
     public void robotInit() {
     	Drivetrain.initialize();
     	Manipulator.initialize();
 		OI.initialize();
-		updateHeight = new UpdateElevatorHeightCommand();
+		persistentCommands = new PersistentCommands();
+		pdp = new PDPJNI();
+//		server = CameraServer.getInstance();
+//		server.startAutomaticCapture("cam0");
+//		server.setQuality(100);
     }
 	
 	public void disabledPeriodic() {
@@ -40,6 +50,7 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
+    	persistentCommands.start();
     	(new AutonomousCommand()).start();
     }
 
@@ -51,8 +62,7 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-    	updateHeight = new UpdateElevatorHeightCommand();
-    	updateHeight.start();
+    	persistentCommands.start();
     }
 
     /**

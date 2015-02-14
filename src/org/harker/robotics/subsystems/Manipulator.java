@@ -43,6 +43,15 @@ public class Manipulator extends Subsystem {
 	//The inches of distance reported by the range finder per volt
 	public final double INCHES_PER_VOLT = 512 / 5;
 	
+	//The speed to which the elevator slows when near the ends
+	public final double ELEVATOR_SPEED_LIMIT = 0.3;
+	
+	//The distance in inches before limiting takes place
+	public final double ELEVATOR_LIMIT_THRESHOLD = 3;
+	
+	//The height of the elevator from the top to the base of the drivetrain in inches
+	public final double ELEVATOR_HEIGHT = 73;
+	
 	//Fields for calculating the average height, to avoid random noise
 	private double averageElevatorHeight;
 	private double[] instantHeightValues;
@@ -98,6 +107,9 @@ public class Manipulator extends Subsystem {
      */
     public void moveElevator(double speed) {
     	double spd = speed;
+    	if (getAverageElevatorHeight() <= ELEVATOR_LIMIT_THRESHOLD ||
+    			ELEVATOR_HEIGHT - getAverageElevatorHeight() <= ELEVATOR_LIMIT_THRESHOLD)
+    		spd *= ELEVATOR_SPEED_LIMIT;
     	if (isHighSwitchPressed())
     		spd = -1;
     	else if (isLowSwitchPressed())

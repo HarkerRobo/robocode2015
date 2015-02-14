@@ -34,9 +34,6 @@ public class Drivetrain extends Subsystem {
 	private static double DZ_T = 0.20;
 	private static double DZ_X = 0.15;
 	
-	//Strafe correction 
-	private static double STRAFE_ERROR = 0.12;
-	
 	//Theta scale because we need to ensure we don't move theta too fast
 	private static double T_SCALE = 0.8;
 	private static double X_SCALE = 1;
@@ -51,7 +48,9 @@ public class Drivetrain extends Subsystem {
 	//Constants for acceleration
 	private static double MAX_ACCEL_X = 0.1;
 	private static double MAX_ACCEL_Y = 0.1;
-	private static double MAX_ACCEL_T = 0.1;
+	private static double MAX_ACCEL_T = 0.05;
+	
+	private static double KP = 4.0;
 	
 	//A reference to previous speeds to use for acceleration
 	private double prevX;
@@ -79,6 +78,7 @@ public class Drivetrain extends Subsystem {
 		
 		gyro = new Gyro(RobotMap.Drivetrain.GYRO_PORT);
 		gyro.setSensitivity(voltsPerDegreePerSecond);
+		gyro.reset();
 		
 		robotDrive = new RobotDrive(leftBack, rightBack, leftFront, rightFront);
 		robotDrive.setSafetyEnabled(false);
@@ -132,21 +132,25 @@ public class Drivetrain extends Subsystem {
 	public void drive(double sx, double sy, double rotation) {
 		//Applying deadzone
 		double vX = (Math.abs(sx) > DZ_X) ? -sx : 0; 
-		double vY = (Math.abs(sy) > DZ_Y) ? (sy + vX*STRAFE_ERROR) : 0;
+		double vY = (Math.abs(sy) > DZ_Y) ? sy : 0;
 		vY = Math.min(1, vY); // the error correction might overflow vY
-		double vT = (Math.abs(rotation) > DZ_T) ? -rotation * T_SCALE : 0;
+		double vT = (Math.abs(rotation) > DZ_T) ? -rotation : 0;
+		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
+		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
+		double error = (vT - actualRate);
+		System.out.println("Error: " + error);
+		vT += error * KP;
+		vT *= T_SCALE;
+		if (Math.abs(vT) > 1) vT = Math.signum(vT);
 		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
 //		System.out.println("====BEFORE====");
 //		System.out.println("vX: " + vX);
 //		System.out.println("vY: " + vY);
-//		System.out.println("vT: " + vT);
+		System.out.println("vT: " + vT);
 //		System.out.println("dH: " + heading);
 		
 //		System.out.println("Rate: " + getRotationalRate());
 		
-//		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
-//		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
-//		vT += (vT - actualRate);
 		
 		//Restricting acceleration
 		if (Math.abs(vX - prevX) > MAX_ACCEL_X)
@@ -170,7 +174,6 @@ public class Drivetrain extends Subsystem {
 //			prevR = getCurrentContinuousHeading();
 //		}
 		
-		System.out.println("Rate: " + getRotationalRate());
 		prevX = vX;
 		prevY = vY;
 		prevT = vT;
@@ -178,7 +181,7 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	public double getRotationalRate() {
-		return gyro.getRate();
+		return (Math.abs(gyro.getRate()) < 0.05) ? 0 : -gyro.getRate();
 	}
 	
 	/**
