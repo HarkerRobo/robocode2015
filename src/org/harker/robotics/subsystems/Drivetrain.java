@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.File;
 
-import org.harker.robotics.commands.LogErrorCommand;
 import org.harker.robotics.commands.ManualDriveCommand;
 import org.harker.robotics.harkerrobolib.wrappers.EncoderWrapper;
 import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
@@ -18,6 +17,7 @@ import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * @author Neymika
  */
 
-public class Drivetrain extends Subsystem {
+public class Drivetrain extends PIDSubsystem {
 	
 	//Drive related components
 	private static RobotDrive robotDrive;
@@ -58,15 +58,22 @@ public class Drivetrain extends Subsystem {
 	private static double MAX_ACCEL_Y = 0.1;
 	private static double MAX_ACCEL_T = 0.1;
 	
-	private static double KP = 3.6;
+	//PID Constants
+	private static final double P = 3.6;
+	private static final double I = 0.0;
+	private static final double D = 1.0;
+	//The time between calculations in seconds
+	private static final double PERIOD = 1.0;
 	
 	//A reference to previous speeds to use for acceleration
 	private double prevX;
 	private double prevY;
 	private double prevT;
 	
-	//Gyro compensation
-	private double prevR;
+	//A reference to the current setpoint values
+	private double targetX;
+	private double targetY;
+	private double targetT;
 	
 	//Calibration factor for the gyro
 	private double voltsPerDegreePerSecond = (12.5e-3);
@@ -76,9 +83,11 @@ public class Drivetrain extends Subsystem {
 	
 	/**
 	 * Drivetrain singleton constructor. Initializes the various components 
-	 * of the robot along with the internal RobotDrive handler. 
+	 * of the robot along with the internal RobotDrive handler. Also initializes
+	 * the internal PID loop.
 	 */
 	private Drivetrain() {
+		super(P, I, D, PERIOD);
 		leftBack = new TalonWrapper(RobotMap.Drivetrain.LEFT_FRONT_TALON_PORT);
 		rightBack = new TalonWrapper(RobotMap.Drivetrain.LEFT_BACK_TALON_PORT);
 		leftFront = new TalonWrapper(RobotMap.Drivetrain.RIGHT_FRONT_TALON_PORT);
@@ -94,7 +103,8 @@ public class Drivetrain extends Subsystem {
 		robotDrive.setInvertedMotor(MotorType.kFrontRight, true);
 		robotDrive.setInvertedMotor(MotorType.kRearRight, true);
 		
-		prevX = prevY = prevT = prevR = 0;
+		targetX = targetY = targetT = 0; 
+		prevX = prevY = prevT = 0;
 	}
 	
 	/**
@@ -104,7 +114,6 @@ public class Drivetrain extends Subsystem {
 	 */
     public void initDefaultCommand() {
     	setDefaultCommand(new ManualDriveCommand());
-//    	setDefaultCommand(new LogErrorCommand());
     }
     
     /**
@@ -125,6 +134,10 @@ public class Drivetrain extends Subsystem {
 		return drivetrain;
 	}
 	
+	/**
+	 * Drives all four motors at the given speed.
+	 * @param speed The speed at which to drive all four motors
+	 */
 	public void driveRaw(double speed) {
 		leftBack.set(speed);
 		leftFront.set(speed);
@@ -132,66 +145,53 @@ public class Drivetrain extends Subsystem {
 		rightFront.set(speed);
 	}
 	
-	
 	/**
-	 * Drives the robot using a Cartesian style mecanum drive with the given 
-	 * x, y, and rotational velocities. 
+	 * Sets the robot to the given target values using a Cartesian style mecanum drive with the 
+	 * supplied x, y, and rotational velocities. 
 	 * @param sx The x-velocity
 	 * @param sy The y-velocity
 	 * @param rotation The rotational velocity
 	 */
 	public void drive(double sx, double sy, double rotation) {
 		//Applying deadzone
-		double vX = (Math.abs(sx) > DZ_X) ? -sx : 0; 
-		double vY = (Math.abs(sy) > DZ_Y) ? sy : 0;
-//		vY = Math.min(1, vY); // the error correction might overflow vY
-		double vT = (Math.abs(rotation) > DZ_T) ? -rotation : 0;
-		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
-		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
-		double error = (vT - actualRate);
-		System.out.println("Error: " + error);
-		vT += error * KP;
-		vT *= T_SCALE;
-		
-		if (Math.abs(vT) > 1) vT = Math.signum(vT);
+		targetX = (Math.abs(sx) > DZ_X) ? -sx : 0; 
+		targetY = (Math.abs(sy) > DZ_Y) ? sy : 0;
+		targetT = (Math.abs(rotation) > DZ_T) ? -rotation * T_SCALE : 0;
+	}
+	
+	/**
+	 * Updates the speed at which the drivetrain moves, applying acceleration and updating 
+	 * the previous values for acceleration.
+	 * @param thetaOffset The output calculated by the PID Controller which is added to 
+	 * 						the current rotational velocity
+	 */
+	public void updateDrive(double thetaOffset) {
+		double vX = targetX;
+		double vY = targetY;
+		double vT = targetT + thetaOffset;
 		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
-//		System.out.println("====BEFORE====");
-//		System.out.println("vX: " + vX);
-//		System.out.println("vY: " + vY);
-//		System.out.println("vT: " + vT);
-//		System.out.println("dH: " + heading);
 		
-//		System.out.println("Rate: " + getRotationalRate());
-		
-		
-		//Restricting acceleration
-		if (Math.abs(vX - prevX) > MAX_ACCEL_X)
+		//Apply accelerations
+		if (Math.abs(targetX - prevX) > MAX_ACCEL_X)
 			vX = prevX + Math.signum(vX - prevX) * MAX_ACCEL_X;
 		if (Math.abs(vY - prevY) > MAX_ACCEL_Y)
 			vY = prevY + Math.signum(vY - prevY) * MAX_ACCEL_Y;
 		if (Math.abs(vT - prevT) > MAX_ACCEL_T)
 			vT = prevT + Math.signum(vT - prevT) * MAX_ACCEL_T;
 		
-//		System.out.println("====AFTER====");
-//		System.out.println("vX: " + vX);
-//		System.out.println("vY: " + vY);
-//		System.out.println("vT: " + vT);
-//		System.out.println("dH: " + heading);
-		
-		//Updating previous values
-//		
-//		if (vT == 0) {
-//			vT -= (getCurrentContinuousHeading() - prevR); // might be +=
-//		} else {
-//			prevR = getCurrentContinuousHeading();
-//		}
-		
+		//Update old values
 		prevX = vX;
 		prevY = vY;
 		prevT = vT;
+		
 		robotDrive.mecanumDrive_Cartesian(vX, vY, vT, heading);
 	}
 	
+	/**
+	 * Determines the rate at which the robot is currently spinning in degrees
+	 * per second. 
+	 * @return The rotational rate in degrees per second
+	 */
 	public double getRotationalRate() {
 		return (-gyro.getRate());
 //		return (Math.abs(gyro.getRate()) < 0.05) ? 0 : -gyro.getRate();
@@ -235,6 +235,25 @@ public class Drivetrain extends Subsystem {
 	 */
 	public void toggleRelative() {
 		isRelative = !isRelative;
+	}
+
+	/**
+	 * Calculates the error term for the PID Controller as the difference between 
+	 * target rotational speed and the true rotational speed.
+	 */
+	protected double returnPIDInput() {
+		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
+		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
+		double error = (targetT - actualRate);
+		return error;
+	}
+
+	/**
+	 * Uses the offset calculated by the PID Controller in the update drive method
+	 * to affect the speed of the RobotDrive. 
+	 */
+	protected void usePIDOutput(double output) {
+		updateDrive(output);
 	}
 }
 
