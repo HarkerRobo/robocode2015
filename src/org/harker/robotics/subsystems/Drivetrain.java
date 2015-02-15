@@ -64,6 +64,7 @@ public class Drivetrain extends Subsystem {
 	private double prevX;
 	private double prevY;
 	private double prevT;
+	private double prevE;
 	
 	//Gyro compensation
 	private double prevR;
@@ -94,7 +95,7 @@ public class Drivetrain extends Subsystem {
 		robotDrive.setInvertedMotor(MotorType.kFrontRight, true);
 		robotDrive.setInvertedMotor(MotorType.kRearRight, true);
 		
-		prevX = prevY = prevT = prevR = 0;
+		prevX = prevE =  prevY = prevT = prevR = 0;
 	}
 	
 	/**
@@ -189,6 +190,7 @@ public class Drivetrain extends Subsystem {
 		prevX = vX;
 		prevY = vY;
 		prevT = vT;
+		prevE = error;
 		robotDrive.mecanumDrive_Cartesian(vX, vY, vT, heading);
 	}
 	
