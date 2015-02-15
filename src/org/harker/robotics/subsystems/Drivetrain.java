@@ -48,9 +48,9 @@ public class Drivetrain extends Subsystem {
 	//Constants for acceleration
 	private static double MAX_ACCEL_X = 0.1;
 	private static double MAX_ACCEL_Y = 0.1;
-	private static double MAX_ACCEL_T = 0.05;
+	private static double MAX_ACCEL_T = 0.1;
 	
-	private static double KP = 4.0;
+	private static double KP = 3.6;
 	
 	//A reference to previous speeds to use for acceleration
 	private double prevX;
@@ -79,6 +79,7 @@ public class Drivetrain extends Subsystem {
 		gyro = new Gyro(RobotMap.Drivetrain.GYRO_PORT);
 		gyro.setSensitivity(voltsPerDegreePerSecond);
 		gyro.reset();
+		
 		
 		robotDrive = new RobotDrive(leftBack, rightBack, leftFront, rightFront);
 		robotDrive.setSafetyEnabled(false);
@@ -133,7 +134,7 @@ public class Drivetrain extends Subsystem {
 		//Applying deadzone
 		double vX = (Math.abs(sx) > DZ_X) ? -sx : 0; 
 		double vY = (Math.abs(sy) > DZ_Y) ? sy : 0;
-		vY = Math.min(1, vY); // the error correction might overflow vY
+//		vY = Math.min(1, vY); // the error correction might overflow vY
 		double vT = (Math.abs(rotation) > DZ_T) ? -rotation : 0;
 		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
 		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
