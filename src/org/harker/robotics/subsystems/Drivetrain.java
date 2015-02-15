@@ -159,6 +159,7 @@ public class Drivetrain extends PIDSubsystem {
 		targetX = (Math.abs(sx) > DZ_X) ? -sx : 0; 
 		targetY = (Math.abs(sy) > DZ_Y) ? sy : 0;
 		targetT = (Math.abs(rotation) > DZ_T) ? -rotation * T_SCALE : 0;
+		this.setSetpoint(targetT);
 	}
 	
 	/**
@@ -246,8 +247,7 @@ public class Drivetrain extends PIDSubsystem {
 	protected double returnPIDInput() {
 		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
 		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
-		double error = (targetT - actualRate);
-		return error;
+		return actualRate;
 	}
 
 	/**
