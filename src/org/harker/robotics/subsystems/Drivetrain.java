@@ -1,5 +1,13 @@
 package org.harker.robotics.subsystems;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.File;
+
+import org.harker.robotics.commands.LogErrorCommand;
 import org.harker.robotics.commands.ManualDriveCommand;
 import org.harker.robotics.harkerrobolib.wrappers.EncoderWrapper;
 import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
@@ -64,7 +72,7 @@ public class Drivetrain extends Subsystem {
 	private double voltsPerDegreePerSecond = (12.5e-3);
 	
 	//The maximum rotational speed (corresponds to '1')
-	private final double MAX_ROTATIONAL_RATE = 0.20;
+	public final double MAX_ROTATIONAL_RATE = 0.20;
 	
 	/**
 	 * Drivetrain singleton constructor. Initializes the various components 
@@ -96,6 +104,7 @@ public class Drivetrain extends Subsystem {
 	 */
     public void initDefaultCommand() {
     	setDefaultCommand(new ManualDriveCommand());
+//    	setDefaultCommand(new LogErrorCommand());
     }
     
     /**
@@ -123,6 +132,7 @@ public class Drivetrain extends Subsystem {
 		rightFront.set(speed);
 	}
 	
+	
 	/**
 	 * Drives the robot using a Cartesian style mecanum drive with the given 
 	 * x, y, and rotational velocities. 
@@ -142,12 +152,13 @@ public class Drivetrain extends Subsystem {
 		System.out.println("Error: " + error);
 		vT += error * KP;
 		vT *= T_SCALE;
+		
 		if (Math.abs(vT) > 1) vT = Math.signum(vT);
 		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
 //		System.out.println("====BEFORE====");
 //		System.out.println("vX: " + vX);
 //		System.out.println("vY: " + vY);
-		System.out.println("vT: " + vT);
+//		System.out.println("vT: " + vT);
 //		System.out.println("dH: " + heading);
 		
 //		System.out.println("Rate: " + getRotationalRate());
@@ -182,7 +193,8 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	public double getRotationalRate() {
-		return (Math.abs(gyro.getRate()) < 0.05) ? 0 : -gyro.getRate();
+		return (-gyro.getRate());
+//		return (Math.abs(gyro.getRate()) < 0.05) ? 0 : -gyro.getRate();
 	}
 	
 	/**
