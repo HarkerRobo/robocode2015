@@ -63,13 +63,12 @@ public class Drivetrain extends PIDSubsystem {
 	private static final double I = 0.0;
 	private static final double D = 1.0;
 	//The time between calculations in seconds
-	private static final double PERIOD = 1.0;
+	private static final double PERIOD = .05;
 	
 	//A reference to previous speeds to use for acceleration
 	private double prevX;
 	private double prevY;
 	private double prevT;
-	private double prevE;
 	
 	//A reference to the current setpoint values
 	private double targetX;
@@ -158,6 +157,7 @@ public class Drivetrain extends PIDSubsystem {
 		targetX = (Math.abs(sx) > DZ_X) ? -sx : 0; 
 		targetY = (Math.abs(sy) > DZ_Y) ? sy : 0;
 		targetT = (Math.abs(rotation) > DZ_T) ? -rotation * T_SCALE : 0;
+		super.setSetpoint(targetT);
 	}
 	
 	/**
@@ -245,8 +245,7 @@ public class Drivetrain extends PIDSubsystem {
 	protected double returnPIDInput() {
 		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
 		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
-		double error = (targetT - actualRate);
-		return error;
+		return actualRate;
 	}
 
 	/**
