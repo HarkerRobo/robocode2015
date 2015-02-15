@@ -61,7 +61,7 @@ public class Drivetrain extends PIDSubsystem {
 	//PID Constants
 	private static final double P = 3.6;
 	private static final double I = 0.0;
-	private static final double D = 1.0;
+	private static final double D = 0.0;
 	//The time between calculations in seconds
 	private static final double PERIOD = 1.0;
 	
@@ -106,6 +106,7 @@ public class Drivetrain extends PIDSubsystem {
 		
 		targetX = targetY = targetT = 0; 
 		prevX = prevY = prevT = 0;
+		this.enable();
 	}
 	
 	/**
