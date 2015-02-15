@@ -61,7 +61,7 @@ public class Drivetrain extends PIDSubsystem {
 	//PID Constants
 	private static final double P = 3.6;
 	private static final double I = 0.0;
-	private static final double D = 0.0;
+	private static final double D = 0.5;
 	//The time between calculations in seconds
 	private static final double PERIOD = .005;
 	
@@ -250,7 +250,7 @@ public class Drivetrain extends PIDSubsystem {
 		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
 		double error = actualRate - targetT;
 		System.out.println("targetT: " + targetT + " actualRate: " + actualRate + " error: " + error);
-		return error;
+		return actualRate;
 	}
 
 	/**
