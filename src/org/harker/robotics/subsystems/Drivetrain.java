@@ -164,11 +164,11 @@ public class Drivetrain extends Subsystem {
 		
 		//Updating previous values
 //		
-//		if (vT == 0) {
-//			vT -= (getCurrentContinuousHeading() - prevR); // might be +=
-//		} else {
-//			prevR = getCurrentContinuousHeading();
-//		}
+		if (vT == 0) {
+			vT -= (getCurrentContinuousHeading() - prevR) / MAX_ROTATIONAL_RATE; // might be +=
+		} else {
+			prevR = getCurrentContinuousHeading();
+		}
 		
 		System.out.println("Rate: " + getRotationalRate());
 		prevX = vX;
