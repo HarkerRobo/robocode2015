@@ -249,7 +249,7 @@ public class Drivetrain extends PIDSubsystem {
 		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
 		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
 		double error = actualRate - targetT;
-		System.out.println("error: " + error);
+		System.out.println("targetT: " + targetT + " actualRate: " + actualRate + " error: " + error);
 		return error;
 	}
 
