@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.io.File;
 
 import org.harker.robotics.commands.ManualDriveCommand;
+import org.harker.robotics.commands.ResetPIDCommand;
 import org.harker.robotics.harkerrobolib.wrappers.EncoderWrapper;
 import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
 import org.harker.robotics.OI;
@@ -60,9 +61,9 @@ public class Drivetrain extends PIDSubsystem {
 	private static double MAX_ACCEL_T = 0.1;
 	
 	//PID Constants
-	private static final double P = 3.6;
+	private static final double P = 1.0;
 	private static final double I = 0.0;
-	private static final double D = 0.5;
+	private static final double D = 0.0;
 	//The time between calculations in seconds
 	private static final double PERIOD = .005;
 	
@@ -92,6 +93,7 @@ public class Drivetrain extends PIDSubsystem {
 		super(P, I, D, PERIOD);
 		
 		SmartDashboard.putData("DT PID", getPIDController());
+		SmartDashboard.putData("Reset PID", new ResetPIDCommand());
 		
 		leftBack = new TalonWrapper(RobotMap.Drivetrain.LEFT_FRONT_TALON_PORT);
 		rightBack = new TalonWrapper(RobotMap.Drivetrain.LEFT_BACK_TALON_PORT);
@@ -259,7 +261,7 @@ public class Drivetrain extends PIDSubsystem {
 			actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE_LEFT;
 		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
 		double error = actualRate - targetT;
-		System.out.println("targetT: " + targetT + " actualRate: " + actualRate + " error: " + error);
+//		System.out.println("targetT: " + targetT + " actualRate: " + actualRate + " error: " + error);
 		return actualRate;
 	}
 
@@ -269,6 +271,11 @@ public class Drivetrain extends PIDSubsystem {
 	 */
 	protected void usePIDOutput(double output) {
 		updateDrive(output);
+	}
+	
+	public void resetPID() {
+		getPIDController().reset();
+		getPIDController().enable();
 	}
 }
 

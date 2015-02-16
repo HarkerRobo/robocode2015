@@ -243,6 +243,7 @@ public class Manipulator extends Subsystem {
     		averageElevatorHeight = sumValues / (nDataPoints - 2);
     		nDataPoints = 0;
     	}
+    	System.out.println("Elevator Height: " + averageElevatorHeight);
     }
     
     /**
