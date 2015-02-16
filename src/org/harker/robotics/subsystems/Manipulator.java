@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * controls the stacking and manipulation of totes. 
  * 
  * @author Vedaad Shakib
- * @author Nikita K
  * @author Neymika J
  * @author Andrew Tierno
  */
@@ -117,19 +116,8 @@ public class Manipulator extends Subsystem {
      * elevator further in that direction, the speed will then be set
      * to zero.
      * 
-     * @param speed the speed to be set in the range [-1, 1]
+     * @param spd the speed to be set in the range [-1, 1]
      */
-<<<<<<< HEAD
-    public void moveElevator(double speed) {
-    	double spd = speed;
-    	if (getAverageElevatorHeight() <= ELEVATOR_LIMIT_THRESHOLD ||
-    			ELEVATOR_HEIGHT - getAverageElevatorHeight() <= ELEVATOR_LIMIT_THRESHOLD)
-    		spd *= ELEVATOR_SPEED_LIMIT;
-    	if (isHighSwitchPressed())
-    		spd = -1;
-    	else if (isLowSwitchPressed())
-    		spd = 1;
-=======
     public void moveElevator(double spd) {
     	SmartDashboard.putNumber("Manipulator Height", averageElevatorHeight);
     	
@@ -148,7 +136,6 @@ public class Manipulator extends Subsystem {
     	else if (isLowSwitchPressed() && spd < 0)
     		spd = 0;
     	
->>>>>>> rotation
     	elevatorTalon.set(spd);
     }
     
@@ -278,11 +265,6 @@ public class Manipulator extends Subsystem {
     		averageElevatorHeight = sumValues / (nDataPoints - 2);
     		nDataPoints = 0;
     	}
-<<<<<<< HEAD
-    	System.out.println("Elevator Height: " + averageElevatorHeight);
-=======
-//    	averageElevatorHeight = getInstantElevatorHeight();
->>>>>>> rotation
     }
     
     /**
