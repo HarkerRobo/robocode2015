@@ -63,13 +63,12 @@ public class Drivetrain extends PIDSubsystem {
 	private static final double I = 0.0;
 	private static final double D = 0.0;
 	//The time between calculations in seconds
-	private static final double PERIOD = 1.0;
+	private static final double PERIOD = .005;
 	
 	//A reference to previous speeds to use for acceleration
 	private double prevX;
 	private double prevY;
 	private double prevT;
-	private double prevE;
 	
 	//A reference to the current setpoint values
 	private double targetX;
@@ -106,6 +105,7 @@ public class Drivetrain extends PIDSubsystem {
 		
 		targetX = targetY = targetT = 0; 
 		prevX = prevY = prevT = 0;
+		this.setOutputRange(-1, 1);
 		this.enable();
 	}
 	
@@ -159,6 +159,7 @@ public class Drivetrain extends PIDSubsystem {
 		targetX = (Math.abs(sx) > DZ_X) ? -sx : 0; 
 		targetY = (Math.abs(sy) > DZ_Y) ? sy : 0;
 		targetT = (Math.abs(rotation) > DZ_T) ? -rotation * T_SCALE : 0;
+		System.out.println("T: " + targetT);
 		this.setSetpoint(targetT);
 	}
 	
@@ -168,10 +169,10 @@ public class Drivetrain extends PIDSubsystem {
 	 * @param thetaOffset The output calculated by the PID Controller which is added to 
 	 * 						the current rotational velocity
 	 */
-	public void updateDrive(double thetaOffset) {
+	public void updateDrive(double theta) {
 		double vX = targetX;
 		double vY = targetY;
-		double vT = targetT + thetaOffset;
+		double vT = theta;
 		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
 		
 		//Apply accelerations
@@ -247,7 +248,9 @@ public class Drivetrain extends PIDSubsystem {
 	protected double returnPIDInput() {
 		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
 		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
-		return actualRate;
+		double error = actualRate - targetT;
+		System.out.println("error: " + error);
+		return error;
 	}
 
 	/**
