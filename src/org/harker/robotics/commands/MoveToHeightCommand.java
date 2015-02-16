@@ -28,18 +28,13 @@ public class MoveToHeightCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double deltaH = manipulator.getAverageElevatorHeight() - targetHeight;
-    	if (deltaH > 0)
-    		manipulator.moveElevator(-1);
-    	else if (deltaH < 0)
-    		manipulator.moveElevator(1);
-    	else
-    		manipulator.moveElevator(0);
+    	manipulator.moveElevator(Math.signum(targetHeight - manipulator.getAverageElevatorHeight()));
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Math.abs(manipulator.getAverageElevatorHeight() - targetHeight) < ACCURACY_THRESHOLD;
+        return Math.abs(manipulator.getAverageElevatorHeight() - targetHeight) < ACCURACY_THRESHOLD ||
+        		manipulator.isLowSwitchPressed() || manipulator.isHighSwitchPressed();
     }
 
     // Called once after isFinished returns true
