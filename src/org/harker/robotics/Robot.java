@@ -10,6 +10,7 @@ import org.harker.robotics.subsystems.Manipulator;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * directory.
  * 
  * @author Andrew Tierno
+ * @author Vedaad Shakib
  */
 public class Robot extends IterativeRobot {
     /**
@@ -33,6 +35,8 @@ public class Robot extends IterativeRobot {
     	Manipulator.initialize();
 		OI.initialize();
 		updateHeight = new UpdateElevatorHeightCommand();
+		
+		SmartDashboard.putString("Autonomous mode", "Simple");
     }
 	
 	public void disabledPeriodic() {
@@ -40,7 +44,7 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
-    	(new AutonomousCommand()).start();
+    	(new AutonomousCommand(SmartDashboard.getString("Autonomous mode"))).start();
     }
 
     /**

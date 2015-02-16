@@ -8,6 +8,7 @@ import org.harker.robotics.RobotMap;
 
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -35,8 +36,9 @@ public class Drivetrain extends Subsystem {
 	private static double DZ_T = 0.20;
 	private static double DZ_X = 0.15;
 	
-	//Strafe correction 
-	private static double STRAFE_ERROR = 0.12;
+	// accounting for the gyro drift (degrees per second)
+	private static double GYRO_DRIFT = 0;
+	private static double startTime = 0;
 	
 	//Theta scale because we need to ensure we don't move theta too fast
 	private static double T_SCALE = 0.8;
@@ -88,6 +90,8 @@ public class Drivetrain extends Subsystem {
 		robotDrive.setInvertedMotor(MotorType.kRearRight, true);
 		
 		prevX = prevY = prevT = prevR = 0;
+		
+		startTime = Timer.getFPGATimestamp();
 	}
 	
 	/**
@@ -167,32 +171,19 @@ public class Drivetrain extends Subsystem {
 		//Updating previous values
 //		
 		
-		SmartDashboard.putString("Test", "Text");
-		
-		SmartDashboard.putBoolean("Compensate", vT == 0);
-		if (vT == 0) {
-			vT -= (getCurrentContinuousHeading() - prevR) / 100; // might be +=
-			if (Math.abs(vT) > 1) vT = Math.signum(vT);
-			SmartDashboard.putNumber("Gyro delta", vT);
-		} else {
-			prevR = getCurrentContinuousHeading();
-		}
-		
-		
-//		double currRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
-//		double error = (currRate - prevVT);
-//		vT -= error;
-//		if (Math.abs(vT) > 1) vT = Math.signum(vT); // to prevent vT overflow
-//		prevVT = vT;
-
+//		SmartDashboard.putBoolean("Compensate", vT == 0);
+//		if (vT == 0) {
+//			vT -= (getCurrentContinuousHeading() - prevR) / 10; // might be +=
+//			if (Math.abs(vT) > 1) vT = Math.signum(vT);
+//			SmartDashboard.putNumber("Gyro delta", vT);
+//		} else {
+//			prevR = getCurrentContinuousHeading();
+//			gyro.reset();
+//		}
 		
 		SmartDashboard.putNumber("prevR", prevR);
 		SmartDashboard.putNumber("getHeading()", getCurrentContinuousHeading());
 		SmartDashboard.putNumber("getRate()", getRotationalRate());
-		
-//		SmartDashboard.putNumber("vT: ", vT);
-//		SmartDashboard.putNumber("currentRate: ", currRate);
-//		SmartDashboard.putNumber("error: ", error);
 
 		System.out.println("Rate: " + getRotationalRate());
 		prevX = vX;
@@ -202,7 +193,7 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	public double getRotationalRate() {
-		return gyro.getRate();
+		return gyro.getRate() * 1000 - GYRO_DRIFT;
 	}
 	
 	/**
@@ -212,7 +203,7 @@ public class Drivetrain extends Subsystem {
 	 */
 
 	public double getCurrentContinuousHeading() {
-		return gyro.getAngle() * 1000;
+		return gyro.getAngle() * 1000 - GYRO_DRIFT * (Timer.getFPGATimestamp() - startTime);
 	}
 	
 	/**
@@ -220,7 +211,7 @@ public class Drivetrain extends Subsystem {
 	 * @return The angle which the robot is facing mod 360
 	 */
 	public double getCurrentAbsoluteHeading() {
-		return gyro.getAngle() % 360;
+		return (gyro.getAngle() * 1000 - GYRO_DRIFT * (Timer.getFPGATimestamp() - startTime)) % 360;
 	}
 	
 	/**

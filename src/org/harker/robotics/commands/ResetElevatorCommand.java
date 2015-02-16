@@ -14,7 +14,7 @@ public class ResetElevatorCommand extends Command {
 	Manipulator manipulator;
 	
     public ResetElevatorCommand() {
-        manipulator.getInstance();
+        manipulator = Manipulator.getInstance();
     }
 
     // Called just before this Command runs the first time

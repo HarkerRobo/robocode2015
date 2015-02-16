@@ -10,21 +10,21 @@ import edu.wpi.first.wpilibj.command.Command;
  * 
  * @author Vedaad Shakib
  */
-public class DriveForTimeCommand extends Command {
+public class RotateCommand extends Command {
 
 	Drivetrain drivetrain;
-	double startTime;
-	double time;
+	double startRot;
+	double endRot;
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param time the time to drive in seconds
 	 */
-    public DriveForTimeCommand(double seconds) {
-    	this.time = seconds;
-    	startTime = Timer.getFPGATimestamp();
+    public RotateCommand(double rotation) {
     	drivetrain = Drivetrain.getInstance();
+    	this.startRot = drivetrain.getCurrentAbsoluteHeading();
+    	this.endRot = startRot + rotation;
         requires(drivetrain);
     }
 
@@ -34,12 +34,18 @@ public class DriveForTimeCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	drivetrain.drive(0, .3, 0);
+    	if (endRot > startRot)
+    		drivetrain.drive(0, 0, .9);
+    	else
+    		drivetrain.drive(0, 0, -.9);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Timer.getFPGATimestamp() - startTime > time;
+    	if (endRot > startRot)
+    		return endRot <= drivetrain.getCurrentAbsoluteHeading();
+    	else
+    		return endRot >= drivetrain.getCurrentAbsoluteHeading();
     }
 
     // Called once after isFinished returns true
