@@ -46,8 +46,6 @@ public class Drivetrain extends PIDSubsystem {
 	
 	//Theta scale because we need to ensure we don't move theta too fast
 	private static double T_SCALE = 0.8;
-	private static double X_SCALE = 1;
-	private static double Y_SCALE = 1;
 	
 	//Relative driving boolean
 	private static boolean isRelative = false;
@@ -56,9 +54,9 @@ public class Drivetrain extends PIDSubsystem {
 	private static Drivetrain drivetrain;
 	
 	//Constants for acceleration
-	private static double MAX_ACCEL_X = 0.1;
-	private static double MAX_ACCEL_Y = 0.1;
-	private static double MAX_ACCEL_T = 0.1;
+	private static double MAX_ACCEL_X = 0.05;
+	private static double MAX_ACCEL_Y = 0.05;
+	private static double MAX_ACCEL_T = 0.05;
 	
 	//PID Constants
 	private static final double P = 1.0;
@@ -112,7 +110,6 @@ public class Drivetrain extends PIDSubsystem {
 		targetX = targetY = targetT = 0; 
 		prevX = prevY = prevT = 0;
 		
-		
 		this.setOutputRange(-1, 1);
 		this.enable();
 	}
@@ -149,8 +146,10 @@ public class Drivetrain extends PIDSubsystem {
 	 * @param speed The speed at which to drive all four motors
 	 */
 	public void driveRaw(double speed) {
-		robotDrive.mecanumDrive_Cartesian(0, 0, speed, 0);
-		SmartDashboard.putNumber("Rotational Rate", getRotationalRate());
+		leftBack.set(speed);
+		leftFront.set(speed);
+		rightBack.set(speed);
+		rightFront.set(speed);
 	}
 	
 	/**
@@ -205,7 +204,6 @@ public class Drivetrain extends PIDSubsystem {
 	 */
 	public double getRotationalRate() {
 		return (-gyro.getRate());
-//		return (Math.abs(gyro.getRate()) < 0.05) ? 0 : -gyro.getRate();
 	}
 	
 	/**
@@ -278,4 +276,3 @@ public class Drivetrain extends PIDSubsystem {
 		getPIDController().enable();
 	}
 }
-

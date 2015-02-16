@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  * 
  * @author Andrew Tierno
+ * @author Vedaad Shakib
  */
 public class Robot extends IterativeRobot {
     /**
@@ -32,17 +33,13 @@ public class Robot extends IterativeRobot {
 	
 	PersistentCommands persistentCommands;
 	CameraServer server;
-	PDPJNI pdp;
 	
     public void robotInit() {
     	Drivetrain.initialize();
     	Manipulator.initialize();
 		OI.initialize();
+
 		persistentCommands = new PersistentCommands();
-		pdp = new PDPJNI();
-//		server = CameraServer.getInstance();
-//		server.startAutomaticCapture("cam0");
-//		server.setQuality(100);
     }
 	
 	public void disabledPeriodic() {
@@ -63,6 +60,12 @@ public class Robot extends IterativeRobot {
 
     public void teleopInit() {
     	persistentCommands.start();
+    	
+    	server = CameraServer.getInstance();
+		server.startAutomaticCapture("cam0");
+		server.setQuality(100);
+		
+		System.out.println("Camera initialized");
     }
 
     /**

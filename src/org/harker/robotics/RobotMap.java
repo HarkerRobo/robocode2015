@@ -30,7 +30,7 @@ public class RobotMap {
 		public static final int ELEVATOR_TALON_PORT = 4;
 		public static final int LIMIT_SWITCH_HIGH_PORT = 8;
 		public static final int LIMIT_SWITCH_LOW_PORT = 9;
-		public static final int RANGE_FINDER_PORT = 1;
+		public static final int RANGE_FINDER_PORT = 3;
 	}
 	
 	/**

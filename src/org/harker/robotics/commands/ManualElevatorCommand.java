@@ -4,6 +4,7 @@ import org.harker.robotics.OI;
 import org.harker.robotics.subsystems.Manipulator;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Moves the elevator.
@@ -28,6 +29,8 @@ public class ManualElevatorCommand extends Command {
     	//of the two triggers is taken.
     	double val = OI.gamepad.getRightTrigger() - OI.gamepad.getLeftTrigger();
     	manipulator.moveElevator(val);
+    	manipulator.getAverageElevatorHeight();
+    	SmartDashboard.putBoolean("LOW LIM", manipulator.isLowSwitchPressed());
     }
 
     // Make this return true when this Command no longer needs to run execute()
