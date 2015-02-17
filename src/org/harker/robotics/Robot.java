@@ -36,7 +36,7 @@ public class Robot extends IterativeRobot {
 		OI.initialize();
 		updateHeight = new UpdateElevatorHeightCommand();
 		
-		SmartDashboard.putString("Autonomous mode", "Simple");
+//		SmartDashboard.putString("Autonomous mode", "Simple");
     }
 	
 	public void disabledPeriodic() {
@@ -44,7 +44,7 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
-    	(new AutonomousCommand(SmartDashboard.getString("Autonomous mode"))).start();
+    	(new AutonomousCommand()).start();
     }
 
     /**

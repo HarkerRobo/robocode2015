@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The Manipulator, which contains methods to manipulate the elevator talons, 
@@ -16,6 +17,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * controls the stacking and manipulation of totes. 
  * 
  * @author Vedaad Shakib
+ * @author Nikita K
+ * @author Neymika J
  * @author Andrew Tierno
  */
 public class Manipulator extends Subsystem {
@@ -50,6 +53,17 @@ public class Manipulator extends Subsystem {
 	
 	//The sample size used for averaging
 	private static final int DATA_POINTS_PER_CALC = 3;
+	
+	//Distance from top or bottom when to start decellerating
+	private static final double SLOW_DIST = 1;
+	private static final double MIN_DIST = 7;
+	private static final double TOP_DIST = 53;
+	
+	//Decelleration Constant
+	private static final double DECEL_PROP = 15;
+	
+	//Rangefinder offset
+	private static final double RANGE_FINDER_OFFSET = 8.5;
 		
 	/**
 	 * Creates a new Manipulator instance by initializing all of the elements of the manipulator.
@@ -96,12 +110,21 @@ public class Manipulator extends Subsystem {
      * 
      * @param speed the speed to be set in the range [-1, 1]
      */
-    public void moveElevator(double speed) {
-    	double spd = speed;
+    public void moveElevator(double spd) {
+    	SmartDashboard.putNumber("Manipulator Height", averageElevatorHeight);
+    	
+    	if (nearBottom() && spd < 0) {
+    		spd *= getAverageElevatorHeight()/DECEL_PROP;
+    	}
+    	else if (nearTop() && spd > 0){
+    		spd *= (TOP_DIST - getAverageElevatorHeight())/DECEL_PROP;
+    	}
+    	
     	if (isHighSwitchPressed())
-    		spd = -1;
+    		spd = -.5;
     	else if (isLowSwitchPressed())
-    		spd = 1;
+    		spd = .5;
+    	
     	elevatorTalon.set(spd);
     }
     
@@ -231,6 +254,7 @@ public class Manipulator extends Subsystem {
     		averageElevatorHeight = sumValues / (nDataPoints - 2);
     		nDataPoints = 0;
     	}
+//    	averageElevatorHeight = getInstantElevatorHeight();
     }
     
     /**
@@ -282,6 +306,14 @@ public class Manipulator extends Subsystem {
      * @return
      */
     private double getInstantElevatorHeight() {
-    	return rangeFinder.getVoltage() * INCHES_PER_VOLT;
+    	return rangeFinder.getVoltage() * INCHES_PER_VOLT + RANGE_FINDER_OFFSET;
+    }
+    
+    private boolean nearBottom() {
+    	return getAverageElevatorHeight() <= SLOW_DIST+MIN_DIST;
+    }
+    
+    private boolean nearTop() {
+    	return getAverageElevatorHeight() <= TOP_DIST-SLOW_DIST;
     }
 }

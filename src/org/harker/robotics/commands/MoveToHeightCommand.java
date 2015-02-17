@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class MoveToHeightCommand extends Command {
 	
-	private double targetHeight;
+	private double targetHeight, startHeight;
 	private static double ACCURACY_THRESHOLD = 0.4;
 	private Manipulator manipulator;
 	
@@ -20,6 +20,7 @@ public class MoveToHeightCommand extends Command {
     public MoveToHeightCommand(double height) {
         this.targetHeight = height;
         manipulator = Manipulator.getInstance();
+        startHeight = manipulator.getAverageElevatorHeight();
     }
 
     // Called just before this Command runs the first time
@@ -33,8 +34,13 @@ public class MoveToHeightCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Math.abs(manipulator.getAverageElevatorHeight() - targetHeight) < ACCURACY_THRESHOLD ||
-        		manipulator.isLowSwitchPressed() || manipulator.isHighSwitchPressed();
+//    	if (manipulator.isLowSwitchPressed() || manipulator.isHighSwitchPressed())
+//    		return true;
+    	if (targetHeight > startHeight) {
+    		return manipulator.getAverageElevatorHeight() >= targetHeight;
+    	} else {
+    		return manipulator.getAverageElevatorHeight() <= targetHeight;
+    	}
     }
 
     // Called once after isFinished returns true

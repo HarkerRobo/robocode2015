@@ -2,6 +2,7 @@ package org.harker.robotics.commands;
 
 import org.harker.robotics.subsystems.Manipulator;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -33,7 +34,7 @@ public class ResetElevatorCommand extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	manipulator.moveElevator(.5);
+//    	manipulator.moveElevator(1);
     }
 
     // Called when another command which requires one or more of the same

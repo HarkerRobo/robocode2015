@@ -37,7 +37,7 @@ public class Drivetrain extends Subsystem {
 	private static double DZ_X = 0.15;
 	
 	// accounting for the gyro drift (degrees per second)
-	private static double GYRO_DRIFT = 0;
+	private static double GYRO_DRIFT;
 	private static double startTime = 0;
 	
 	//Theta scale because we need to ensure we don't move theta too fast
@@ -92,6 +92,8 @@ public class Drivetrain extends Subsystem {
 		prevX = prevY = prevT = prevR = 0;
 		
 		startTime = Timer.getFPGATimestamp();
+		
+//		SmartDashboard.putNumber("GYRO_DRIFT", GYRO_DRIFT);
 	}
 	
 	/**
@@ -148,6 +150,8 @@ public class Drivetrain extends Subsystem {
 //		System.out.println("vT: " + vT);
 //		System.out.println("dH: " + heading);
 		
+		GYRO_DRIFT = SmartDashboard.getNumber("GYRO_DRIFT");
+		
 //		System.out.println("Rate: " + getRotationalRate());
 		
 //		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
@@ -184,6 +188,9 @@ public class Drivetrain extends Subsystem {
 		SmartDashboard.putNumber("prevR", prevR);
 		SmartDashboard.putNumber("getHeading()", getCurrentContinuousHeading());
 		SmartDashboard.putNumber("getRate()", getRotationalRate());
+		
+		SmartDashboard.putNumber("angular accel", getRotationalRate() - prevVT);
+		prevVT = getRotationalRate();
 
 		System.out.println("Rate: " + getRotationalRate());
 		prevX = vX;
@@ -193,7 +200,7 @@ public class Drivetrain extends Subsystem {
 	}
 	
 	public double getRotationalRate() {
-		return gyro.getRate() * 1000 - GYRO_DRIFT;
+		return gyro.getRate() - GYRO_DRIFT;
 	}
 	
 	/**
@@ -203,7 +210,7 @@ public class Drivetrain extends Subsystem {
 	 */
 
 	public double getCurrentContinuousHeading() {
-		return gyro.getAngle() * 1000 - GYRO_DRIFT * (Timer.getFPGATimestamp() - startTime);
+		return gyro.getAngle() - GYRO_DRIFT * (Timer.getFPGATimestamp() - startTime);
 	}
 	
 	/**
@@ -211,7 +218,7 @@ public class Drivetrain extends Subsystem {
 	 * @return The angle which the robot is facing mod 360
 	 */
 	public double getCurrentAbsoluteHeading() {
-		return (gyro.getAngle() * 1000 - GYRO_DRIFT * (Timer.getFPGATimestamp() - startTime)) % 360;
+		return (gyro.getAngle() - GYRO_DRIFT * (Timer.getFPGATimestamp() - startTime)) % 360;
 	}
 	
 	/**
