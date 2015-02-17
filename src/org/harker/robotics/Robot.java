@@ -7,6 +7,7 @@ import org.harker.robotics.commands.UpdateElevatorHeightCommand;
 import org.harker.robotics.subsystems.Drivetrain;
 import org.harker.robotics.subsystems.Manipulator;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -35,6 +36,9 @@ public class Robot extends IterativeRobot {
     	Manipulator.initialize();
 		OI.initialize();
 		updateHeight = new UpdateElevatorHeightCommand();
+		server = CameraServer.getInstance();
+		server.startAutomaticCapture("cam0");
+		server.setQuality(100);
 		
 //		SmartDashboard.putString("Autonomous mode", "Simple");
     }
