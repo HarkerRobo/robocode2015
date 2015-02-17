@@ -23,7 +23,7 @@ public class AutonomousCommand extends CommandGroup {
 	
 	private static final double TIME_TO_SCORING = .8;
 	private static final double TIME_TO_TOTE = 2;
-	private static final double TOTE_HEIGHT = 20;
+	private static final double TOTE_HEIGHT = 28;
 	private static final double BIN_HEIGHT = 20;
 	
     public  AutonomousCommand() {
@@ -34,42 +34,39 @@ public class AutonomousCommand extends CommandGroup {
 		addSequential(new ResetElevatorCommand());
 				
 		String mode = SmartDashboard.getString("Autonomous mode");
+		System.out.println("Mode: " + mode);
 
     	if (mode.equals("Bin")) {
 	    	addSequential(new CloseClampsCommand());
-	    	addSequential(new MoveToHeightCommand(BIN_HEIGHT));
+//	    	addSequential(new MoveToHeightCommand(BIN_HEIGHT));
 //	    	addSequential(new RotateCommand(-90));
 	    	addSequential(new DriveForTimeCommand(TIME_TO_SCORING));
 	    	addSequential(new ResetElevatorCommand());
 	        addSequential(new OpenClampsCommand());
     	} else if (mode.equals("Tote")) {
+    		System.out.println("Start tote");
 	    	addSequential(new CloseClampsCommand());
-	    	Timer.delay(.1);
+	    	Timer.delay(1);
 	    	addSequential(new MoveToHeightCommand(TOTE_HEIGHT));
+//	    	addSequential(new MoveForTimeCommand(.3));
 //	    	addSequential(new RotateCommand(90));
 	    	addSequential(new DriveForTimeCommand(TIME_TO_SCORING));
 	    	addSequential(new ResetElevatorCommand());
 	        addSequential(new OpenClampsCommand());
-    	} else if (mode.equals("Test")) {
-    		addSequential(new MoveToHeightCommand(30));
-    		Timer.delay(1);
-    		addSequential(new MoveToHeightCommand(20));
-    		Timer.delay(1);
-    		addSequential(new MoveToHeightCommand(40));
-    		Timer.delay(1);
-    		addSequential(new ResetElevatorCommand());
     	} else {
     		addSequential(new CloseClampsCommand());
-    		addSequential(new MoveToHeightCommand(TOTE_HEIGHT+BIN_HEIGHT));
+//    		addSequential(new MoveToHeightCommand(TOTE_HEIGHT+BIN_HEIGHT));
     		addSequential(new DriveForTimeCommand(TIME_TO_TOTE));
     		addSequential(new OpenClampsCommand());
     		addSequential(new ResetElevatorCommand());
     		addSequential(new CloseClampsCommand());
-    		addSequential(new MoveToHeightCommand(TOTE_HEIGHT));
+//    		addSequential(new MoveToHeightCommand(TOTE_HEIGHT));
     		addSequential(new RotateCommand(-90));
 	    	addSequential(new DriveForTimeCommand(TIME_TO_SCORING));
 	    	addSequential(new ResetElevatorCommand());
 	        addSequential(new OpenClampsCommand());
     	}
+    	
+    	System.out.println("End Auto");
     }
 }

@@ -8,43 +8,35 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class MoveToHeightCommand extends Command {
+public class MoveForTimeCommand extends Command {
 	
-	private double targetHeight, startHeight;
+	private double endTime;
 	private Manipulator manipulator;
 	
 	/**
-	 * Moves the elevator to the given height relative to the base of the robot in inches.
-	 * @param height The height to travel to in inches relative to the base.
+	 * Moves the elevator to the given height relative to the base of the robot in seconds.
+	 * @param time The time to move the manipulator
 	 */
-    public MoveToHeightCommand(double height) {
-        this.targetHeight = height;
+    public MoveForTimeCommand(double time) {
         manipulator = Manipulator.getInstance();
-        startHeight = manipulator.getAverageElevatorHeight();
+        endTime = Timer.getFPGATimestamp() + time;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	manipulator.moveElevator(1);
-    	Timer.delay(0.05);
-    	manipulator.moveElevator(0);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	manipulator.moveElevator(Math.signum(targetHeight - manipulator.getAverageElevatorHeight()));
+    	manipulator.moveElevator(1);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if (manipulator.isLowSwitchPressed() || manipulator.isHighSwitchPressed())
-    		return true;
+//    	if (manipulator.isLowSwitchPressed() || manipulator.isHighSwitchPressed())
+//    		return true;
     	
-    	if (targetHeight > startHeight) {
-    		return manipulator.getAverageElevatorHeight() >= targetHeight;
-    	} else {
-    		return manipulator.getAverageElevatorHeight() <= targetHeight;
-    	}
+    	return Timer.getFPGATimestamp() > endTime;
     }
 
     // Called once after isFinished returns true

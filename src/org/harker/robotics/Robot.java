@@ -43,7 +43,7 @@ public class Robot extends IterativeRobot {
 		persistentCommands = new PersistentCommands();
 		
 		SmartDashboard.putNumber("Desired height", Manipulator.MIN_HEIGHT + 5);
-		SmartDashboard.putData("MoveToHeightCommand", new MoveToHeightCommand(SmartDashboard.getNumber("Desired height")));
+		SmartDashboard.putString("Autonomous mode", "Tote");
     }
 	
 	public void disabledPeriodic() {

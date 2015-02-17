@@ -3,6 +3,7 @@ import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
 import org.harker.robotics.OI;
 import org.harker.robotics.subsystems.Manipulator;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -13,10 +14,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class ManualElevatorCommand extends Command {
 	Manipulator manipulator;
+	public double prevTime;
 	
     public ManualElevatorCommand() {
         manipulator = Manipulator.getInstance();
         requires(manipulator);
+        prevTime = Timer.getFPGATimestamp();
     }
 
     // Called just before this Command runs the first time
@@ -30,6 +33,10 @@ public class ManualElevatorCommand extends Command {
     	double val = OI.gamepad.getRightTrigger() - OI.gamepad.getLeftTrigger();
     	manipulator.moveElevator(val);
     	manipulator.getAverageElevatorHeight();
+    	
+    	double curTime = Timer.getFPGATimestamp();
+    	SmartDashboard.putNumber("Loop time", curTime - prevTime);
+    	prevTime = curTime;
     }
 
     // Make this return true when this Command no longer needs to run execute()

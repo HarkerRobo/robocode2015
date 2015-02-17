@@ -13,6 +13,7 @@ import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
 
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -33,11 +34,13 @@ public class OI {
 	 */
 	public OI() {
 		gamepad = new GamepadWrapper(RobotMap.OI.GAMEPAD_PORT);
-		gamepad.getButtonB().whenPressed(new ToggleRelativeDrivingCommand());
+//		gamepad.getButtonB().whenPressed(new ToggleRelativeDrivingCommand());
 		gamepad.getButtonA().whenPressed(new ToggleClampsCommand());
 		gamepad.getButtonBumperLeft().whenPressed(new ToggleLeftClampCommand());
 		gamepad.getButtonBumperRight().whenPressed(new ToggleRightClampCommand());
-		gamepad.getButtonX().whenPressed(new ResetElevatorCommand());
+//		gamepad.getButtonX().whenPressed(new ResetElevatorCommand());
+		
+		SmartDashboard.putData("MoveToHeightCommand", new MoveToHeightCommand(SmartDashboard.getNumber("Desired height")));
 	}
 	
 	/**

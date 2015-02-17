@@ -30,8 +30,7 @@ public class Manipulator extends Subsystem {
 	private Solenoid rightClamp;
 	
 	// Talons that lift the elevator
-	private TalonWrapper elevatorTalon1;
-	private TalonWrapper elevatorTalon2;
+	private TalonWrapper elevatorTalon;
 	
 	// Limit switches that detect if the elevator is too high or low
 	private DigitalInput limitSwitchLow;
@@ -46,26 +45,22 @@ public class Manipulator extends Subsystem {
 	//The inches of distance reported by the range finder per volt
 	public final double INCHES_PER_VOLT = 512 / 5;
 	
-	//The speed to which the elevator slows when near the ends
-	public final double ELEVATOR_SPEED_LIMIT = 0.3;
-	
-	//The distance in inches before limiting takes place
-	public final double ELEVATOR_LIMIT_THRESHOLD = 3;
-	
 	//Fields for calculating the average height, to avoid random noise
 	private double averageElevatorHeight;
 	private double[] instantHeightValues;
 	private int nDataPoints;
 	
 	//The sample size used for averaging
-	private static final int DATA_POINTS_PER_CALC = 10;
+	private static final int DATA_POINTS_PER_CALC = 4;
 	
 	//Distance from top or bottom when to start decellerating
-	public static final double MIN_HEIGHT = 15.5;
-	public static final double TOP_HEIGHT = 73;
+	public static final double MIN_HEIGHT = 17;
+	public static final double TOP_HEIGHT = 62;
+	
+	private boolean slowingDown = false, slowingUp = false;
 	
 	//Decelleration Constant
-	private static final double DECEL_PROP = 30;
+	private static final double SLOW_SPEED = 0.25;
 	
 	//Rangefinder offset
 	private static final double RANGE_FINDER_OFFSET = 8.5;
@@ -77,8 +72,7 @@ public class Manipulator extends Subsystem {
 		leftClamp = new Solenoid(RobotMap.Manipulator.LEFT_CLAMP_PORT);
 		rightClamp = new Solenoid(RobotMap.Manipulator.RIGHT_CLAMP_PORT);
 		
-		elevatorTalon1 = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON1_PORT);
-		elevatorTalon2 = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON2_PORT);
+		elevatorTalon = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON_PORT);
 		
 		limitSwitchLow = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_LOW_PORT);
 		limitSwitchHigh = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_HIGH_PORT);
@@ -119,14 +113,25 @@ public class Manipulator extends Subsystem {
     public void moveElevator(double spd) {
     	SmartDashboard.putNumber("Manipulator Height", averageElevatorHeight);
     	
-    	SmartDashboard.putBoolean("Decellerating", 
-    			(nearBottom() && spd < 0) || (nearTop() && spd > 0));
+    	SmartDashboard.putBoolean("nearBotton", nearBottom());
+    	SmartDashboard.putBoolean("nearTop", nearTop());
     	
-    	if (nearBottom() && spd < 0) {
-    		spd *= getAverageElevatorHeight() / DECEL_PROP;
+    	if (nearBottom() && spd < 0)
+    	{
+    		slowingDown = true;
+    	} else if (spd >= 0) {
+    		slowingDown = false;
     	}
-    	else if (nearTop() && spd > 0){
-    		spd *= (TOP_HEIGHT - getAverageElevatorHeight()) / DECEL_PROP;
+    	
+    	if (nearTop() && spd > 0) {
+    		slowingUp = true;
+    	} else if (spd <= 0) {
+    		slowingUp = false;
+    	}
+    	
+    	if (slowingDown || slowingUp) {
+    		spd = Math.signum(spd);
+    		spd *= SLOW_SPEED;
     	}
     	
     	if (isHighSwitchPressed() && spd > 0)
@@ -134,8 +139,9 @@ public class Manipulator extends Subsystem {
     	else if (isLowSwitchPressed() && spd < 0)
     		spd = 0;
     	
-    	elevatorTalon1.set(spd);
-//    	elevatorTalon2.set(spd);
+    	SmartDashboard.putNumber("Manipulator speed", spd);
+    	
+    	elevatorTalon.set(spd);
     }
     
     /**
