@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The Drivetrain, which contains accessors for the Talons along the base as well as 
@@ -88,6 +89,9 @@ public class Drivetrain extends PIDSubsystem {
 	 */
 	private Drivetrain() {
 		super(P, I, D, PERIOD);
+		
+		SmartDashboard.putData("DT PID", getPIDController());
+		
 		leftBack = new TalonWrapper(RobotMap.Drivetrain.LEFT_FRONT_TALON_PORT);
 		rightBack = new TalonWrapper(RobotMap.Drivetrain.LEFT_BACK_TALON_PORT);
 		leftFront = new TalonWrapper(RobotMap.Drivetrain.RIGHT_FRONT_TALON_PORT);

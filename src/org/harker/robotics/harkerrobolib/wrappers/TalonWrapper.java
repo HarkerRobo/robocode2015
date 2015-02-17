@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Talon;
 public class TalonWrapper extends Talon{
     
     private boolean isReversed = false;
+    private double scale = 1;
     
     /**
      * Initializes a TalonWrapper with its channel.
@@ -27,12 +28,22 @@ public class TalonWrapper extends Talon{
         super(channel);
         this.isReversed = isReversed;
     }
+
+    /**
+     * Sets the scaling of the speed of this Talon
+     * @param scale The amount of scaling to apply to this motor's speed
+     */
+    public void setScale(double scale) {
+        this.scale = scale;
+    }
+
     
     /**
      * Sets the speed of the Talon (handles reversing).
      * @param speed The speed to set the Talon.
      */
     public void set (double speed) {
+        speed *= scale;
         super.set(isReversed ? -speed : speed);
     }
     
