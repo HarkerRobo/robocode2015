@@ -79,8 +79,9 @@ public class Drivetrain extends PIDSubsystem {
 	//Calibration factor for the gyro
 	private double voltsPerDegreePerSecond = (12.5e-3);
 	
-	//The maximum rotational speed (corresponds to '1')
-	public final double MAX_ROTATIONAL_RATE = 0.20;
+	//The maximum rotational speed in degrees per second (corresponds to '1')
+	public final double MAX_ROTATIONAL_RATE_RIGHT = 199;
+	public final double MAX_ROTATIONAL_RATE_LEFT = 89;
 	
 	/**
 	 * Drivetrain singleton constructor. Initializes the various components 
@@ -101,7 +102,6 @@ public class Drivetrain extends PIDSubsystem {
 		gyro.setSensitivity(voltsPerDegreePerSecond);
 		gyro.reset();
 		
-		
 		robotDrive = new RobotDrive(leftBack, rightBack, leftFront, rightFront);
 		robotDrive.setSafetyEnabled(false);
 		robotDrive.setInvertedMotor(MotorType.kFrontRight, true);
@@ -109,6 +109,8 @@ public class Drivetrain extends PIDSubsystem {
 		
 		targetX = targetY = targetT = 0; 
 		prevX = prevY = prevT = 0;
+		
+		
 		this.setOutputRange(-1, 1);
 		this.enable();
 	}
@@ -145,10 +147,8 @@ public class Drivetrain extends PIDSubsystem {
 	 * @param speed The speed at which to drive all four motors
 	 */
 	public void driveRaw(double speed) {
-		leftBack.set(speed);
-		leftFront.set(speed);
-		rightBack.set(speed);
-		rightFront.set(speed);
+		robotDrive.mecanumDrive_Cartesian(0, 0, speed, 0);
+		SmartDashboard.putNumber("Rotational Rate", getRotationalRate());
 	}
 	
 	/**
@@ -176,6 +176,8 @@ public class Drivetrain extends PIDSubsystem {
 		double vX = targetX;
 		double vY = targetY;
 		double vT = theta;
+		if (vX == 0)
+			vT = targetT;
 		double heading = (isRelative) ? getCurrentAbsoluteHeading() : 0;
 		
 		//Apply accelerations
@@ -249,7 +251,12 @@ public class Drivetrain extends PIDSubsystem {
 	 * target rotational speed and the true rotational speed.
 	 */
 	protected double returnPIDInput() {
-		double actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE;
+		double rawRate = getRotationalRate();
+		double actualRate = rawRate;
+		if (rawRate > 0)
+			actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE_RIGHT;
+		else if (rawRate < 0)
+			actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE_LEFT;
 		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
 		double error = actualRate - targetT;
 		System.out.println("targetT: " + targetT + " actualRate: " + actualRate + " error: " + error);

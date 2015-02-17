@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class PersistentCommands extends CommandGroup {
     
-    public  PersistentCommands() {
+    public PersistentCommands() {
         addParallel(new UpdateElevatorHeightCommand());
     }
 }

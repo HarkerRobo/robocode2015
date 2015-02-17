@@ -37,7 +37,7 @@ public class LogErrorCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	drivetrain.drive(currVX, 0, 0);
-    	error = drivetrain.getRotationalRate() / drivetrain.MAX_ROTATIONAL_RATE; // [-1...1]
+    	error = 0;
     	if ((System.currentTimeMillis() - currTime) > 100) {
         	System.out.println(currVX+", "+error);
     		currVX += 0.01;
