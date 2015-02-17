@@ -21,9 +21,7 @@ public class AutonomousCommand extends CommandGroup {
 	Manipulator manipulator;
 	Drivetrain drivetrain;
 	
-	private static final double TIME_TO_SCORING = .8; // we don't have encoders anymore :(
-	                                             // let's just assume that the battery is full voltage :)
-												 // Andrew Tierno 2015 - "We seriously don't need encoders"
+	private static final double TIME_TO_SCORING = .8;
 	private static final double TIME_TO_TOTE = 2;
 	private static final double TOTE_HEIGHT = 20;
 	private static final double BIN_HEIGHT = 20;

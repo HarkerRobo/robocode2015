@@ -71,6 +71,9 @@ public class Drivetrain extends Subsystem {
 	//The maximum rotational speed (corresponds to '1')
 	private final double MAX_ROTATIONAL_RATE = 0.20;
 	
+	//The amount to which to decrese the motor output if strafing
+	private final double BACK_SCALING = 0.8;
+	
 	/**
 	 * Drivetrain singleton constructor. Initializes the various components 
 	 * of the robot along with the internal RobotDrive handler. 
@@ -154,6 +157,16 @@ public class Drivetrain extends Subsystem {
 		sy *= sy*sy;
 		rotation *= rotation*rotation;
 		
+		if (sx != 0) {
+			leftBack.setScale(BACK_SCALING);
+			rightBack.setScale(BACK_SCALING);
+		}
+		else
+		{
+			leftBack.setScale(1);
+			rightBack.setScale(1);
+		}
+		
 		GYRO_DRIFT = SmartDashboard.getNumber("GYRO_DRIFT");
 		
 //		System.out.println("Rate: " + getRotationalRate());
@@ -179,15 +192,16 @@ public class Drivetrain extends Subsystem {
 		//Updating previous values
 //		
 		
-//		SmartDashboard.putBoolean("Compensate", vT == 0);
-//		if (vT == 0) {
-//			vT -= (getCurrentContinuousHeading() - prevR) / 10; // might be +=
-//			if (Math.abs(vT) > 1) vT = Math.signum(vT);
-//			SmartDashboard.putNumber("Gyro delta", vT);
-//		} else {
-//			prevR = getCurrentContinuousHeading();
-//			gyro.reset();
-//		}
+		SmartDashboard.putBoolean("Compensate", vT == 0);
+		if (vT == 0) {
+			vT -= (getCurrentContinuousHeading() - prevR) / 2; // might be +=
+			if (Math.abs(vT) > 1) vT = Math.signum(vT);
+			if (Math.abs(getCurrentContinuousHeading() - prevR) < 2) vT = 0;
+			SmartDashboard.putNumber("Gyro delta", vT);
+		} else {
+			prevR = getCurrentContinuousHeading();
+			gyro.reset();
+		}
 		
 		SmartDashboard.putNumber("prevR", prevR);
 		SmartDashboard.putNumber("getHeading()", getCurrentContinuousHeading());
