@@ -30,7 +30,8 @@ public class Manipulator extends Subsystem {
 	private Solenoid rightClamp;
 	
 	// Talons that lift the elevator
-	private TalonWrapper elevatorTalon;
+	private TalonWrapper elevatorTalon1;
+	private TalonWrapper elevatorTalon2;
 	
 	// Limit switches that detect if the elevator is too high or low
 	private DigitalInput limitSwitchLow;
@@ -76,7 +77,8 @@ public class Manipulator extends Subsystem {
 		leftClamp = new Solenoid(RobotMap.Manipulator.LEFT_CLAMP_PORT);
 		rightClamp = new Solenoid(RobotMap.Manipulator.RIGHT_CLAMP_PORT);
 		
-		elevatorTalon = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON_PORT);
+		elevatorTalon1 = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON1_PORT);
+		elevatorTalon2 = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON2_PORT);
 		
 		limitSwitchLow = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_LOW_PORT);
 		limitSwitchHigh = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_HIGH_PORT);
@@ -132,7 +134,8 @@ public class Manipulator extends Subsystem {
     	else if (isLowSwitchPressed() && spd < 0)
     		spd = 0;
     	
-    	elevatorTalon.set(spd);
+    	elevatorTalon1.set(spd);
+    	elevatorTalon2.set(spd);
     }
     
     /**
