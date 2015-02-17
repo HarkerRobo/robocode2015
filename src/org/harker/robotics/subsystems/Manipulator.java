@@ -135,7 +135,7 @@ public class Manipulator extends Subsystem {
     		spd = 0;
     	
     	elevatorTalon1.set(spd);
-    	elevatorTalon2.set(spd);
+//    	elevatorTalon2.set(spd);
     }
     
     /**
