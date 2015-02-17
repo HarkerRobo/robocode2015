@@ -51,21 +51,17 @@ public class Manipulator extends Subsystem {
 	//The distance in inches before limiting takes place
 	public final double ELEVATOR_LIMIT_THRESHOLD = 3;
 	
-	//The height of the elevator from the top to the base of the drivetrain in inches
-	public final double ELEVATOR_HEIGHT = 73;
-	
 	//Fields for calculating the average height, to avoid random noise
 	private double averageElevatorHeight;
 	private double[] instantHeightValues;
 	private int nDataPoints;
 	
 	//The sample size used for averaging
-	private static final int DATA_POINTS_PER_CALC = 3;
+	private static final int DATA_POINTS_PER_CALC = 10;
 	
 	//Distance from top or bottom when to start decellerating
-	private static final double SLOW_DIST = 4;
-	private static final double MIN_DIST = 15.5;
-	private static final double TOP_DIST = 62;
+	public static final double MIN_HEIGHT = 15.5;
+	public static final double TOP_HEIGHT = 73;
 	
 	//Decelleration Constant
 	private static final double DECEL_PROP = 30;
@@ -128,7 +124,7 @@ public class Manipulator extends Subsystem {
     		spd *= getAverageElevatorHeight() / DECEL_PROP;
     	}
     	else if (nearTop() && spd > 0){
-    		spd *= (TOP_DIST - getAverageElevatorHeight()) / DECEL_PROP;
+    		spd *= (TOP_HEIGHT - getAverageElevatorHeight()) / DECEL_PROP;
     	}
     	
     	if (isHighSwitchPressed() && spd > 0)
@@ -145,6 +141,7 @@ public class Manipulator extends Subsystem {
      * @return whether the elevator has reached its maximum height
      */
     public boolean isHighSwitchPressed() {
+    	SmartDashboard.putBoolean("HIGH LIM", !limitSwitchHigh.get());
     	return ! limitSwitchHigh.get();
     }
     
@@ -154,6 +151,7 @@ public class Manipulator extends Subsystem {
      * @return whether the elevator has reached its minimum height
      */
     public boolean isLowSwitchPressed() {
+    	SmartDashboard.putBoolean("LOW LIM", !limitSwitchLow.get());
     	return ! limitSwitchLow.get();
     }
     
@@ -320,10 +318,10 @@ public class Manipulator extends Subsystem {
     }
     
     private boolean nearBottom() {
-    	return getAverageElevatorHeight() <= SLOW_DIST+MIN_DIST;
+    	return getAverageElevatorHeight() <= MIN_HEIGHT;
     }
     
     private boolean nearTop() {
-    	return getAverageElevatorHeight() >= TOP_DIST-SLOW_DIST;
+    	return getAverageElevatorHeight() >= TOP_HEIGHT;
     }
 }

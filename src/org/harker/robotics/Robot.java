@@ -3,6 +3,7 @@ package org.harker.robotics;
 
 import org.harker.robotics.OI;
 import org.harker.robotics.commands.AutonomousCommand;
+import org.harker.robotics.commands.MoveToHeightCommand;
 import org.harker.robotics.commands.PersistentCommands;
 import org.harker.robotics.commands.UpdateElevatorHeightCommand;
 import org.harker.robotics.subsystems.Drivetrain;
@@ -40,6 +41,9 @@ public class Robot extends IterativeRobot {
 		OI.initialize();
 
 		persistentCommands = new PersistentCommands();
+		
+		SmartDashboard.putNumber("Desired height", Manipulator.MIN_HEIGHT + 5);
+		SmartDashboard.putData("MoveToHeightCommand", new MoveToHeightCommand(SmartDashboard.getNumber("Desired height")));
     }
 	
 	public void disabledPeriodic() {
@@ -62,8 +66,8 @@ public class Robot extends IterativeRobot {
     	persistentCommands.start();
     	
     	server = CameraServer.getInstance();
-		server.startAutomaticCapture("cam0");
-		server.setQuality(100);
+		server.startAutomaticCapture("cam2");
+		server.setQuality(50);
 		
 		System.out.println("Camera initialized");
     }

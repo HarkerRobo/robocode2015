@@ -31,12 +31,11 @@ public class AutonomousCommand extends CommandGroup {
     	drivetrain = Drivetrain.getInstance();
     	
 		addSequential(new OpenClampsCommand());
-		addParallel(new UpdateElevatorHeightCommand());
+		addSequential(new ResetElevatorCommand());
 				
 		String mode = SmartDashboard.getString("Autonomous mode");
 
     	if (mode.equals("Bin")) {
-	    	addSequential(new ResetElevatorCommand());
 	    	addSequential(new CloseClampsCommand());
 	    	addSequential(new MoveToHeightCommand(BIN_HEIGHT));
 //	    	addSequential(new RotateCommand(-90));
@@ -44,7 +43,6 @@ public class AutonomousCommand extends CommandGroup {
 	    	addSequential(new ResetElevatorCommand());
 	        addSequential(new OpenClampsCommand());
     	} else if (mode.equals("Tote")) {
-	    	addSequential(new ResetElevatorCommand());
 	    	addSequential(new CloseClampsCommand());
 	    	Timer.delay(.1);
 	    	addSequential(new MoveToHeightCommand(TOTE_HEIGHT));
@@ -61,7 +59,6 @@ public class AutonomousCommand extends CommandGroup {
     		Timer.delay(1);
     		addSequential(new ResetElevatorCommand());
     	} else {
-    		addSequential(new ResetElevatorCommand());
     		addSequential(new CloseClampsCommand());
     		addSequential(new MoveToHeightCommand(TOTE_HEIGHT+BIN_HEIGHT));
     		addSequential(new DriveForTimeCommand(TIME_TO_TOTE));

@@ -30,7 +30,6 @@ public class ManualElevatorCommand extends Command {
     	double val = OI.gamepad.getRightTrigger() - OI.gamepad.getLeftTrigger();
     	manipulator.moveElevator(val);
     	manipulator.getAverageElevatorHeight();
-    	SmartDashboard.putBoolean("LOW LIM", manipulator.isLowSwitchPressed());
     }
 
     // Make this return true when this Command no longer needs to run execute()
