@@ -34,8 +34,10 @@ public class MoveToHeightCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-//    	if (manipulator.isLowSwitchPressed() || manipulator.isHighSwitchPressed())
-//    		return true;
+    	if ((manipulator.isLowSwitchPressed() && targetHeight < startHeight) || 
+    	    (manipulator.isHighSwitchPressed() && targetHeight > startHeight))
+    		return true;
+    	
     	if (targetHeight > startHeight) {
     		return manipulator.getAverageElevatorHeight() >= targetHeight;
     	} else {

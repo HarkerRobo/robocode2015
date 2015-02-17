@@ -30,15 +30,13 @@ public class Robot extends IterativeRobot {
      */
 	
 	UpdateElevatorHeightCommand updateHeight;
+	CameraServer server;
 	
     public void robotInit() {
     	Drivetrain.initialize();
     	Manipulator.initialize();
 		OI.initialize();
 		updateHeight = new UpdateElevatorHeightCommand();
-		server = CameraServer.getInstance();
-		server.startAutomaticCapture("cam0");
-		server.setQuality(100);
 		
 //		SmartDashboard.putString("Autonomous mode", "Simple");
     }
@@ -61,6 +59,12 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
     	updateHeight = new UpdateElevatorHeightCommand();
     	updateHeight.start();
+    	
+    	server = CameraServer.getInstance();
+		server.startAutomaticCapture("cam0");
+		server.setQuality(100);
+		
+		System.out.println("Camera initialized");
     }
 
     /**

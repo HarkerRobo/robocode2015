@@ -55,12 +55,12 @@ public class Manipulator extends Subsystem {
 	private static final int DATA_POINTS_PER_CALC = 3;
 	
 	//Distance from top or bottom when to start decellerating
-	private static final double SLOW_DIST = 1;
-	private static final double MIN_DIST = 7;
-	private static final double TOP_DIST = 53;
+	private static final double SLOW_DIST = 4;
+	private static final double MIN_DIST = 15.5;
+	private static final double TOP_DIST = 62;
 	
 	//Decelleration Constant
-	private static final double DECEL_PROP = 15;
+	private static final double DECEL_PROP = 30;
 	
 	//Rangefinder offset
 	private static final double RANGE_FINDER_OFFSET = 8.5;
@@ -113,17 +113,20 @@ public class Manipulator extends Subsystem {
     public void moveElevator(double spd) {
     	SmartDashboard.putNumber("Manipulator Height", averageElevatorHeight);
     	
+    	SmartDashboard.putBoolean("Decellerating", 
+    			(nearBottom() && spd < 0) || (nearTop() && spd > 0));
+    	
     	if (nearBottom() && spd < 0) {
-    		spd *= getAverageElevatorHeight()/DECEL_PROP;
+    		spd *= getAverageElevatorHeight() / DECEL_PROP;
     	}
     	else if (nearTop() && spd > 0){
-    		spd *= (TOP_DIST - getAverageElevatorHeight())/DECEL_PROP;
+    		spd *= (TOP_DIST - getAverageElevatorHeight()) / DECEL_PROP;
     	}
     	
-    	if (isHighSwitchPressed())
-    		spd = -.5;
-    	else if (isLowSwitchPressed())
-    		spd = .5;
+    	if (isHighSwitchPressed() && spd > 0)
+    		spd = 0;
+    	else if (isLowSwitchPressed() && spd < 0)
+    		spd = 0;
     	
     	elevatorTalon.set(spd);
     }
@@ -314,6 +317,6 @@ public class Manipulator extends Subsystem {
     }
     
     private boolean nearTop() {
-    	return getAverageElevatorHeight() <= TOP_DIST-SLOW_DIST;
+    	return getAverageElevatorHeight() >= TOP_DIST-SLOW_DIST;
     }
 }

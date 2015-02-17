@@ -41,7 +41,7 @@ public class Drivetrain extends Subsystem {
 	private static double startTime = 0;
 	
 	//Theta scale because we need to ensure we don't move theta too fast
-	private static double T_SCALE = 0.8;
+	private static double T_SCALE = 0.6;
 	private static double X_SCALE = 1;
 	private static double Y_SCALE = 1;
 	
@@ -52,9 +52,9 @@ public class Drivetrain extends Subsystem {
 	private static Drivetrain drivetrain;
 	
 	//Constants for acceleration
-	private static double MAX_ACCEL_X = 0.1;
-	private static double MAX_ACCEL_Y = 0.1;
-	private static double MAX_ACCEL_T = 0.1;
+	private static double MAX_ACCEL_X = 0.05;
+	private static double MAX_ACCEL_Y = 0.05;
+	private static double MAX_ACCEL_T = 0.05;
 	
 	//A reference to previous speeds to use for acceleration
 	private double prevX;
@@ -93,7 +93,7 @@ public class Drivetrain extends Subsystem {
 		
 		startTime = Timer.getFPGATimestamp();
 		
-//		SmartDashboard.putNumber("GYRO_DRIFT", GYRO_DRIFT);
+		SmartDashboard.putNumber("GYRO_DRIFT", GYRO_DRIFT);
 	}
 	
 	/**
@@ -150,6 +150,10 @@ public class Drivetrain extends Subsystem {
 //		System.out.println("vT: " + vT);
 //		System.out.println("dH: " + heading);
 		
+		sx *= sx*sx;
+		sy *= sy*sy;
+		rotation *= rotation*rotation;
+		
 		GYRO_DRIFT = SmartDashboard.getNumber("GYRO_DRIFT");
 		
 //		System.out.println("Rate: " + getRotationalRate());
@@ -192,7 +196,7 @@ public class Drivetrain extends Subsystem {
 		SmartDashboard.putNumber("angular accel", getRotationalRate() - prevVT);
 		prevVT = getRotationalRate();
 
-		System.out.println("Rate: " + getRotationalRate());
+//		System.out.println("Rate: " + getRotationalRate());
 		prevX = vX;
 		prevY = vY;
 		prevT = vT;
