@@ -25,9 +25,7 @@ public class MoveToHeightCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	manipulator.moveElevator(1);
-    	Timer.delay(0.05);
-    	manipulator.moveElevator(0);
+
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -37,7 +35,7 @@ public class MoveToHeightCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if (manipulator.isLowSwitchPressed() || manipulator.isHighSwitchPressed())
+    	if (manipulator.isHighSwitchPressed())
     		return true;
     	
     	if (targetHeight > startHeight) {
@@ -46,9 +44,10 @@ public class MoveToHeightCommand extends Command {
     		return manipulator.getAverageElevatorHeight() <= targetHeight;
     	}
     }
-
+    
     // Called once after isFinished returns true
     protected void end() {
+    	System.out.println("Finished MoveToHeight");
     	manipulator.moveElevator(0);
     }
 

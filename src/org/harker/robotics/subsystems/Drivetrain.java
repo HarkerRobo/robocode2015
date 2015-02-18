@@ -146,10 +146,14 @@ public class Drivetrain extends PIDSubsystem {
 	 * @param speed The speed at which to drive all four motors
 	 */
 	public void driveRaw(double speed) {
-		leftBack.set(speed);
-		leftFront.set(speed);
-		rightBack.set(speed);
-		rightFront.set(speed);
+		disable();
+		robotDrive.mecanumDrive_Cartesian(0, speed, 0, 0);
+//		System.out.println("Speed: " + speed);
+	}
+	
+	public void rotate(double speed) {
+		disable();
+		robotDrive.mecanumDrive_Cartesian(0, 0, speed, 0);
 	}
 	
 	/**

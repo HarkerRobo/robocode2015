@@ -1,20 +1,19 @@
 package org.harker.robotics.commands;
 
-import org.harker.robotics.subsystems.Manipulator;
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * Closes the clamps.
- * 
- * @author Vedaad Shakib
+ *
  */
-public class CloseClampsCommand extends Command {
-
-	Manipulator manipulator;
+public class WaitForTimeCommand extends Command {
 	
-    public CloseClampsCommand() {
-        manipulator = Manipulator.getInstance();
+	private double endTime;
+
+    public WaitForTimeCommand(double time) {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+    	setTimeout(time);
     }
 
     // Called just before this Command runs the first time
@@ -23,13 +22,11 @@ public class CloseClampsCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	manipulator.closeClamps();
-    	System.out.println("Executed Close Clamps");
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true

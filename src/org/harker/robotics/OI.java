@@ -39,8 +39,6 @@ public class OI {
 		gamepad.getButtonBumperLeft().whenPressed(new ToggleLeftClampCommand());
 		gamepad.getButtonBumperRight().whenPressed(new ToggleRightClampCommand());
 //		gamepad.getButtonX().whenPressed(new ResetElevatorCommand());
-		
-		SmartDashboard.putData("MoveToHeightCommand", new MoveToHeightCommand(SmartDashboard.getNumber("Desired height")));
 	}
 	
 	/**

@@ -21,16 +21,17 @@ public class AutonomousCommand extends CommandGroup {
 	Manipulator manipulator;
 	Drivetrain drivetrain;
 	
-	private static final double TIME_TO_SCORING = .8;
+	private static final double TIME_TO_SCORING = 1.5;
+	private static final double WAIT_TIME = 1.5;
 	private static final double TIME_TO_TOTE = 2;
-	private static final double TOTE_HEIGHT = 28;
+	private static final double TOTE_HEIGHT = 27;
 	private static final double BIN_HEIGHT = 20;
 	
     public  AutonomousCommand() {
     	manipulator = Manipulator.getInstance();
     	drivetrain = Drivetrain.getInstance();
     	
-		addSequential(new OpenClampsCommand());
+    	addSequential(new OpenClampsCommand());
 		addSequential(new ResetElevatorCommand());
 				
 		String mode = SmartDashboard.getString("Autonomous mode");
@@ -46,8 +47,9 @@ public class AutonomousCommand extends CommandGroup {
     	} else if (mode.equals("Tote")) {
     		System.out.println("Start tote");
 	    	addSequential(new CloseClampsCommand());
-	    	Timer.delay(1);
+	    	addSequential(new WaitForTimeCommand(WAIT_TIME));
 	    	addSequential(new MoveToHeightCommand(TOTE_HEIGHT));
+//	    	
 //	    	addSequential(new MoveForTimeCommand(.3));
 //	    	addSequential(new RotateCommand(90));
 	    	addSequential(new DriveForTimeCommand(TIME_TO_SCORING));
@@ -65,8 +67,8 @@ public class AutonomousCommand extends CommandGroup {
 	    	addSequential(new DriveForTimeCommand(TIME_TO_SCORING));
 	    	addSequential(new ResetElevatorCommand());
 	        addSequential(new OpenClampsCommand());
-    	}
+    	}    	
     	
-    	System.out.println("End Auto");
+    	Drivetrain.getInstance().enable();
     }
 }

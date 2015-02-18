@@ -54,13 +54,13 @@ public class Manipulator extends Subsystem {
 	private static final int DATA_POINTS_PER_CALC = 4;
 	
 	//Distance from top or bottom when to start decellerating
-	public static final double MIN_HEIGHT = 17;
+	public static final double MIN_HEIGHT = 21;
 	public static final double TOP_HEIGHT = 62;
 	
 	private boolean slowingDown = false, slowingUp = false;
 	
 	//Decelleration Constant
-	private static final double SLOW_SPEED = 0.25;
+	private static final double SLOW_SPEED = 0.4;
 	
 	//Rangefinder offset
 	private static final double RANGE_FINDER_OFFSET = 8.5;
@@ -110,9 +110,7 @@ public class Manipulator extends Subsystem {
      * 
      * @param spd the speed to be set in the range [-1, 1]
      */
-    public void moveElevator(double spd) {
-    	SmartDashboard.putNumber("Manipulator Height", averageElevatorHeight);
-    	
+    public void moveElevator(double spd) {    	
     	SmartDashboard.putBoolean("nearBotton", nearBottom());
     	SmartDashboard.putBoolean("nearTop", nearTop());
     	
@@ -130,7 +128,7 @@ public class Manipulator extends Subsystem {
     	}
     	
     	if (slowingDown || slowingUp) {
-    		spd = Math.signum(spd);
+//    		spd = Math.signum(spd);
     		spd *= SLOW_SPEED;
     	}
     	
@@ -255,6 +253,7 @@ public class Manipulator extends Subsystem {
      * @return
      */
     public double getAverageElevatorHeight() {
+    	SmartDashboard.putNumber("Manipulator Height", averageElevatorHeight);
     	return averageElevatorHeight;
     }
     
