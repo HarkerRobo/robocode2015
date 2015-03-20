@@ -43,7 +43,7 @@ public class Robot extends IterativeRobot {
 		persistentCommands = new PersistentCommands();
 		
 		SmartDashboard.putNumber("Desired height", Manipulator.MIN_HEIGHT + 5);
-		SmartDashboard.putString("Autonomous mode", "Tote");
+		SmartDashboard.putString("Autonomous mode", "Backup");
     }
 	
 	public void disabledPeriodic() {
@@ -64,6 +64,7 @@ public class Robot extends IterativeRobot {
 
     public void teleopInit() {
     	persistentCommands.start();
+    	Drivetrain.getInstance().enable();
     	
     	server = CameraServer.getInstance();
 		server.startAutomaticCapture("cam2");

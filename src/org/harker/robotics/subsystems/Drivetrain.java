@@ -40,7 +40,7 @@ public class Drivetrain extends PIDSubsystem {
 	private static Gyro gyro;
 	
 	//Deadzone constants
-	private static double DZ_Y = 0.15;
+	private static double DZ_Y = 0.15;	
 	private static double DZ_T = 0.20;
 	private static double DZ_X = 0.15;
 	

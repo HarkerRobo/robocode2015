@@ -2,30 +2,27 @@ package org.harker.robotics.commands;
 
 import org.harker.robotics.subsystems.Drivetrain;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * Drives for a specific time (can't do distance as we have no encoders)
- * 
- * @author Vedaad Shakib
+ *
  */
-public class RotateCommand extends Command {
-
-	Drivetrain drivetrain;
-	double startRot;
-	double endRot;
+public class RotateForTimeCommand extends Command {
 	
+	Drivetrain drivetrain;
+	double speed;
+
 	/**
 	 * Constructor
 	 * 
 	 * @param time the time to drive in seconds
 	 */
-    public RotateCommand(double rotation) {
+     public RotateForTimeCommand(double seconds, double speed) {
     	drivetrain = Drivetrain.getInstance();
-    	this.startRot = drivetrain.getCurrentContinuousHeading();
-    	this.endRot = startRot + rotation;
         requires(drivetrain);
+        setTimeout(seconds);
+//        this.time = Timer.getFPGATimestamp() + seconds;
+//        System.out.println("End: " + time);
     }
 
     // Called just before this Command runs the first time
@@ -34,24 +31,22 @@ public class RotateCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double speed = .3;
-    	if (endRot > startRot)
-    		drivetrain.rotate(speed);
-    	else
-    		drivetrain.rotate(-speed);
+    	drivetrain.rotate(speed);
+//    	if (speed < 0.6) speed += 0.05;
+//    	System.out.println("Executed Drive for time");
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if (endRot > startRot)
-    		return endRot <= drivetrain.getCurrentContinuousHeading();
-    	else
-    		return endRot >= drivetrain.getCurrentContinuousHeading();
+//    	System.out.println(Timer.getFPGATimestamp());
+//        return Timer.getFPGATimestamp() > time;
+    	return isTimedOut();
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	drivetrain.rotate(0);
+    	System.out.println("Finished Rotate for Time");
     }
 
     // Called when another command which requires one or more of the same

@@ -13,18 +13,18 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveForTimeCommand extends Command {
 
 	Drivetrain drivetrain;
-	double time;
-	double speed = 0.05;
+	double speed;
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param time the time to drive in seconds
 	 */
-    public DriveForTimeCommand(double seconds) {
+    public DriveForTimeCommand(double seconds, double speed) {
     	drivetrain = Drivetrain.getInstance();
         requires(drivetrain);
         setTimeout(seconds);
+        this.speed = speed;
 //        this.time = Timer.getFPGATimestamp() + seconds;
 //        System.out.println("End: " + time);
     }
@@ -35,7 +35,7 @@ public class DriveForTimeCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	drivetrain.drive(0.6, 0, 0);
+    	drivetrain.driveRaw(speed);
 //    	if (speed < 0.6) speed += 0.05;
 //    	System.out.println("Executed Drive for time");
     }
@@ -49,7 +49,7 @@ public class DriveForTimeCommand extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	drivetrain.drive(0, 0, 0);
+    	drivetrain.driveRaw(0);
     	System.out.println("Finished Drive for Time");
     }
 
