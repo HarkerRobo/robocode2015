@@ -16,15 +16,15 @@ public class ElevForTimeCommand extends Command {
 	
 	/**
 	 * Moves the elevator to the given height relative to the base of the robot in inches.
-	 * @param time Time
 	 * @param speed Speed
+	 * @param time Time
 	 */
-    public ElevForTimeCommand(double time, double speed) {
+    public ElevForTimeCommand(double speed, double time) {
 //        this.targetHeight = height;
     	setTimeout(time);
     	this.speed = speed;
         manipulator = Manipulator.getInstance();
-        startHeight = manipulator.getAverageElevatorHeight();
+//        startHeight = manipulator.getAverageElevatorHeight();
     }
 
     // Called just before this Command runs the first time
@@ -40,7 +40,8 @@ public class ElevForTimeCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if (manipulator.isHighSwitchPressed())
+    	if (manipulator.isHighSwitchPressed() && speed > 0 ||
+    		manipulator.isLowSwitchPressed() && speed < 0)
     		return true;
     	
     	return isTimedOut();

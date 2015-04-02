@@ -3,6 +3,7 @@ package org.harker.robotics.subsystems;
 import org.harker.robotics.RobotMap;
 import org.harker.robotics.commands.ManualElevatorCommand;
 import org.harker.robotics.commands.UpdateElevatorHeightCommand;
+import org.harker.robotics.harkerrobolib.wrappers.EncoderWrapper;
 import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -64,6 +65,15 @@ public class Manipulator extends Subsystem {
 	
 	//Rangefinder offset
 	private static final double RANGE_FINDER_OFFSET = 8.5;
+	
+	private static EncoderWrapper heightEnc;
+	
+	private static final double DISTANCE_PER_PULSE = 0.00014877;
+	
+	private static double startHeight;
+	
+	private static DigitalInput chnA;
+	private static DigitalInput chnB;
 		
 	/**
 	 * Creates a new Manipulator instance by initializing all of the elements of the manipulator.
@@ -82,6 +92,13 @@ public class Manipulator extends Subsystem {
 		averageElevatorHeight = getInstantElevatorHeight();
 		instantHeightValues = new double[DATA_POINTS_PER_CALC];
 		nDataPoints = 0;
+		
+		heightEnc = new EncoderWrapper(RobotMap.Manipulator.ENC_PORT_A, RobotMap.Manipulator.ENC_PORT_B);
+		heightEnc.setDistancePerPulse(1);
+		startHeight = 10;
+		
+		chnA = new DigitalInput(2);
+		chnB = new DigitalInput(3);
 	}
 	
 	public static void initialize() {
@@ -131,9 +148,12 @@ public class Manipulator extends Subsystem {
     	}
     	
     	if (isHighSwitchPressed() && spd > 0)
-    		spd *= -1;
-    	else if (isLowSwitchPressed() && spd < 0)
-    		spd *= -1;
+    		spd = 0;
+    	else if (isLowSwitchPressed() && spd < 0) {
+    		spd = 0;
+    		startHeight = 0;
+    		heightEnc.reset();
+    	}
     	
     	SmartDashboard.putBoolean("slowingDown", slowingDown);
     	SmartDashboard.putBoolean("slowingUp", slowingUp);
@@ -254,9 +274,10 @@ public class Manipulator extends Subsystem {
      * @return
      */
     public double getAverageElevatorHeight() {
+//    	System.out.println("A: " + chnA.get());
+//    	System.out.println("B: " + chnB.get());
+    	averageElevatorHeight = 5;//heightEnc.getDistance() + startHeight;
     	SmartDashboard.putNumber("Manipulator Height", averageElevatorHeight);
-    	if (averageElevatorHeight > 100) //Just trust me on this one
-    		return 18;
     	return averageElevatorHeight;
     }
     
@@ -265,59 +286,7 @@ public class Manipulator extends Subsystem {
      * highest and lowest of them.
      */
     public void updateElevatorHeight() {
-    	instantHeightValues[nDataPoints] = getInstantElevatorHeight();
-    	nDataPoints++;
-    	if (nDataPoints >= DATA_POINTS_PER_CALC) {
-    		double sumValues = sum(instantHeightValues);
-    		sumValues -= instantHeightValues[findLowestIdx(instantHeightValues)];
-    		sumValues -= instantHeightValues[findHighestIdx(instantHeightValues)];
-    		averageElevatorHeight = sumValues / (nDataPoints - 2);
-    		nDataPoints = 0;
-    	}
-    }
-    
-    /**
-     * Finds the index of the lowest value within the array.
-     * @param arr The array to search
-     * @return The index of the lowest value
-     */
-    private int findLowestIdx(double[] arr) {
-    	int lowIdx = 0;
-    	for (int i = 1; i < arr.length; i++)
-    	{
-    		if (arr[i] < arr[lowIdx])
-    			lowIdx = i;
-    	}
-    	
-    	return lowIdx;
-    }
-    
-    /**
-     * Finds the index of the highest value within the array.
-     * @param arr The array to search
-     * @return The index of the highest value
-     */
-    private int findHighestIdx(double[] arr) {
-    	int highIdx = 0;
-    	for (int i = 1; i < arr.length; i++)
-    	{
-    		if (arr[i] > arr[highIdx])
-    			highIdx = i;
-    	}
-    	
-    	return highIdx;
-    }
-    
-    /**
-     * Finds the sum of the values within the array.
-     * @param arr The values 
-     * @return The sum of the given values
-     */
-    private double sum(double[] arr) {
-    	double sumArr = 0;
-    	for (double d : arr)
-    		sumArr += d;
-    	return sumArr;
+//    	averageElevatorHeight = heightEnc.getDistance() + startHeight;
     }
     
     /**

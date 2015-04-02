@@ -3,7 +3,7 @@ package org.harker.robotics;
 
 import org.harker.robotics.OI;
 import org.harker.robotics.commands.AutonomousCommand;
-import org.harker.robotics.commands.MoveToHeightCommand;
+import org.harker.robotics.commands.ElevForTimeCommand;
 import org.harker.robotics.commands.PersistentCommands;
 import org.harker.robotics.commands.UpdateElevatorHeightCommand;
 import org.harker.robotics.subsystems.Drivetrain;
@@ -63,13 +63,15 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
+//    	SmartDashboard.putNumber("Auto speed", 0.5);
+//    	SmartDashboard.putNumber("Move time", 2);
     	persistentCommands.start();
     	Drivetrain.getInstance().enable();
     	
     	server = CameraServer.getInstance();
 		server.startAutomaticCapture("cam2");
 		server.setQuality(50);
-		
+				
 		System.out.println("Camera initialized");
     }
 

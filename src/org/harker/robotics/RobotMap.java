@@ -31,6 +31,8 @@ public class RobotMap {
 		public static final int LIMIT_SWITCH_HIGH_PORT = 8;
 		public static final int LIMIT_SWITCH_LOW_PORT = 9;
 		public static final int RANGE_FINDER_PORT = 3;
+		public static final int ENC_PORT_A = 5;
+		public static final int ENC_PORT_B = 6;
 	}
 	
 	/**

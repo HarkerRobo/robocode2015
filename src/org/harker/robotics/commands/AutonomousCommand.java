@@ -50,7 +50,7 @@ public class AutonomousCommand extends CommandGroup {
 	    	addSequential(new CloseClampsCommand());
 	    	addSequential(new WaitForTimeCommand(WAIT_TIME));
 	    	addSequential(new DriveForTimeCommand(0.2, -0.3));
-	    	addSequential(new MoveToHeightCommand(1, 0.5));
+	    	addSequential(new ElevForTimeCommand(0.5, 1));
 	    	
 //	    	addSequential(new MoveForTimeCommand(.3));
 //	    	addSequential(new RotateCommand(-90));
@@ -60,7 +60,11 @@ public class AutonomousCommand extends CommandGroup {
 	        addSequential(new OpenClampsCommand());
     	} else if (mode.equals("Backup")) {
     		addSequential(new CloseClampsCommand());
-    		addSequential(new DriveForTimeCommand(1, 1.8));
+//    		addSequential(new ElevForTimeCommand(0.4, 2.5));
+    		addSequential(new DriveForTimeCommand(SmartDashboard.getNumber("Move Time"), SmartDashboard.getNumber("Auto speed")));
+    		addSequential(new WaitForTimeCommand(1));
+    		addSequential(new OpenClampsCommand());
+//    		addSequential(new ElevForTimeCommand(-0.4, 2.5));
     	} else {
     		addSequential(new CloseClampsCommand());
 //    		addSequential(new MoveToHeightCommand(TOTE_HEIGHT+BIN_HEIGHT));

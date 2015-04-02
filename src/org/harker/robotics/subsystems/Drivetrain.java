@@ -14,12 +14,14 @@ import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
 import org.harker.robotics.OI;
 import org.harker.robotics.RobotMap;
 
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.hal.AccelerometerJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -38,6 +40,7 @@ public class Drivetrain extends PIDSubsystem {
 	private static RobotDrive robotDrive;
 	private static TalonWrapper leftBack, leftFront, rightBack, rightFront;
 	private static Gyro gyro;
+	private static BuiltInAccelerometer accel;
 	
 	//Deadzone constants
 	private static double DZ_Y = 0.15;	
@@ -45,7 +48,7 @@ public class Drivetrain extends PIDSubsystem {
 	private static double DZ_X = 0.15;
 	
 	//Theta scale because we need to ensure we don't move theta too fast
-	private static double T_SCALE = 0.8;
+	private static double T_SCALE = 0.4;
 	
 	//Relative driving boolean
 	private static boolean isRelative = false;
@@ -54,9 +57,9 @@ public class Drivetrain extends PIDSubsystem {
 	private static Drivetrain drivetrain;
 	
 	//Constants for acceleration
-	private static double MAX_ACCEL_X = 0.05;
-	private static double MAX_ACCEL_Y = 0.05;
-	private static double MAX_ACCEL_T = 0.05;
+	private static double MAX_ACCEL_X = 0.02;
+	private static double MAX_ACCEL_Y = 0.02;
+	private static double MAX_ACCEL_T = 0.02;
 	
 	//PID Constants
 	private static final double P = 1.0;
@@ -106,6 +109,8 @@ public class Drivetrain extends PIDSubsystem {
 		robotDrive.setSafetyEnabled(false);
 		robotDrive.setInvertedMotor(MotorType.kFrontRight, true);
 		robotDrive.setInvertedMotor(MotorType.kRearRight, true);
+		
+//		accel = new BuiltInAccelerometer(Accelerometer.Range.k2g);
 		
 		targetX = targetY = targetT = 0; 
 		prevX = prevY = prevT = 0;
