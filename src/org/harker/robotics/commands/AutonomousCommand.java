@@ -3,7 +3,6 @@ package org.harker.robotics.commands;
 import org.harker.robotics.subsystems.Drivetrain;
 import org.harker.robotics.subsystems.Manipulator;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -60,11 +59,28 @@ public class AutonomousCommand extends CommandGroup {
 	        addSequential(new OpenClampsCommand());
     	} else if (mode.equals("Backup")) {
     		addSequential(new CloseClampsCommand());
-//    		addSequential(new ElevForTimeCommand(0.4, 2.5));
+    		addSequential(new ElevForTimeCommand(0.4, 3.2));
+//    		addSequential(new StrafeForTimeCommand(SmartDashboard.getNumber("Strafe Time"), SmartDashboard.getNumber("Strafe Speed")));
     		addSequential(new DriveForTimeCommand(SmartDashboard.getNumber("Move Time"), SmartDashboard.getNumber("Auto speed")));
     		addSequential(new WaitForTimeCommand(1));
     		addSequential(new OpenClampsCommand());
 //    		addSequential(new ElevForTimeCommand(-0.4, 2.5));
+    	} else if (mode.equals("Proto")) {
+    		addSequential(new ToggleTopBinClampCommand());
+    		addSequential(new WaitForTimeCommand(2));
+    		addSequential(new DriveForTimeCommand(1, -0.4));
+    		addSequential(new WaitForTimeCommand(1));
+    		addSequential(new ToggleBotBinClampCommand());
+    		addSequential(new WaitForTimeCommand(2));
+    		
+    		addSequential(new ToggleTopBinClampCommand());
+    		addSequential(new WaitForTimeCommand(0.5));
+    		
+    		addSequential(new DriveForTimeCommand(1.5, 0.8));
+    		addSequential(new ToggleBotBinClampCommand());
+    		addSequential(new WaitForTimeCommand(1));
+    		
+//    		addSequential(new ToggleTopBinClampCommand());
     	} else {
     		addSequential(new CloseClampsCommand());
 //    		addSequential(new MoveToHeightCommand(TOTE_HEIGHT+BIN_HEIGHT));

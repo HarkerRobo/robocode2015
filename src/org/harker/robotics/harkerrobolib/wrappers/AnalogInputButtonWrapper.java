@@ -9,16 +9,16 @@ import edu.wpi.first.wpilibj.AnalogInput;
 public class AnalogInputButtonWrapper extends ButtonWrapper {
 
     private double threshold = 0.5;
-    private final int port;
+//    private final int port;
     private final AnalogInput channel;
 
     public AnalogInputButtonWrapper(int port) {
-        this.port = port;
+//        this.port = port;
         channel = new AnalogInput(port);
     }
     
     public AnalogInputButtonWrapper(int port, double threshold) {
-        this.port = port;
+//        this.port = port;
         this.threshold = threshold;
         channel = new AnalogInput(port);
     }

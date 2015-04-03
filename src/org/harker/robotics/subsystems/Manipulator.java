@@ -2,11 +2,8 @@ package org.harker.robotics.subsystems;
 
 import org.harker.robotics.RobotMap;
 import org.harker.robotics.commands.ManualElevatorCommand;
-import org.harker.robotics.commands.UpdateElevatorHeightCommand;
-import org.harker.robotics.harkerrobolib.wrappers.EncoderWrapper;
 import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -30,6 +27,10 @@ public class Manipulator extends Subsystem {
 	private Solenoid leftClamp;
 	private Solenoid rightClamp;
 	
+	// Solenoids that control the bin mechanism
+	private Solenoid leftBinClamp;
+	private Solenoid rightBinClamp;
+	
 	// Talons that lift the elevator
 	private TalonWrapper elevatorTalon;
 	
@@ -37,7 +38,7 @@ public class Manipulator extends Subsystem {
 	private DigitalInput limitSwitchLow;
 	private DigitalInput limitSwitchHigh;
 	
-	private AnalogInput rangeFinder;
+//	private AnalogInput rangeFinder;
 	
 	// The open and closed states of the Solenoids
 	public final boolean CLAMP_OPEN_STATE = false;
@@ -48,8 +49,8 @@ public class Manipulator extends Subsystem {
 	
 	//Fields for calculating the average height, to avoid random noise
 	private double averageElevatorHeight;
-	private double[] instantHeightValues;
-	private int nDataPoints;
+//	private double[] instantHeightValues;
+//	private int nDataPoints;
 	
 	//The sample size used for averaging
 	private static final int DATA_POINTS_PER_CALC = 4;
@@ -66,14 +67,14 @@ public class Manipulator extends Subsystem {
 	//Rangefinder offset
 	private static final double RANGE_FINDER_OFFSET = 8.5;
 	
-	private static EncoderWrapper heightEnc;
+//	private static EncoderWrapper heightEnc;
 	
-	private static final double DISTANCE_PER_PULSE = 0.00014877;
+//	private static final double DISTANCE_PER_PULSE = 0.00014877;
 	
-	private static double startHeight;
+//	private static double startHeight;
 	
-	private static DigitalInput chnA;
-	private static DigitalInput chnB;
+//	private static DigitalInput chnA;
+//	private static DigitalInput chnB;
 		
 	/**
 	 * Creates a new Manipulator instance by initializing all of the elements of the manipulator.
@@ -82,23 +83,26 @@ public class Manipulator extends Subsystem {
 		leftClamp = new Solenoid(RobotMap.Manipulator.LEFT_CLAMP_PORT);
 		rightClamp = new Solenoid(RobotMap.Manipulator.RIGHT_CLAMP_PORT);
 		
+		leftBinClamp = new Solenoid(RobotMap.Manipulator.LEFT_BIN_CLAMP_PORT);
+		rightBinClamp = new Solenoid(RobotMap.Manipulator.RIGHT_BIN_CLAMP_PORT);
+		
 		elevatorTalon = new TalonWrapper(RobotMap.Manipulator.ELEVATOR_TALON_PORT);
 		
 		limitSwitchLow = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_LOW_PORT);
 		limitSwitchHigh = new DigitalInput(RobotMap.Manipulator.LIMIT_SWITCH_HIGH_PORT);
 		
-		rangeFinder = new AnalogInput(RobotMap.Manipulator.RANGE_FINDER_PORT);
+//		rangeFinder = new AnalogInput(RobotMap.Manipulator.RANGE_FINDER_PORT);
 		
 		averageElevatorHeight = getInstantElevatorHeight();
-		instantHeightValues = new double[DATA_POINTS_PER_CALC];
-		nDataPoints = 0;
+//		instantHeightValues = new double[DATA_POINTS_PER_CALC];
+//		nDataPoints = 0;
 		
-		heightEnc = new EncoderWrapper(RobotMap.Manipulator.ENC_PORT_A, RobotMap.Manipulator.ENC_PORT_B);
-		heightEnc.setDistancePerPulse(1);
-		startHeight = 10;
+//		heightEnc = new EncoderWrapper(RobotMap.Manipulator.ENC_PORT_A, RobotMap.Manipulator.ENC_PORT_B);
+//		heightEnc.setDistancePerPulse(1);
+//		startHeight = 10;
 		
-		chnA = new DigitalInput(2);
-		chnB = new DigitalInput(3);
+//		chnA = new DigitalInput(2);
+//		chnB = new DigitalInput(3);
 	}
 	
 	public static void initialize() {
@@ -151,8 +155,8 @@ public class Manipulator extends Subsystem {
     		spd = 0;
     	else if (isLowSwitchPressed() && spd < 0) {
     		spd = 0;
-    		startHeight = 0;
-    		heightEnc.reset();
+//    		startHeight = 0;
+//    		heightEnc.reset();
     	}
     	
     	SmartDashboard.putBoolean("slowingDown", slowingDown);
@@ -181,6 +185,20 @@ public class Manipulator extends Subsystem {
     public boolean isLowSwitchPressed() {
     	SmartDashboard.putBoolean("LOW LIM", !limitSwitchLow.get());
     	return ! limitSwitchLow.get();
+    }
+    
+    /**
+     * Toggles the left bin clamp.
+     */
+    public void toggleLeftBinClamp() {
+    	setLeftBinClamp(!leftBinClamp.get());
+    }
+    
+    /**
+     * Toggles the right bin clamp.
+     */
+    public void toggleRightBinClamp() {
+    	setRightBinClamp(!rightBinClamp.get());
     }
     
     /**
@@ -242,6 +260,24 @@ public class Manipulator extends Subsystem {
     }
     
     /**
+     * Set the state of the right bin clamp based on a specified state.
+     * 
+     * @param state the state to be set																																												
+     */
+    private void setLeftBinClamp(boolean state) {
+    	leftBinClamp.set(state);
+    }
+    
+    /**
+     * Set the state of the right bin clamp based on a specified state.
+     * 
+     * @param state the state to be set																																												
+     */
+    private void setRightBinClamp(boolean state) {
+    	rightBinClamp.set(state);
+    }
+    
+    /**
      * Set the state of the right clamp based on a specified state.
      * 
      * @param state the state to be set																																												
@@ -294,7 +330,8 @@ public class Manipulator extends Subsystem {
      * @return
      */
     private double getInstantElevatorHeight() {
-    	return rangeFinder.getVoltage() * INCHES_PER_VOLT + RANGE_FINDER_OFFSET;
+//    	return rangeFinder.getVoltage() * INCHES_PER_VOLT + RANGE_FINDER_OFFSET;
+    	return 5; // please accept this magic number. Trust mde
     }
     
     private boolean nearBottom() {

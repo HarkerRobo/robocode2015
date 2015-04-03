@@ -1,6 +1,5 @@
 package org.harker.robotics.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -8,8 +7,6 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class WaitForTimeCommand extends Command {
 	
-	private double endTime;
-
     public WaitForTimeCommand(double time) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);

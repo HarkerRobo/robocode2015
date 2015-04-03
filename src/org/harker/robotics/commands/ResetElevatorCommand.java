@@ -3,7 +3,6 @@ package org.harker.robotics.commands;
 import org.harker.robotics.OI;
 import org.harker.robotics.subsystems.Manipulator;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**

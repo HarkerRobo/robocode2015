@@ -1,19 +1,14 @@
 package org.harker.robotics;
 
 import org.harker.robotics.RobotMap;
-import org.harker.robotics.commands.ManualDriveCommand;
-import org.harker.robotics.commands.ElevForTimeCommand;
-import org.harker.robotics.commands.ResetElevatorCommand;
 import org.harker.robotics.commands.ToggleClampsCommand;
+import org.harker.robotics.commands.ToggleBotBinClampCommand;
 import org.harker.robotics.commands.ToggleLeftClampCommand;
-import org.harker.robotics.commands.ToggleRelativeDrivingCommand;
+import org.harker.robotics.commands.ToggleTopBinClampCommand;
 import org.harker.robotics.commands.ToggleRightClampCommand;
-import org.harker.robotics.commands.UpdateElevatorHeightCommand;
 import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
 
-import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -38,6 +33,8 @@ public class OI {
 		gamepad.getButtonA().whenPressed(new ToggleClampsCommand());
 		gamepad.getButtonBumperLeft().whenPressed(new ToggleLeftClampCommand());
 		gamepad.getButtonBumperRight().whenPressed(new ToggleRightClampCommand());
+		gamepad.getButtonX().whenPressed(new ToggleBotBinClampCommand());
+		gamepad.getButtonY().whenPressed(new ToggleTopBinClampCommand());
 //		gamepad.getButtonX().whenPressed(new ResetElevatorCommand());
 	}
 	

@@ -1,13 +1,6 @@
 package org.harker.robotics.commands;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import org.harker.robotics.subsystems.Drivetrain;
-
-import com.sun.glass.ui.Timer;
 
 import edu.wpi.first.wpilibj.command.Command;
 

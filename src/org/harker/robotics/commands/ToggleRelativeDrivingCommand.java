@@ -1,6 +1,5 @@
 package org.harker.robotics.commands;
 
-import org.harker.robotics.Robot;
 import org.harker.robotics.subsystems.Drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;

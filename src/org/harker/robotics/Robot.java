@@ -3,16 +3,13 @@ package org.harker.robotics;
 
 import org.harker.robotics.OI;
 import org.harker.robotics.commands.AutonomousCommand;
-import org.harker.robotics.commands.ElevForTimeCommand;
 import org.harker.robotics.commands.PersistentCommands;
-import org.harker.robotics.commands.UpdateElevatorHeightCommand;
 import org.harker.robotics.subsystems.Drivetrain;
 import org.harker.robotics.subsystems.Manipulator;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.hal.PDPJNI;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -42,8 +39,10 @@ public class Robot extends IterativeRobot {
 
 		persistentCommands = new PersistentCommands();
 		
-		SmartDashboard.putNumber("Desired height", Manipulator.MIN_HEIGHT + 5);
-		SmartDashboard.putString("Autonomous mode", "Backup");
+//		SmartDashboard.putNumber("Desired height", Manipulator.MIN_HEIGHT + 5);
+//		SmartDashboard.putString("Autonomous mode", "Backup");
+//		SmartDashboard.putNumber("Strafe Time", 2);
+//		SmartDashboard.putNumber("Strafe Speed", 0.2);
     }
 	
 	public void disabledPeriodic() {
@@ -68,11 +67,11 @@ public class Robot extends IterativeRobot {
     	persistentCommands.start();
     	Drivetrain.getInstance().enable();
     	
-    	server = CameraServer.getInstance();
-		server.startAutomaticCapture("cam2");
-		server.setQuality(50);
+//    	server = CameraServer.getInstance();
+//		server.startAutomaticCapture("cam2");
+//		server.setQuality(50);
 				
-		System.out.println("Camera initialized");
+//		System.out.println("Camera initialized");
     }
 
     /**

@@ -1,27 +1,15 @@
 package org.harker.robotics.subsystems;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.File;
-
 import org.harker.robotics.commands.ManualDriveCommand;
 import org.harker.robotics.commands.ResetPIDCommand;
-import org.harker.robotics.harkerrobolib.wrappers.EncoderWrapper;
 import org.harker.robotics.harkerrobolib.wrappers.TalonWrapper;
-import org.harker.robotics.OI;
 import org.harker.robotics.RobotMap;
 
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.RobotDrive.MotorType;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.hal.AccelerometerJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -156,6 +144,16 @@ public class Drivetrain extends PIDSubsystem {
 //		System.out.println("Speed: " + speed);
 	}
 	
+	/**
+	 * Drives all four motors at the given speed.
+	 * @param speed The speed at which to drive all four motors
+	 */
+	public void strafeRaw(double speed) {
+		disable();
+		robotDrive.mecanumDrive_Cartesian(speed, 0, 0, 0);
+//		System.out.println("Speed: " + speed);
+	}
+	
 	public void rotate(double speed) {
 		disable();
 		robotDrive.mecanumDrive_Cartesian(0, 0, speed, 0);
@@ -267,7 +265,7 @@ public class Drivetrain extends PIDSubsystem {
 		else if (rawRate < 0)
 			actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE_LEFT;
 		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
-		double error = actualRate - targetT;
+//		double error = actualRate - targetT;
 //		System.out.println("targetT: " + targetT + " actualRate: " + actualRate + " error: " + error);
 		return actualRate;
 	}

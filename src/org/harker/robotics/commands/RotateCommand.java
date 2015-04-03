@@ -2,7 +2,6 @@ package org.harker.robotics.commands;
 
 import org.harker.robotics.subsystems.Drivetrain;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
