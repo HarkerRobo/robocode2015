@@ -37,6 +37,7 @@ public class AutonomousCommand extends CommandGroup {
 		String mode = SmartDashboard.getString("Autonomous mode");
 		System.out.println("Mode: " + mode);
 
+		try {
     	if (mode.equals("Bin")) {
 	    	addSequential(new CloseClampsCommand());
 //	    	addSequential(new MoveToHeightCommand(BIN_HEIGHT));
@@ -66,8 +67,10 @@ public class AutonomousCommand extends CommandGroup {
     		addSequential(new OpenClampsCommand());
 //    		addSequential(new ElevForTimeCommand(-0.4, 2.5));
     	} else if (mode.equals("Proto")) {
+    		addSequential(new ElevForTimeCommand(-1, 3.5));
+    		
     		addSequential(new ToggleTopBinClampCommand());
-    		addSequential(new WaitForTimeCommand(2));
+//    		addSequential(new WaitForTimeCommand(2));
     		addSequential(new DriveForTimeCommand(1, -0.4));
     		addSequential(new WaitForTimeCommand(1));
     		addSequential(new ToggleBotBinClampCommand());
@@ -79,8 +82,6 @@ public class AutonomousCommand extends CommandGroup {
     		addSequential(new DriveForTimeCommand(1.5, 0.8));
     		addSequential(new ToggleBotBinClampCommand());
     		addSequential(new WaitForTimeCommand(1));
-    		
-//    		addSequential(new ToggleTopBinClampCommand());
     	} else {
     		addSequential(new CloseClampsCommand());
 //    		addSequential(new MoveToHeightCommand(TOTE_HEIGHT+BIN_HEIGHT));
@@ -94,6 +95,9 @@ public class AutonomousCommand extends CommandGroup {
 	    	addSequential(new ResetElevatorCommand());
 	        addSequential(new OpenClampsCommand());
     	}    	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     	
     	Drivetrain.getInstance().enable();
     }
