@@ -67,10 +67,10 @@ public class AutonomousCommand extends CommandGroup {
     		addSequential(new OpenClampsCommand());
 //    		addSequential(new ElevForTimeCommand(-0.4, 2.5));
     	} else if (mode.equals("Proto")) {
-    		addSequential(new ElevForTimeCommand(-1, 3.5));
+    		addParallel(new ElevForTimeCommand(-1, 6));
     		
     		addSequential(new ToggleTopBinClampCommand());
-//    		addSequential(new WaitForTimeCommand(2));
+    		addSequential(new WaitForTimeCommand(2));
     		addSequential(new DriveForTimeCommand(1, -0.4));
     		addSequential(new WaitForTimeCommand(1));
     		addSequential(new ToggleBotBinClampCommand());
@@ -79,7 +79,7 @@ public class AutonomousCommand extends CommandGroup {
     		addSequential(new ToggleTopBinClampCommand());
     		addSequential(new WaitForTimeCommand(0.5));
     		
-    		addSequential(new DriveForTimeCommand(1.5, 0.8));
+    		addSequential(new DriveForTimeCommand(1.2, 1));
     		addSequential(new ToggleBotBinClampCommand());
     		addSequential(new WaitForTimeCommand(1));
     	} else {
