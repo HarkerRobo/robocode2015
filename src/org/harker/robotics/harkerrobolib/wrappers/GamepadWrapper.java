@@ -8,6 +8,55 @@ import edu.wpi.first.wpilibj.Joystick;
  * @author atierno
  */
 public class GamepadWrapper extends Joystick {
+	public static final int SETTING_XBOX = 0;
+	public static final int SETTING_LOGITECH = 1;
+	
+	/************************************************
+	 * XBOX SETTINGS                                *
+	 ************************************************/
+    public static final int XBOX_A_PORT = 1;
+    public static final int XBOX_B_PORT = 2;
+    public static final int XBOX_X_PORT = 3;
+    public static final int XBOX_Y_PORT = 4;
+    public static final int XBOX_SELECT_PORT = 7;
+    public static final int XBOX_START_PORT = 8;
+
+    public static final int XBOX_STICK_LEFT_PORT = 9;
+    public static final int XBOX_STICK_RIGHT_PORT = 10;
+
+    public static final int XBOX_BUMPER_LEFT_PORT = 5;
+    public static final int XBOX_BUMPER_RIGHT_PORT = 6;
+    
+    public static final int XBOX_AXIS_LEFT_X = 0;
+    public static final int XBOX_AXIS_LEFT_Y = 1;
+    public static final int XBOX_AXIS_RIGHT_X = 4;
+    public static final int XBOX_AXIS_RIGHT_Y = 5;
+    public static final int XBOX_AXIS_TRIGGER_LEFT = 2;
+    public static final int XBOX_AXIS_TRIGGER_RIGHT = 3;
+    
+    /************************************************
+	 * LOGITECH SETTINGS                            *
+	 ************************************************/
+    public static final int LOGITECH_A_PORT = 2;
+    public static final int LOGITECH_B_PORT = 3;
+    public static final int LOGITECH_X_PORT = 1;
+    public static final int LOGITECH_Y_PORT = 4;
+    public static final int LOGITECH_SELECT_PORT = 9;
+    public static final int LOGITECH_START_PORT = 10;
+
+    public static final int LOGITECH_STICK_LEFT_PORT = 11;
+    public static final int LOGITECH_STICK_RIGHT_PORT = 12;
+
+    public static final int LOGITECH_BUMPER_LEFT_PORT = 5;
+    public static final int LOGITECH_BUMPER_RIGHT_PORT = 6;
+    
+    public static final int LOGITECH_AXIS_LEFT_X = 0;
+    public static final int LOGITECH_AXIS_LEFT_Y = 1;
+    public static final int LOGITECH_AXIS_RIGHT_X = 2;
+    public static final int LOGITECH_AXIS_RIGHT_Y = 3;
+    public static final int LOGITECH_TRIGGER_LEFT = 7;
+    public static final int LOGITECH_TRIGGER_RIGHT = 8;
+    
     private final JoystickButtonWrapper buttonA;
     private final JoystickButtonWrapper buttonB;
     private final JoystickButtonWrapper buttonX;
@@ -19,62 +68,84 @@ public class GamepadWrapper extends Joystick {
     private final JoystickButtonWrapper buttonBumperLeft;
     private final JoystickButtonWrapper buttonBumperRight;
     
-    public static final int BUTTON_A_PORT = 1;
-    public static final int BUTTON_B_PORT = 2;
-    public static final int BUTTON_X_PORT = 3;
-    public static final int BUTTON_Y_PORT = 4;
-    public static final int BUTTON_SELECT_PORT = 7;
-    public static final int BUTTON_START_PORT = 8;
-
-    public static final int BUTTON_STICK_LEFT_PORT = 9;
-    public static final int BUTTON_STICK_RIGHT_PORT = 10;
-
-    public static final int BUTTON_BUMPER_LEFT_PORT = 5;
-    public static final int BUTTON_BUMPER_RIGHT_PORT = 6;
-    
-    public static final int AXIS_LEFT_X = 0;
-    public static final int AXIS_LEFT_Y = 1;
-    public static final int AXIS_RIGHT_X = 4;
-    public static final int AXIS_RIGHT_Y = 5;
-    public static final int AXIS_TRIGGER_LEFT = 2;
-    public static final int AXIS_TRIGGER_RIGHT = 3;
+    private int setting;
     
     public GamepadWrapper(int port) {
     	super(port);
-        buttonA = new JoystickButtonWrapper(this, BUTTON_A_PORT);
-        buttonB = new JoystickButtonWrapper(this, BUTTON_B_PORT);
-        buttonX = new JoystickButtonWrapper(this, BUTTON_X_PORT);
-        buttonY = new JoystickButtonWrapper(this, BUTTON_Y_PORT);
-        buttonStart = new JoystickButtonWrapper(this, BUTTON_START_PORT);
-        buttonSelect = new JoystickButtonWrapper(this, BUTTON_SELECT_PORT);
-        buttonStickLeft = new JoystickButtonWrapper(this, BUTTON_STICK_LEFT_PORT);
-        buttonStickRight = new JoystickButtonWrapper(this, BUTTON_STICK_RIGHT_PORT);
-        buttonBumperLeft = new JoystickButtonWrapper(this, BUTTON_BUMPER_LEFT_PORT);
-        buttonBumperRight = new JoystickButtonWrapper(this, BUTTON_BUMPER_RIGHT_PORT);
+        buttonA = new JoystickButtonWrapper(this, XBOX_A_PORT);
+        buttonB = new JoystickButtonWrapper(this, XBOX_B_PORT);
+        buttonX = new JoystickButtonWrapper(this, XBOX_X_PORT);
+        buttonY = new JoystickButtonWrapper(this, XBOX_Y_PORT);
+        buttonStart = new JoystickButtonWrapper(this, XBOX_START_PORT);
+        buttonSelect = new JoystickButtonWrapper(this, XBOX_SELECT_PORT);
+        buttonStickLeft = new JoystickButtonWrapper(this, XBOX_STICK_LEFT_PORT);
+        buttonStickRight = new JoystickButtonWrapper(this, XBOX_STICK_RIGHT_PORT);
+        buttonBumperLeft = new JoystickButtonWrapper(this, XBOX_BUMPER_LEFT_PORT);
+        buttonBumperRight = new JoystickButtonWrapper(this, XBOX_BUMPER_RIGHT_PORT);
+        
+        this.setting = SETTING_XBOX;
+    }
+    
+    public GamepadWrapper(int port, int setting) {
+    	super(port);
+    	if (setting == SETTING_XBOX) {
+    		buttonA = new JoystickButtonWrapper(this, XBOX_A_PORT);
+            buttonB = new JoystickButtonWrapper(this, XBOX_B_PORT);
+            buttonX = new JoystickButtonWrapper(this, XBOX_X_PORT);
+            buttonY = new JoystickButtonWrapper(this, XBOX_Y_PORT);
+            buttonStart = new JoystickButtonWrapper(this, XBOX_START_PORT);
+            buttonSelect = new JoystickButtonWrapper(this, XBOX_SELECT_PORT);
+            buttonStickLeft = new JoystickButtonWrapper(this, XBOX_STICK_LEFT_PORT);
+            buttonStickRight = new JoystickButtonWrapper(this, XBOX_STICK_RIGHT_PORT);
+            buttonBumperLeft = new JoystickButtonWrapper(this, XBOX_BUMPER_LEFT_PORT);
+            buttonBumperRight = new JoystickButtonWrapper(this, XBOX_BUMPER_RIGHT_PORT);
+    	}
+    	else if (setting == SETTING_LOGITECH) {
+    		buttonA = new JoystickButtonWrapper(this, LOGITECH_A_PORT);
+            buttonB = new JoystickButtonWrapper(this, LOGITECH_B_PORT);
+            buttonX = new JoystickButtonWrapper(this, LOGITECH_X_PORT);
+            buttonY = new JoystickButtonWrapper(this, LOGITECH_Y_PORT);
+            buttonStart = new JoystickButtonWrapper(this, LOGITECH_START_PORT);
+            buttonSelect = new JoystickButtonWrapper(this, LOGITECH_SELECT_PORT);
+            buttonStickLeft = new JoystickButtonWrapper(this, LOGITECH_STICK_LEFT_PORT);
+            buttonStickRight = new JoystickButtonWrapper(this, LOGITECH_STICK_RIGHT_PORT);
+            buttonBumperLeft = new JoystickButtonWrapper(this, LOGITECH_BUMPER_LEFT_PORT);
+            buttonBumperRight = new JoystickButtonWrapper(this, LOGITECH_BUMPER_RIGHT_PORT);
+    	}
+    	else {
+    		throw new RuntimeException("Error, invalid setting given");
+    	}
+    	this.setting = setting;
     }
 
     public double getLeftX() {
-    	return getRawAxis(AXIS_LEFT_X);
+    	return getRawAxis(XBOX_AXIS_LEFT_X);
     }
 
     public double getLeftY() {
-    	return -getRawAxis(AXIS_LEFT_Y); //by default, forward returns a negative number, which is unintuitive
+    	return -getRawAxis(XBOX_AXIS_LEFT_Y); //by default, forward returns a negative number, which is unintuitive
     }
 
     public double getRightX() {
-    	return getRawAxis(AXIS_RIGHT_X);
+    	return getRawAxis(XBOX_AXIS_RIGHT_X);
     }
 
     public double getRightY() {
-    	return -getRawAxis(AXIS_RIGHT_Y); //by default, forward returns a negative number, which is unintuitive
+    	return -getRawAxis(XBOX_AXIS_RIGHT_Y); //by default, forward returns a negative number, which is unintuitive
     }
     
     public double getRightTrigger() {
-    	return getRawAxis(AXIS_TRIGGER_RIGHT);
+    	if (setting == SETTING_LOGITECH) {
+    		return (getRawButton(LOGITECH_TRIGGER_RIGHT) == true) ? 1 : 0;
+    	}
+    	return getRawAxis(XBOX_AXIS_TRIGGER_RIGHT);
     }
     
     public double getLeftTrigger() {
-    	return getRawAxis(AXIS_TRIGGER_LEFT);
+    	if (setting == SETTING_LOGITECH) {
+    		return (getRawButton(LOGITECH_TRIGGER_LEFT) == true) ? 1 : 0;
+    	}
+    	return getRawAxis(XBOX_AXIS_TRIGGER_LEFT);
     }
     
     /**

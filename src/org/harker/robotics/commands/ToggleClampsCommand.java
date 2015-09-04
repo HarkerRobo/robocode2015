@@ -23,6 +23,7 @@ public class ToggleClampsCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	System.out.println("Executed tcc");
     	manipulator.toggleLeftClamp();
     	manipulator.toggleRightClamp();
     }

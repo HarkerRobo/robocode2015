@@ -28,7 +28,7 @@ public class OI {
 	 * the functionalities associated with buttons on the gamepad. 
 	 */
 	public OI() {
-		gamepad = new GamepadWrapper(RobotMap.OI.GAMEPAD_PORT);
+		gamepad = new GamepadWrapper(RobotMap.OI.GAMEPAD_PORT, GamepadWrapper.SETTING_LOGITECH);
 //		gamepad.getButtonB().whenPressed(new ToggleRelativeDrivingCommand());
 		gamepad.getButtonA().whenPressed(new ToggleClampsCommand());
 		gamepad.getButtonBumperLeft().whenPressed(new ToggleLeftClampCommand());

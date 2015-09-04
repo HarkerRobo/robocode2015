@@ -103,6 +103,9 @@ public class Manipulator extends Subsystem {
 		
 //		chnA = new DigitalInput(2);
 //		chnB = new DigitalInput(3);
+		
+		openRightClamp();
+		openLeftClamp();
 	}
 	
 	public static void initialize() {

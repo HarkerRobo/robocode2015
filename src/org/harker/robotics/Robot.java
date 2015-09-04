@@ -38,11 +38,6 @@ public class Robot extends IterativeRobot {
 		OI.initialize();
 
 		persistentCommands = new PersistentCommands();
-		
-//		SmartDashboard.putNumber("Desired height", Manipulator.MIN_HEIGHT + 5);
-//		SmartDashboard.putString("Autonomous mode", "Backup");
-//		SmartDashboard.putNumber("Strafe Time", 2);
-//		SmartDashboard.putNumber("Strafe Speed", 0.2);
     }
 	
 	public void disabledPeriodic() {
@@ -62,16 +57,8 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopInit() {
-//    	SmartDashboard.putNumber("Auto speed", 0.5);
-//    	SmartDashboard.putNumber("Move time", 2);
     	persistentCommands.start();
     	Drivetrain.getInstance().enable();
-    	
-//    	server = CameraServer.getInstance();
-//		server.startAutomaticCapture("cam2");
-//		server.setQuality(50);
-				
-//		System.out.println("Camera initialized");
     }
 
     /**
