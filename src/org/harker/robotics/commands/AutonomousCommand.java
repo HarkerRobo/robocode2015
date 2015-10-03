@@ -61,12 +61,12 @@ public class AutonomousCommand extends CommandGroup {
 	        addSequential(new OpenClampsCommand());
     	} else if (mode.equalsIgnoreCase("Backup")) {
     		addSequential(new CloseClampsCommand());
-    		addSequential(new ElevForTimeCommand(0.4, 3.2));
+    		addSequential(new ElevForTimeCommand(0.4, 1.6));
 //    		addSequential(new StrafeForTimeCommand(SmartDashboard.getNumber("Strafe Time"), SmartDashboard.getNumber("Strafe Speed")));
 //    		addSequential(new DriveForTimeCommand(SmartDashboard.getNumber("Move Time"), SmartDashboard.getNumber("Auto speed")));
     		addSequential(new DriveForTimeCommand(2.1, 0.5));
     		addSequential(new WaitForTimeCommand(1));
-//    		addSequential(new OpenClampsCommand());
+    		addSequential(new OpenClampsCommand());
 //    		addSequential(new ElevForTimeCommand(-0.4, 2.5));
     	} else if (mode.equalsIgnoreCase("Proto")) {
 //    		addParallel(new ElevForTimeCommand(-1, 6));
