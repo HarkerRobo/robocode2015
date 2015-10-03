@@ -34,18 +34,19 @@ public class AutonomousCommand extends CommandGroup {
     	addSequential(new OpenClampsCommand());
 //		addSequential(new ResetElevatorCommand());
 				
-		String mode = SmartDashboard.getString("Autonomous mode");
+//		String mode = SmartDashboard.getString("Autonomous mode");
+    	String mode = "Backup";
 		System.out.println("Mode: " + mode);
 
 		try {
-    	if (mode.equals("Bin")) {
+    	if (mode.equalsIgnoreCase("Bin")) {
 	    	addSequential(new CloseClampsCommand());
 //	    	addSequential(new MoveToHeightCommand(BIN_HEIGHT));
 //	    	addSequential(new RotateCommand(-90));
 	    	addSequential(new DriveForTimeCommand(TIME_TO_SCORING, 0.6));
-	    	addSequential(new ResetElevatorCommand());
+//	    	addSequential(new ResetElevatorCommand());
 	        addSequential(new OpenClampsCommand());
-    	} else if (mode.equals("Tote")) {
+    	} else if (mode.equalsIgnoreCase("Tote")) {
     		System.out.println("Start tote");
 	    	addSequential(new CloseClampsCommand());
 	    	addSequential(new WaitForTimeCommand(WAIT_TIME));
@@ -56,30 +57,32 @@ public class AutonomousCommand extends CommandGroup {
 //	    	addSequential(new RotateCommand(-90));
 	    	addSequential(new RotateForTimeCommand(2, 0.3));
 	    	addSequential(new DriveForTimeCommand(1.5, 0.7));
-	    	addSequential(new ResetElevatorCommand());
+//	    	addSequential(new ResetElevatorCommand());
 	        addSequential(new OpenClampsCommand());
-    	} else if (mode.equals("Backup")) {
+    	} else if (mode.equalsIgnoreCase("Backup")) {
     		addSequential(new CloseClampsCommand());
     		addSequential(new ElevForTimeCommand(0.4, 3.2));
 //    		addSequential(new StrafeForTimeCommand(SmartDashboard.getNumber("Strafe Time"), SmartDashboard.getNumber("Strafe Speed")));
-    		addSequential(new DriveForTimeCommand(SmartDashboard.getNumber("Move Time"), SmartDashboard.getNumber("Auto speed")));
+//    		addSequential(new DriveForTimeCommand(SmartDashboard.getNumber("Move Time"), SmartDashboard.getNumber("Auto speed")));
+    		addSequential(new DriveForTimeCommand(2.1, 0.5));
     		addSequential(new WaitForTimeCommand(1));
-    		addSequential(new OpenClampsCommand());
+//    		addSequential(new OpenClampsCommand());
 //    		addSequential(new ElevForTimeCommand(-0.4, 2.5));
-    	} else if (mode.equals("Proto")) {
-    		addParallel(new ElevForTimeCommand(-1, 6));
+    	} else if (mode.equalsIgnoreCase("Proto")) {
+//    		addParallel(new ElevForTimeCommand(-1, 6));
     		
+    		addSequential(new DriveForTimeCommand(4.1, -0.5));
+    		addSequential(new WaitForTimeCommand(1));
     		addSequential(new ToggleTopBinClampCommand());
     		addSequential(new WaitForTimeCommand(2));
-    		addSequential(new DriveForTimeCommand(1, -0.4));
-    		addSequential(new WaitForTimeCommand(1));
     		addSequential(new ToggleBotBinClampCommand());
     		addSequential(new WaitForTimeCommand(2));
     		
     		addSequential(new ToggleTopBinClampCommand());
     		addSequential(new WaitForTimeCommand(0.5));
     		
-    		addSequential(new DriveForTimeCommand(1.2, 1));
+    		addParallel(new RotateForTimeCommand(0.5, 0.1));
+    		addSequential(new DriveForTimeCommand(1.1, 1));
     		addSequential(new ToggleBotBinClampCommand());
     		addSequential(new WaitForTimeCommand(1));
     	} else {
@@ -87,12 +90,12 @@ public class AutonomousCommand extends CommandGroup {
 //    		addSequential(new MoveToHeightCommand(TOTE_HEIGHT+BIN_HEIGHT));
     		addSequential(new DriveForTimeCommand(TIME_TO_TOTE, 0.6));
     		addSequential(new OpenClampsCommand());
-    		addSequential(new ResetElevatorCommand());
+//    		addSequential(new ResetElevatorCommand());
     		addSequential(new CloseClampsCommand());
 //    		addSequential(new MoveToHeightCommand(TOTE_HEIGHT));
     		addSequential(new RotateCommand(-90));
 	    	addSequential(new DriveForTimeCommand(TIME_TO_SCORING, 0.6));
-	    	addSequential(new ResetElevatorCommand());
+//	    	addSequential(new ResetElevatorCommand());
 	        addSequential(new OpenClampsCommand());
     	}    	
 		} catch (Exception e) {

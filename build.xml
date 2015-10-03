@@ -27,12 +27,12 @@
 		<arg value="pull"/>
 		<arg value="origin"/>
 		<arg value="master"/>
-	</exec>-->
+	</exec>
  
 	  <delete dir="src/org/harker/robotics/harkerrobolib"/>
 	  <copy todir="src">
 	    <fileset dir="harkerrobolib/src"/>
-	  </copy>
+	  </copy>-->
   <property file="${user.home}/wpilib/wpilib.properties"/>
   <property file="build.properties"/>
   <property file="${user.home}/wpilib/java/current/ant/build.properties"/>

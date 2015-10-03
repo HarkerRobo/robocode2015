@@ -1,5 +1,10 @@
 package org.harker.robotics.harkerrobolib.wrappers;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JFrame;
+
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
@@ -70,6 +75,9 @@ public class GamepadWrapper extends Joystick {
     
     private int setting;
     
+    private boolean aPressed, bPressed, xPressed, yPressed, sUpPressed, sDownPressed;
+    private boolean sLeftPressed, sRightPressed, bLeftPressed, bRightPressed, sRRightPressed, sRLeftPressed;
+    
     public GamepadWrapper(int port) {
     	super(port);
         buttonA = new JoystickButtonWrapper(this, XBOX_A_PORT);
@@ -84,7 +92,97 @@ public class GamepadWrapper extends Joystick {
         buttonBumperRight = new JoystickButtonWrapper(this, XBOX_BUMPER_RIGHT_PORT);
         
         this.setting = SETTING_XBOX;
+        
+        aPressed = bPressed = xPressed = yPressed = sUpPressed = sDownPressed = false;
+        sLeftPressed = sRightPressed = bLeftPressed = bRightPressed = sRRightPressed = sRLeftPressed = false;
     }
+    
+//    public JFrame addKeyboard() {
+//    	JFrame frame = new JFrame("Input");
+//		frame.addKeyListener(new KeyListener() {
+//			public void keyPressed(KeyEvent event) {
+//				if (event.getKeyCode() == KeyEvent.VK_K) {
+//					aPressed = true;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_L) {
+//					bPressed = true;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_J) {
+//					xPressed = true;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_I) {
+//					yPressed = true;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_A) {
+//					sLeftPressed = true;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_D) {
+//					sRightPressed = true;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_W) {
+//					sUpPressed = true;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_S) {
+//					sDownPressed = true;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_U) {
+//					bLeftPressed = true;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_O) {
+//					bRightPressed = true;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_BRACELEFT) {
+//					sRLeftPressed = true;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_BRACERIGHT) {
+//					sRRightPressed = true;
+//				}
+//			}
+//			
+//			public void keyTyped(KeyEvent event) {}
+//			
+//			public void keyReleased(KeyEvent event) {
+//				if (event.getKeyCode() == KeyEvent.VK_K) {
+//					aPressed = false;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_L) {
+//					bPressed = false;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_J) {
+//					xPressed = false;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_I) {
+//					yPressed = false;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_A) {
+//					sLeftPressed = false;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_D) {
+//					sRightPressed = false;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_W) {
+//					sUpPressed = false;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_S) {
+//					sDownPressed = false;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_U) {
+//					bLeftPressed = false;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_O) {
+//					bRightPressed = false;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_BRACELEFT) {
+//					sRLeftPressed = false;
+//				}
+//				if (event.getKeyCode() == KeyEvent.VK_BRACERIGHT) {
+//					sRRightPressed = false;
+//				}
+//			}
+//		});
+//		
+//		return frame;
+//    }
     
     public GamepadWrapper(int port, int setting) {
     	super(port);
@@ -119,22 +217,45 @@ public class GamepadWrapper extends Joystick {
     }
 
     public double getLeftX() {
+    	if (sLeftPressed)
+    		return -1;
+    	else if (sRightPressed)
+    		return 1;
+    	if (setting == SETTING_LOGITECH)
+    		return getRawAxis(LOGITECH_AXIS_LEFT_X);
     	return getRawAxis(XBOX_AXIS_LEFT_X);
     }
 
     public double getLeftY() {
+    	if (sUpPressed)
+    		return 1;
+    	else if (sDownPressed)
+    		return -1;
+    	if (setting == SETTING_LOGITECH)
+    		return -getRawAxis(LOGITECH_AXIS_LEFT_Y);
     	return -getRawAxis(XBOX_AXIS_LEFT_Y); //by default, forward returns a negative number, which is unintuitive
     }
 
     public double getRightX() {
+    	if (sRLeftPressed)
+    		return -1;
+    	if (sRRightPressed)
+    		return 1;
+    	if (setting == SETTING_LOGITECH)
+    		return getRawAxis(LOGITECH_AXIS_RIGHT_X);
     	return getRawAxis(XBOX_AXIS_RIGHT_X);
     }
 
     public double getRightY() {
+    	if (setting == SETTING_LOGITECH) {
+    		return -getRawAxis(LOGITECH_AXIS_RIGHT_Y);
+    	}
     	return -getRawAxis(XBOX_AXIS_RIGHT_Y); //by default, forward returns a negative number, which is unintuitive
     }
     
     public double getRightTrigger() {
+    	if (bRightPressed)
+    		return 1;
     	if (setting == SETTING_LOGITECH) {
     		return (getRawButton(LOGITECH_TRIGGER_RIGHT) == true) ? 1 : 0;
     	}
@@ -142,6 +263,8 @@ public class GamepadWrapper extends Joystick {
     }
     
     public double getLeftTrigger() {
+    	if (bLeftPressed)
+    		return 1;
     	if (setting == SETTING_LOGITECH) {
     		return (getRawButton(LOGITECH_TRIGGER_LEFT) == true) ? 1 : 0;
     	}
@@ -153,6 +276,8 @@ public class GamepadWrapper extends Joystick {
      * @return The state of the button
      */
     public boolean getButtonAState() {
+    	if (aPressed)
+    		return true;
         return buttonA.get();
     }
     
@@ -161,6 +286,8 @@ public class GamepadWrapper extends Joystick {
      * @return The state of the button
      */
     public boolean getButtonBState() {
+    	if (bPressed)
+    		return true;
         return buttonB.get();
     }
     
@@ -169,6 +296,8 @@ public class GamepadWrapper extends Joystick {
      * @return The state of the button
      */
     public boolean getButtonXState() {
+    	if (xPressed)
+    		return true;
         return buttonX.get();
     }
     
@@ -177,6 +306,8 @@ public class GamepadWrapper extends Joystick {
      * @return The state of the button
      */
     public boolean getButtonYState() {
+    	if (yPressed)
+    		return true;
         return buttonY.get();
     }
     

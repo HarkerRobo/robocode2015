@@ -261,12 +261,16 @@ public class Drivetrain extends PIDSubsystem {
 		double rawRate = getRotationalRate();
 		double actualRate = rawRate;
 		if (rawRate > 0)
-			actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE_RIGHT;
+			actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE_RIGHT * T_SCALE;
 		else if (rawRate < 0)
-			actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE_LEFT;
+			actualRate = getRotationalRate() / MAX_ROTATIONAL_RATE_LEFT * T_SCALE;
 		if (Math.abs(actualRate) > 1) actualRate = Math.signum(actualRate);
 //		double error = actualRate - targetT;
 //		System.out.println("targetT: " + targetT + " actualRate: " + actualRate + " error: " + error);
+		
+		SmartDashboard.putNumber("Actual Rate", actualRate);
+		SmartDashboard.putNumber("Target Theta", targetT);
+		SmartDashboard.putNumber("PID Error", actualRate - targetT);
 		return actualRate;
 	}
 

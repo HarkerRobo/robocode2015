@@ -1,6 +1,11 @@
 package org.harker.robotics;
 
+import javax.swing.JFrame;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+
 import org.harker.robotics.RobotMap;
+
 import org.harker.robotics.commands.ToggleClampsCommand;
 import org.harker.robotics.commands.ToggleBotBinClampCommand;
 import org.harker.robotics.commands.ToggleLeftClampCommand;
@@ -28,7 +33,7 @@ public class OI {
 	 * the functionalities associated with buttons on the gamepad. 
 	 */
 	public OI() {
-		gamepad = new GamepadWrapper(RobotMap.OI.GAMEPAD_PORT, GamepadWrapper.SETTING_LOGITECH);
+		gamepad = new GamepadWrapper(RobotMap.OI.GAMEPAD_PORT, GamepadWrapper.SETTING_XBOX);
 //		gamepad.getButtonB().whenPressed(new ToggleRelativeDrivingCommand());
 		gamepad.getButtonA().whenPressed(new ToggleClampsCommand());
 		gamepad.getButtonBumperLeft().whenPressed(new ToggleLeftClampCommand());
@@ -36,6 +41,32 @@ public class OI {
 		gamepad.getButtonX().whenPressed(new ToggleBotBinClampCommand());
 		gamepad.getButtonY().whenPressed(new ToggleTopBinClampCommand());
 //		gamepad.getButtonX().whenPressed(new ResetElevatorCommand());
+		
+//		gamepad.addKeyboard().addKeyListener(new KeyListener() {
+//			public void keyPressed(KeyEvent event) {
+//				switch (event.getKeyCode()) {
+//				case KeyEvent.VK_K:
+//					(new ToggleClampsCommand()).start();
+//					break;
+//				case KeyEvent.VK_H:
+//					(new ToggleLeftClampCommand()).start();
+//					break;
+//				case KeyEvent.VK_SEMICOLON:
+//					(new ToggleRightClampCommand()).start();
+//					break;
+//				case KeyEvent.VK_J:
+//					(new ToggleBotBinClampCommand()).start();
+//					break;
+//				case KeyEvent.VK_I:
+//					(new ToggleTopBinClampCommand()).start();
+//					break;
+//				}
+//			}
+//			
+//			public void keyTyped(KeyEvent event) {}
+//			
+//			public void keyReleased(KeyEvent event) {}
+//		});
 	}
 	
 	/**

@@ -104,8 +104,7 @@ public class Manipulator extends Subsystem {
 //		chnA = new DigitalInput(2);
 //		chnB = new DigitalInput(3);
 		
-		openRightClamp();
-		openLeftClamp();
+//		closeClamps();
 	}
 	
 	public static void initialize() {
@@ -338,7 +337,8 @@ public class Manipulator extends Subsystem {
     }
     
     private boolean nearBottom() {
-    	return getAverageElevatorHeight() <= MIN_HEIGHT;
+//    	return getAverageElevatorHeight() <= MIN_HEIGHT;
+    	return true;
     }
     
     private boolean nearTop() {
