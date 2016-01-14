@@ -25,8 +25,8 @@ public class RobotMap {
 	 * Constants pertaining specifically to the Manipulator.
 	 */
 	public class Manipulator {
-		public static final int LEFT_CLAMP_PORT = 5;
-		public static final int RIGHT_CLAMP_PORT = 4;
+		public static final int LEFT_CLAMP_PORT = 4;
+		public static final int RIGHT_CLAMP_PORT = 5;
 		public static final int LEFT_BIN_CLAMP_PORT = 6;
 		public static final int RIGHT_BIN_CLAMP_PORT = 7;
 		public static final int ELEVATOR_TALON_PORT = 4;

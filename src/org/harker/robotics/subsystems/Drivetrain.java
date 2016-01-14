@@ -61,10 +61,16 @@ public class Drivetrain extends PIDSubsystem {
 	private double prevY;
 	private double prevT;
 	
+	private double prevLeft;
+	private double prevRight;
+	
 	//A reference to the current setpoint values
 	private double targetX;
 	private double targetY;
 	private double targetT;
+	
+	private double targetLeft;
+	private double targetRight;
 	
 	//Calibration factor for the gyro
 	private double voltsPerDegreePerSecond = (12.5e-3);
@@ -100,8 +106,8 @@ public class Drivetrain extends PIDSubsystem {
 		
 //		accel = new BuiltInAccelerometer(Accelerometer.Range.k2g);
 		
-		targetX = targetY = targetT = 0; 
-		prevX = prevY = prevT = 0;
+		targetX = targetY = targetT = targetLeft = targetRight = 0; 
+		prevX = prevY = prevT = prevLeft = prevRight = 0;
 		
 		this.setOutputRange(-1, 1);
 		this.enable();
@@ -144,6 +150,13 @@ public class Drivetrain extends PIDSubsystem {
 //		System.out.println("Speed: " + speed);
 	}
 	
+	public void tankDriveRaw(double left, double right) {
+		leftFront.set(left);
+		leftBack.set(left);
+		rightFront.set(right);
+		rightFront.set(right);
+	}
+	
 	/**
 	 * Drives all four motors at the given speed.
 	 * @param speed The speed at which to drive all four motors
@@ -172,6 +185,11 @@ public class Drivetrain extends PIDSubsystem {
 		targetY = (Math.abs(sy) > DZ_Y) ? sy : 0;
 		targetT = (Math.abs(rotation) > DZ_T) ? -rotation * T_SCALE : 0;
 		this.setSetpoint(targetT);
+	}
+	
+	public void drive(double left, double right) {
+		targetLeft = left;
+		targetRight = right;
 	}
 	
 	/**
@@ -203,6 +221,22 @@ public class Drivetrain extends PIDSubsystem {
 		
 		robotDrive.mecanumDrive_Cartesian(vX, vY, vT, heading);
 	}
+	
+	public void updateDrive() {
+		double vL = targetLeft;
+		double vR = targetRight;
+		
+		if (Math.abs(targetLeft - prevLeft) > MAX_ACCEL_X)
+			vL = prevLeft + Math.signum(vL - prevLeft) * MAX_ACCEL_X;
+		if (Math.abs(targetRight - prevRight) > MAX_ACCEL_X)
+			vR = prevRight + Math.signum(vR - prevRight) * MAX_ACCEL_X;
+		
+		prevLeft = vL;
+		prevRight = vR;
+		
+		tankDriveRaw(vL, vR);
+	}
+	
 	
 	/**
 	 * Determines the rate at which the robot is currently spinning in degrees
